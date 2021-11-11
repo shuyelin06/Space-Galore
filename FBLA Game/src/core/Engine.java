@@ -7,6 +7,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import gamestates.Game;
+
 public class Engine extends StateBasedGame 
 {
 	//desktop: 1920 by 1080

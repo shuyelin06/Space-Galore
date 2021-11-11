@@ -1,6 +1,6 @@
 // added a comment
 
-package core;
+package gamestates;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -12,9 +12,10 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Game extends BasicGameState 
 {	
-	int id;
+	private int id;
 	
-	Game(int id) 
+	
+	public Game(int id) 
 	{
 		this.id = id;
 	}
