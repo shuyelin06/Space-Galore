@@ -1,4 +1,4 @@
 # FBLA-Game-Event
-By Aaron Ren, Nolan Meyers, and Joshua Lin
+By Aaron Ren, Davy Ling, and Joshua Lin
 
 ## Inspired Based On: ....
