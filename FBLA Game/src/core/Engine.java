@@ -13,13 +13,13 @@ public class Engine extends StateBasedGame
 {
 	//desktop: 1920 by 1080
 	//laptop: 1366 by 768
-	public final static int RESOLUTION_X = 1920; 	
-	public final static int RESOLUTION_Y = 1080; 
+	public final static int RESOLUTION_X = 1366; 	
+	public final static int RESOLUTION_Y = 768; 
 	public final static int FRAMES_PER_SECOND = 60;
 	
     public static final int GAME_ID  = 0;
     
-    private BasicGameState game;
+    public static Game game;
 
 	public Engine(String name) 
 	{
