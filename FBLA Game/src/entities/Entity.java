@@ -41,16 +41,11 @@ public abstract class Entity{
 	public boolean isMarked() { return remove; }
 	
 	// Mutator Methods
-	public void updateXSpeed(float acceleration) {
-		xSpeed += acceleration;
-	}
-	public void updateYSpeed(float acceleration) {
-		ySpeed += acceleration;
-	}
-	public void markForRemoval(){
-		this.remove = true;
-	}
+	public void accelerateX(float acceleration) { xSpeed += acceleration; }
+	public void accelerateY(float acceleration) { ySpeed += acceleration; }
+	public void markForRemoval(){ this.remove = true; }
 	
+	// Update method: Updates the physics variables for the entity
 	public void update() {
 		// Update velocities of the entity first - drag will always act on the entity
 		xSpeed -= (xSpeed * Values.Drag_Coefficient) / mass; // Finding the x resistive acceleration

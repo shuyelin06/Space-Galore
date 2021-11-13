@@ -3,6 +3,7 @@
 package gamestates;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.newdawn.slick.Color;
@@ -15,10 +16,12 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import core.Coordinate;
+import core.Values;
 import entities.Enemy;
 import entities.Entity;
 import entities.Player;
 import managers.DisplayManager;
+import support.KeyDown;
 
 public class Game extends BasicGameState 
 {	
@@ -30,6 +33,8 @@ public class Game extends BasicGameState
 	ArrayList<Entity> entities; // Entities
 
 	// Managers
+	KeyDown keyDown;
+	
 	DisplayManager displayManager; // Display Manager
 	// Sound Manager
 	// Animation Manager
@@ -39,15 +44,17 @@ public class Game extends BasicGameState
 	{
 		this.id = id;
 	}
-
+	
+	public Player getPlayer(){ return player; }
+	public ArrayList<Entity> getEntities(){ return entities; }
+	
 	//initializer, first time
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
 	{
 		gc.setShowFPS(true);
-		this.gc = gc;
+		this.gc = gc;		
 		
-		
-		// Initialization
+		// Initialization of the Game
 		entities = new ArrayList<Entity>();
 		
 		player = new Player();
@@ -55,10 +62,13 @@ public class Game extends BasicGameState
 		
 		entities.add(new Enemy());
 		displayManager = new DisplayManager(this, player.getPosition());
+		
+		
+		// Initialization of Managers
+		this.keyDown = new KeyDown(gc.getInput(), this);
 	}
 	
-	public Player getPlayer() { return player; }
-	public ArrayList<Entity> getEntities(){ return entities; }
+
 	
 	//render, all visuals
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
@@ -69,6 +79,8 @@ public class Game extends BasicGameState
 	//update, runs consistently
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
 	{	
+		keyDown(); // Manage keys that are down
+		
 		// Update all entities
 		for(Entity e: entities) {
 			e.update();
@@ -79,38 +91,17 @@ public class Game extends BasicGameState
 		entities.removeIf(filter);				
 	}
 
-	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException 
-	{
-		
-	}
+	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {}
+	public void leave(GameContainer gc, StateBasedGame sbg) {}
 
-	public void leave(GameContainer gc, StateBasedGame sbg) 
-	{
-		
-	}
-
-
+	
+	public void keyDown() { KeyDown.Key_Down_List.stream().filter(keyDown).forEach(keyDown::keyDown); } // Check keys that are down
 	public void keyPressed(int key, char c)
 	{
 		switch(key) {
 			case Input.KEY_ESCAPE: // Exit the game
 				gc.exit();
 				break;
-			
-			// Basic keybinds (will be moved to keyDown later)
-			case Input.KEY_W:
-				player.updateYSpeed(15f);
-				break;
-			case Input.KEY_S:
-				player.updateYSpeed(-15f);
-				break;
-			case Input.KEY_A:
-				player.updateXSpeed(-15f);
-				break;
-			case Input.KEY_D:
-				player.updateXSpeed(15f);
-				break;
-				
 		}
 	}
 	
