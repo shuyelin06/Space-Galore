@@ -13,9 +13,9 @@ public class Engine extends StateBasedGame
 {
 	//desktop: 1920 by 1080
 	//laptop: 1366 by 768
-	public final static int RESOLUTION_X = 1366; 	
-	public final static int RESOLUTION_Y = 768; 
-	public final static int FRAMES_PER_SECOND = 60;
+	public static final int RESOLUTION_X = 1366;
+	public static final int RESOLUTION_Y = 768;
+	public static final int FRAMES_PER_SECOND = 60;
 	
     public static final int GAME_ID  = 0;
     
@@ -39,7 +39,7 @@ public class Engine extends StateBasedGame
 			AppGameContainer appgc = new AppGameContainer(new Engine("Sample Slick Game"));
 			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
 		
-			appgc.setDisplayMode(RESOLUTION_X, RESOLUTION_Y, false);
+			appgc.setDisplayMode(appgc.getScreenWidth(), appgc.getScreenHeight(), false);
 			appgc.setTargetFrameRate(FRAMES_PER_SECOND);
 			appgc.start();
 			appgc.setVSync(true);
