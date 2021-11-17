@@ -1,4 +1,4 @@
-package support;
+package managers;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -9,7 +9,7 @@ import org.newdawn.slick.state.BasicGameState;
 import entities.Player;
 import gamestates.Game;
 
-public class KeyDown implements Predicate<Integer>{
+public class KeyManager implements Predicate<Integer>{
 	final public static List<Integer> Key_Down_List = List.of(Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D); 
 	
 	private Game game;
@@ -17,7 +17,7 @@ public class KeyDown implements Predicate<Integer>{
 	
 	private Input input;
 	
-	public KeyDown(Input input, Game game) {
+	public KeyManager(Input input, Game game) {
 		this.input = input;
 		
 		this.game = game;

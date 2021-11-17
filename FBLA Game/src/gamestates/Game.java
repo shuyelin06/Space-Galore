@@ -21,7 +21,7 @@ import entities.Enemy;
 import entities.Entity;
 import entities.Player;
 import managers.DisplayManager;
-import support.KeyDown;
+import managers.KeyManager;
 
 public class Game extends BasicGameState 
 {	
@@ -33,7 +33,7 @@ public class Game extends BasicGameState
 	ArrayList<Entity> entities; // Entities
 
 	// Managers
-	KeyDown keyDown;
+	KeyManager keyDown;
 	
 	DisplayManager displayManager; // Display Manager
 	// Sound Manager
@@ -65,7 +65,7 @@ public class Game extends BasicGameState
 		
 		
 		// Initialization of Managers
-		this.keyDown = new KeyDown(gc.getInput(), this);
+		this.keyDown = new KeyManager(gc.getInput(), this);
 	}
 	
 
@@ -95,7 +95,7 @@ public class Game extends BasicGameState
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
 
 	
-	public void keyDown() { KeyDown.Key_Down_List.stream().filter(keyDown).forEach(keyDown::keyDown); } // Check keys that are down
+	public void keyDown() { KeyManager.Key_Down_List.stream().filter(keyDown).forEach(keyDown::keyDown); } // Check keys that are down
 	public void keyPressed(int key, char c)
 	{
 		switch(key) {
