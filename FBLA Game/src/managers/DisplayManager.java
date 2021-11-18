@@ -1,23 +1,29 @@
 package managers;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Circle;
 
-import core.Coordinate;
-import core.Engine;
-import core.Values;
-import entities.Entity;
 import entities.Player;
+import entities.core.Coordinate;
+import entities.core.Entity;
+import entities.core.Rectangle;
 import gamestates.Game;
+import main.Engine;
+import main.Values;
 
 public class DisplayManager{
+	private Graphics graphics;
+	
 	private Coordinate center; // The entity the camera will be rendered around
 	private Game game; // The game (so we can reference it)
 	
-	public DisplayManager(Game g, Coordinate center) {
+	public DisplayManager(Game g, Coordinate center, Graphics graphics) {
 		this.game = g;
 		// this.center = center;
 		this.center = new Coordinate(Player.Player_X_Spawn, Player.Player_Y_Spawn);
+		
+		this.graphics = graphics;
 	}
 	
 	// Returns the pixel coordinates on screen for some block coordinate
@@ -40,13 +46,21 @@ public class DisplayManager{
 		return output;
 	}
 	
+	// Render Methods
+	public void setColor(Color color) {
+		graphics.setColor(color);
+	}
+	public void drawLine(float x1, float y1, float x2, float y2) {
+		float[] pos1 = positionOnScreen(x1, y1);
+		float[] pos2 = positionOnScreen(x2, y2);
+		
+		graphics.drawLine(pos1[0], pos1[1], pos2[0], pos2[1]);
+	}
+	// Main rendering method
 	public void renderEntities(Graphics g) {
 		// Render entities in game
 		for(Entity e: game.getEntities()) {
-			Coordinate pos = e.getPosition();
-			
-			float[] renderPos = positionOnScreen(pos.getX(), pos.getY());
-			g.drawRect(renderPos[0], renderPos[1], e.getSizeX() * Values.Pixels_Per_Unit, e.getSizeY() * Values.Pixels_Per_Unit);
+			e.drawHitbox();
 		}
 	}
 }

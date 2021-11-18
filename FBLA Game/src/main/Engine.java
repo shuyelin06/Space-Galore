@@ -1,5 +1,5 @@
 
-package core;
+package main;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -39,7 +39,8 @@ public class Engine extends StateBasedGame
 			AppGameContainer appgc = new AppGameContainer(new Engine("Sample Slick Game"));
 			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
 		
-			appgc.setDisplayMode(appgc.getScreenWidth(), appgc.getScreenHeight(), false);
+			//appgc.getScreenHeight()
+			appgc.setDisplayMode(RESOLUTION_X, RESOLUTION_Y, false);
 			appgc.setTargetFrameRate(FRAMES_PER_SECOND);
 			appgc.start();
 			appgc.setVSync(true);

@@ -15,11 +15,11 @@ import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import core.Coordinate;
-import core.Values;
 import entities.Enemy;
-import entities.Entity;
 import entities.Player;
+import entities.core.Coordinate;
+import entities.core.Entity;
+import main.Values;
 import managers.DisplayManager;
 import managers.KeyManager;
 
@@ -35,7 +35,7 @@ public class Game extends BasicGameState
 	// Managers
 	KeyManager keyDown;
 	
-	DisplayManager displayManager; // Display Manager
+	public DisplayManager displayManager; // Display Manager
 	// Sound Manager
 	// Animation Manager
 	// Background / Ambiance Manager (?)
@@ -61,7 +61,7 @@ public class Game extends BasicGameState
 		entities.add(player);
 		
 		entities.add(new Enemy());
-		displayManager = new DisplayManager(this, player.getPosition());
+		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
 		
 		
 		// Initialization of Managers

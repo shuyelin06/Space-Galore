@@ -1,17 +1,17 @@
-package entities;
+package entities.core;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import core.Coordinate;
-import core.Engine;
-import core.Utility;
-import core.Values;
+import main.Engine;
+import main.Utility;
+import main.Values;
 
 // Standard code for all entities in the game
 public abstract class Entity{
-	protected boolean remove; // When remove == true, the entity will be unloaded
+	boolean remove; // When remove == true, the entity will be unloaded
 	
 	protected Coordinate position;
 	
@@ -19,28 +19,46 @@ public abstract class Entity{
 	protected float mass; // Mass of the object (if we want to factor in collisions; in kg)
 	
 	protected Image sprite;
-	protected float sizeX;
-	protected float sizeY;
+	protected float width;
+	protected float height;
+	
+	protected float angle; // Rotation of the entity (counterclockwise, in radians)
+	
+	// Hit box of the entity
+	protected Rectangle hitBox;
 	
 	public Entity(float x, float y, float mass) {
+		// Initializing the Entity
 		this.position = new Coordinate(x, y); // Initializing position 
 		
 		this.xSpeed = this.ySpeed = 0; // Initializing speeds
 		
-		this.sizeX = 1f;
-		this.sizeY = 1f;
+		this.width = 1f; // Default width
+		this.height = 1f; // Default height
 		this.mass = mass;
 		
-		this.sprite = null; // We'll later add sprite images later.
+		this.angle  = (float) Math.PI / 4; // Default rotation for now
+		
+		this.sprite = null; // We'll add sprite images later.
+		
+		// Initializing hitbox
+		hitBox = new Rectangle(this);	
 	}
 	
 	// Accessor Methods
 	public Coordinate getPosition() { return position; }
-	public float getSizeX() { return sizeX; }
-	public float getSizeY() { return sizeY; }
+	public float getRotation() { return angle; }
+	public float getWidth() { return width; }
+	public float getHeight() { return height; }
 	public boolean isMarked() { return remove; }
 	
+	// Rendering Methods
+	public void drawHitbox() { hitBox.render();}
+	
 	// Mutator Methods
+	public void rotateCounter(float theta) { this.angle += theta; } // Rotations
+	public void setRotation(float theta) { this.angle = theta; } // Rotations
+	
 	public void accelerateX(float acceleration) { xSpeed += acceleration; }
 	public void accelerateY(float acceleration) { ySpeed += acceleration; }
 	public void markForRemoval(){ this.remove = true; }
@@ -63,28 +81,10 @@ public abstract class Entity{
 		
 		for(Entity e: entities){
 			if(this.equals(e)) continue; // Will not collide with itself
-			if(entityCollision(e)){
+			if(hitBox.intersects(e.hitBox)){
 				onCollision(e);
 			}
 		}
-	}
-	private boolean entityCollision(Entity e){
-		float rec1[] = new float[4];
-		rec1[0] = position.getX() + xSpeed / Engine.FRAMES_PER_SECOND; // X1 Next Frame
-		rec1[2] = rec1[0] + this.sizeX; // X2 Next Frame
-		
-		rec1[3] = position.getY() + ySpeed / Engine.FRAMES_PER_SECOND; // Y2 Next Frame
-		rec1[1] = rec1[3] - this.sizeY; // Y1 Next Frame
-		
-		
-		float rec2[] = new float[4];
-		rec2[0] = e.position.getX() + e.xSpeed / Engine.FRAMES_PER_SECOND; // X3 Next Frame
-		rec2[2] = rec2[0] + e.sizeX; // X4 Next Frame
-		
-		rec2[3] = e.position.getY() + e.ySpeed / Engine.FRAMES_PER_SECOND; // Y3 Next Frame
-		rec2[1] = rec2[3] - e.sizeY; // X4 Next Frame
-		
-		return Utility.rectangleOverlap(rec1, rec2);
 	}
 	
 	// Collision code unique to every entity
@@ -104,8 +104,6 @@ public abstract class Entity{
 		
 		this.ySpeed = (C1Y + mass * C2Y) / (mass + e.mass) - C2Y;
 		e.ySpeed = (C1Y + mass * C2Y) / (mass + e.mass);
-		
-		return;
 	}
 	
 }
