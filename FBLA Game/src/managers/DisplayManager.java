@@ -21,6 +21,8 @@ public class DisplayManager{
 	public DisplayManager(Game g, Coordinate center, Graphics graphics) {
 		this.game = g;
 		// this.center = center;
+		
+		// game.getPlayer().getPosition(); 
 		this.center = new Coordinate(Player.Player_X_Spawn, Player.Player_Y_Spawn);
 		
 		this.graphics = graphics;

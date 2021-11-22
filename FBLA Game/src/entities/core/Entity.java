@@ -11,35 +11,43 @@ import main.Values;
 
 // Standard code for all entities in the game
 public abstract class Entity{
+	// Rendering Variables
 	boolean remove; // When remove == true, the entity will be unloaded
+	protected Image sprite; // The entity's sprite
 	
-	protected Coordinate position;
-	
-	protected float xSpeed, ySpeed; // Speeds of the object (m/s)
+	// Descriptive Variables
 	protected float mass; // Mass of the object (if we want to factor in collisions; in kg)
-	
-	protected Image sprite;
 	protected float width;
 	protected float height;
 	
+	// Linear Movement
+	protected Coordinate position;
+	protected float xSpeed, ySpeed; // Speeds of the object (m/s)
+	
+	// Angular Movement
 	protected float angle; // Rotation of the entity (counterclockwise, in radians)
+	protected float aVelocity; // Angular velocity (+ is counterclockwise)
 	
 	// Hit box of the entity
 	protected Rectangle hitBox;
 	
-	public Entity(float x, float y, float mass) {
-		// Initializing the Entity
-		this.position = new Coordinate(x, y); // Initializing position 
+	public Entity(float x, float y) {
+		// Initializing Rendering Variables
+		this.remove = false; 
+		this.sprite = null; // We'll add sprite images later
 		
-		this.xSpeed = this.ySpeed = 0; // Initializing speeds
-		
+		// Initializing Descriptive Variables
 		this.width = 1f; // Default width
 		this.height = 1f; // Default height
-		this.mass = mass;
+		this.mass = 1f; // Default mass
 		
+		// Initializing Linear Movement
+		this.position = new Coordinate(x, y); // Initializing position 
+		this.xSpeed = this.ySpeed = 0; // Initializing speeds
+		
+		// Initializing Angular Movement
 		this.angle  = (float) Math.PI / 4; // Default rotation for now
-		
-		this.sprite = null; // We'll add sprite images later.
+		this.aVelocity = 0f;
 		
 		// Initializing hitbox
 		hitBox = new Rectangle(this);	
@@ -53,7 +61,7 @@ public abstract class Entity{
 	public boolean isMarked() { return remove; }
 	
 	// Rendering Methods
-	public void drawHitbox() { hitBox.render();}
+	public void drawHitbox() { hitBox.drawHitBox();}
 	
 	// Mutator Methods
 	public void rotateCounter(float theta) { this.angle += theta; } // Rotations
@@ -65,15 +73,18 @@ public abstract class Entity{
 	
 	// Update method: Updates the physics variables for the entity
 	public void update() {
-		// Update velocities of the entity first - drag will always act on the entity
+		// Update all velocities of the entity - drag will always act on the entity
 		xSpeed -= (xSpeed * Values.Drag_Coefficient) / mass; // Finding the x resistive acceleration
 		ySpeed -= (ySpeed * Values.Drag_Coefficient) / mass; // Finding the y resistive acceleration
+		
+		aVelocity -= (aVelocity * Values.Drag_Coefficient) / mass; // Angular resistive acceleration
 		
 		// Then, check for collisions with other entities (or we do this in an overarching collision detector)
 		collisions();
 		
 		// Finally, update the position of the entity.
 		this.position.updatePosition(xSpeed, ySpeed);
+		this.angle += aVelocity;
 	};
 	
 	protected void collisions(){

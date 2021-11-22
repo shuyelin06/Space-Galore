@@ -14,10 +14,6 @@ public class Rectangle {
 	}
 	
 	// Rendering Methods
-	public void render() { // Draw rectangle and basis vectors for the rectangle
-		drawHitBox();
-		drawAxes(); 
-	}
 	public void drawHitBox() { // Draw the rectangle
 		Vector[] corners = getCorners(0f,0f);
 		
