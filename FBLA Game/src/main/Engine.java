@@ -1,5 +1,5 @@
 
-package core;
+package main;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -8,6 +8,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import gamestates.Game;
+import gamestates.StartMenu;
 
 public class Engine extends StateBasedGame 
 {
@@ -17,19 +18,23 @@ public class Engine extends StateBasedGame
 	public static final int RESOLUTION_Y = 768;
 	public static final int FRAMES_PER_SECOND = 60;
 	
-    public static final int GAME_ID  = 0;
+	public static final int START_ID = 0;
+    public static final int GAME_ID  = 1;
     
+    public static StartMenu start;
     public static Game game;
 
 	public Engine(String name) 
 	{
 		super(name);
 		
+		start = new StartMenu(START_ID);
 		game = new Game(GAME_ID);
 	}
 
 	public void initStatesList(GameContainer gc) throws SlickException 
 	{
+		addState(start);
 		addState(game);
 	}
 
@@ -39,7 +44,8 @@ public class Engine extends StateBasedGame
 			AppGameContainer appgc = new AppGameContainer(new Engine("Sample Slick Game"));
 			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
 		
-			appgc.setDisplayMode(appgc.getScreenWidth(), appgc.getScreenHeight(), false);
+			//appgc.getScreenHeight()
+			appgc.setDisplayMode(RESOLUTION_X, RESOLUTION_Y, false);
 			appgc.setTargetFrameRate(FRAMES_PER_SECOND);
 			appgc.start();
 			appgc.setVSync(true);

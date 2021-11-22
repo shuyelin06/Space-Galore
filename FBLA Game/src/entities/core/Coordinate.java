@@ -1,7 +1,9 @@
-package core;
+package entities.core;
+
+import main.Engine;
 
 public class Coordinate{
-	private float x, y;
+	float x, y;
 	
 	public Coordinate(float x, float y) {
 		this.x = x;
