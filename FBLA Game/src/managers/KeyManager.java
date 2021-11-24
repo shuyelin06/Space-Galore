@@ -10,7 +10,8 @@ import entities.Player;
 import gamestates.Game;
 
 public class KeyManager implements Predicate<Integer> {
-	final public static List<Integer> Key_Down_List = List.of(Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D); 
+	final private static float Player_Acceleration = 1f;
+	final public static List<Integer> Key_Down_List = List.of(Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D);
 	
 	private Game game;
 	private Player player;
@@ -31,16 +32,16 @@ public class KeyManager implements Predicate<Integer> {
 	public void keyDown(int key) {
 		switch(key) {
 			case Input.KEY_W:
-				player.accelerateY(2f);
+				player.accelerateY(Player_Acceleration);
 				break;
 			case Input.KEY_A:
-				player.accelerateX(-2f);
+				player.accelerateX(-Player_Acceleration);
 				break;
 			case Input.KEY_S:
-				player.accelerateY(-2f);
+				player.accelerateY(-Player_Acceleration);
 				break;
 			case Input.KEY_D:
-				player.accelerateX(2f);
+				player.accelerateX(Player_Acceleration);
 				break;
 		}
 	}

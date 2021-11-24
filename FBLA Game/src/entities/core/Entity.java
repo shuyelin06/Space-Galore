@@ -2,6 +2,7 @@ package entities.core;
 
 import java.util.ArrayList;
 
+import managers.ImageManager;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
@@ -26,16 +27,11 @@ public abstract class Entity{
 	
 	// Angular Movement
 	protected float angle; // Rotation of the entity (counterclockwise, in radians)
-	protected float aVelocity; // Angular velocity (+ is counterclockwise)
 	
 	// Hit box of the entity
 	protected Rectangle hitBox;
 	
 	public Entity(float x, float y) {
-		// Initializing Rendering Variables
-		this.remove = false; 
-		this.sprite = null; // We'll add sprite images later
-		
 		// Initializing Descriptive Variables
 		this.width = 1f; // Default width
 		this.height = 1f; // Default height
@@ -46,14 +42,18 @@ public abstract class Entity{
 		this.xSpeed = this.ySpeed = 0; // Initializing speeds
 		
 		// Initializing Angular Movement
-		this.angle  = (float) Math.PI / 4; // Default rotation for now
-		this.aVelocity = 0f;
-		
+		this.angle = 0f; // Default rotation for now
+
+		// Initializing Rendering Variables
+		this.remove = false;
+		this.sprite = ImageManager.getPlaceholder(); // Default sprite
+
 		// Initializing hitbox
 		hitBox = new Rectangle(this);	
 	}
 	
 	// Accessor Methods
+	public Image getSprite() { return sprite; }
 	public Coordinate getPosition() { return position; }
 	public float getRotation() { return angle; }
 	public float getWidth() { return width; }
@@ -61,7 +61,7 @@ public abstract class Entity{
 	public boolean isMarked() { return remove; }
 	
 	// Rendering Methods
-	public void drawHitbox() { hitBox.drawHitBox();}
+	public void drawHitbox() { hitBox.drawHitBox(); }
 	
 	// Mutator Methods
 	public void rotateCounter(float theta) { this.angle += theta; } // Rotations
@@ -77,14 +77,13 @@ public abstract class Entity{
 		xSpeed -= (xSpeed * Values.Drag_Coefficient) / mass; // Finding the x resistive acceleration
 		ySpeed -= (ySpeed * Values.Drag_Coefficient) / mass; // Finding the y resistive acceleration
 		
-		aVelocity -= (aVelocity * Values.Drag_Coefficient) / mass; // Angular resistive acceleration
+		// aVelocity -= (aVelocity * Values.Drag_Coefficient) / mass; // Angular resistive acceleration
 		
 		// Then, check for collisions with other entities (or we do this in an overarching collision detector)
 		collisions();
 		
 		// Finally, update the position of the entity.
 		this.position.updatePosition(xSpeed, ySpeed);
-		this.angle += aVelocity;
 	};
 	
 	protected void collisions(){

@@ -5,27 +5,22 @@ import java.util.HashMap;
 import org.newdawn.slick.Sound;
 
 public class SoundManager {
-	private Sound backgroundMusic;
-	private HashMap<String, Sound> sounds;
-	
-	public SoundManager() {
-		// Load all sound files in the res/Sound folder
-		
-		// Set other variables
-		backgroundMusic = null;
-	}
+	final public static HashMap<String, Sound> Sounds = new HashMap<>();
+	private static Sound backgroundMusic;
 	
 	// Play a sound effect
-	public void playSoundEffect(String name) {
-		sounds.get(name).play();
+	public static void playSoundEffect(String name) {
+		Sounds.get(name).play();
 	}
-	// Stop existing background music, and play new background music
-	public void playBackgroundMusic(String name) {
+
+	// Stop any existing background music, and play new background music
+	public static void playBackgroundMusic(String name) {
 		try {
+			// Later, have it so the existing background music fades out
 			backgroundMusic.stop();
 		} catch(Exception e) {}
 		finally {
-			backgroundMusic = sounds.get(name);
+			backgroundMusic = Sounds.get(name);
 			backgroundMusic.loop();
 		}
 		

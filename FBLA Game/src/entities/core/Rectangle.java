@@ -8,11 +8,20 @@ import main.Engine;
 // The hitbox of the entity, basically
 public class Rectangle {
 	private Entity entity;
-	
+
+	private float width;
+	private float height;
+
 	public Rectangle(Entity entity) {
 		this.entity = entity;
+
+		this.width = entity.width;
+		this.height = entity.height;
 	}
-	
+
+	public void setWidth(float width) { this.width = width; }
+	public void setHeight(float height) { this.height = height; }
+
 	// Rendering Methods
 	public void drawHitBox() { // Draw the rectangle
 		Vector[] corners = getCorners(0f,0f);
@@ -63,8 +72,8 @@ public class Rectangle {
 		axes[1] = Vector.Standard_Y.rotate(entity.angle); // Y Basis Vector 
 		
 		// Expand both axes to encompass the width or height of the rectangle
-		axes[0].multiply(entity.width / 2);
-		axes[1].multiply(entity.height / 2);
+		axes[0].multiply(width / 2);
+		axes[1].multiply(height / 2);
 		
 		return axes;
 	}

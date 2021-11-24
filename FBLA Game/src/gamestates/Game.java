@@ -2,24 +2,21 @@
 
 package gamestates;
 
+import java.lang.Math;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Predicate;
 
-import org.newdawn.slick.Color;
+import main.Values;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import entities.Enemy;
 import entities.Player;
-import entities.core.Coordinate;
 import entities.core.Entity;
-import main.Values;
 import managers.DisplayManager;
 import managers.KeyManager;
 
@@ -47,24 +44,12 @@ public class Game extends BasicGameState
 	
 	public Player getPlayer(){ return player; }
 	public ArrayList<Entity> getEntities(){ return entities; }
-	
-	//initializer, first time
+
+	// Initialization of the Game
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
 	{
 		gc.setShowFPS(true);
-		this.gc = gc;		
-		
-		// Initialization of the Game
-		entities = new ArrayList<Entity>();
-		
-		player = new Player();
-		entities.add(player);
-		
-		entities.add(new Enemy());
-		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
-		
-		// Initialization of Managers
-		this.keyDown = new KeyManager(gc.getInput(), this);
+		this.gc = gc;
 	}
 	
 
@@ -77,9 +62,11 @@ public class Game extends BasicGameState
 
 	//update, runs consistently
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
-	{	
-		keyDown(); // Manage keys that are down
-		
+	{
+		// Manage Key and Cursor Input
+		keyInput(); // Manage keys that are down
+		cursorInput(); // Manage the cursor
+
 		// Update all entities
 		for(Entity e: entities) {
 			e.update();
@@ -90,10 +77,24 @@ public class Game extends BasicGameState
 		entities.removeIf(filter);				
 	}
 
-	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {}
+	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		entities = new ArrayList<Entity>();
+
+		player = new Player();
+		entities.add(player);
+
+		entities.add(new Enemy());
+
+		// Initialization of Managers
+		keyDown = new KeyManager(gc.getInput(), this);
+		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
+
+
+	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
-	
-	public void keyDown() { KeyManager.Key_Down_List.stream().filter(keyDown).forEach(keyDown::keyDown); } // Check keys that are down
+
+	// Input Methods
+	public void keyInput() { KeyManager.Key_Down_List.stream().filter(keyDown).forEach(keyDown::keyDown); } // Check keys that are down
 	public void keyPressed(int key, char c)
 	{
 		switch(key) {
@@ -102,7 +103,21 @@ public class Game extends BasicGameState
 				break;
 		}
 	}
-	
+
+	// Rotate the player towards the cursor
+	public void cursorInput(){
+		float[] posInGame = displayManager.positionInGame(
+				gc.getInput().getAbsoluteMouseX(),
+				gc.getInput().getAbsoluteMouseY()
+		);
+
+		double theta = Math.atan2(
+				player.getPosition().getY() - posInGame[1],
+				player.getPosition().getX() - posInGame[0]
+		);
+
+		player.setRotation((float) theta);
+	}
 	public void mousePressed(int button, int x, int y)
 	{
 		
