@@ -10,31 +10,31 @@ import org.newdawn.slick.state.StateBasedGame;
 import gamestates.Game;
 import gamestates.StartMenu;
 
-public class Engine extends StateBasedGame 
+public class Engine extends StateBasedGame
 {
 	//desktop: 1920 by 1080
 	//laptop: 1366 by 768
-	public static final int RESOLUTION_X = 1366;
-	public static final int RESOLUTION_Y = 768;
-	public static final int FRAMES_PER_SECOND = 60;
+	public static final int RESOLUTION_X = 1920;
+	public static final int RESOLUTION_Y = 1080;
+	public static final int FRAMES_PER_SECOND = 120;
 	
 	public static final int START_ID = 0;
     public static final int GAME_ID  = 1;
     
-    public static StartMenu start;
+    //public static StartMenu start;
     public static Game game;
 
 	public Engine(String name) 
 	{
 		super(name);
 		
-		start = new StartMenu(START_ID);
+		//start = new StartMenu(START_ID);
 		game = new Game(GAME_ID);
 	}
 
 	public void initStatesList(GameContainer gc) throws SlickException 
 	{
-		addState(start);
+		//addState(start);
 		addState(game);
 	}
 

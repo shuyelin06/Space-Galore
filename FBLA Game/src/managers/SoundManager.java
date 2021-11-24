@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import org.newdawn.slick.Sound;
 
-public class SoundManager{
+public class SoundManager {
 	private Sound backgroundMusic;
 	private HashMap<String, Sound> sounds;
 	
@@ -23,7 +23,7 @@ public class SoundManager{
 	public void playBackgroundMusic(String name) {
 		try {
 			backgroundMusic.stop();
-		} catch(Exception e){}
+		} catch(Exception e) {}
 		finally {
 			backgroundMusic = sounds.get(name);
 			backgroundMusic.loop();

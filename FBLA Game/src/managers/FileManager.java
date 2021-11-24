@@ -7,7 +7,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.openal.Audio;
 
-public class FileManager{
+public class FileManager {
 	final public static String Res_Folder = "res/";
 	
 	final public static HashMap<String, Sound> Sounds = new HashMap<String, Sound>();
@@ -30,7 +30,7 @@ public class FileManager{
 		System.out.println(" --- " + Images.size() + " Images Successfully Loaded ---");
 	}
 	private static void LoadDirectory(File dir, HashMap<String, Image> images, HashMap<String, Sound> sounds) {
-		for(final File f: dir.listFiles()) {
+		for (final File f : dir.listFiles()) {
 			if(f.isDirectory()) {
 				System.out.println("New Directory Found: " + f.getName());
 				LoadDirectory(f, images, sounds);

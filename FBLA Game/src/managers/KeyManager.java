@@ -9,7 +9,7 @@ import org.newdawn.slick.state.BasicGameState;
 import entities.Player;
 import gamestates.Game;
 
-public class KeyManager implements Predicate<Integer>{
+public class KeyManager implements Predicate<Integer> {
 	final public static List<Integer> Key_Down_List = List.of(Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D); 
 	
 	private Game game;
