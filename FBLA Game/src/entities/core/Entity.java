@@ -73,6 +73,7 @@ public abstract class Entity{
 	
 	// Update method: Updates the physics variables for the entity
 	public void update() {
+		System.out.println("Updating ");
 		// Update all velocities of the entity - drag will always act on the entity
 		xSpeed -= (xSpeed * Values.Drag_Coefficient) / mass; // Finding the x resistive acceleration
 		ySpeed -= (ySpeed * Values.Drag_Coefficient) / mass; // Finding the y resistive acceleration

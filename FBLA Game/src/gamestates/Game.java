@@ -63,7 +63,6 @@ public class Game extends BasicGameState
 		entities.add(new Enemy());
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
 		
-		
 		// Initialization of Managers
 		this.keyDown = new KeyManager(gc.getInput(), this);
 	}
@@ -93,7 +92,6 @@ public class Game extends BasicGameState
 
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
-
 	
 	public void keyDown() { KeyManager.Key_Down_List.stream().filter(keyDown).forEach(keyDown::keyDown); } // Check keys that are down
 	public void keyPressed(int key, char c)
