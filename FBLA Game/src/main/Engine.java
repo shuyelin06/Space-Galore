@@ -16,7 +16,7 @@ public class Engine extends StateBasedGame
 	//laptop: 1366 by 768
 	public static final int RESOLUTION_X = 1920;
 	public static final int RESOLUTION_Y = 1080;
-	public static final int FRAMES_PER_SECOND = 120;
+	public static final int FRAMES_PER_SECOND = 144;
 	
 	public static final int START_ID = 0;
     public static final int GAME_ID  = 1;
