@@ -8,11 +8,8 @@ import org.newdawn.slick.Sound;
 import org.newdawn.slick.openal.Audio;
 
 public class FileManager {
-	final public static String Res_Folder = "res/";
-	
-	final public static HashMap<String, Sound> Sounds = new HashMap<String, Sound>();
-	final public static HashMap<String, Image> Images = new HashMap<String, Image>();
-	
+	final public static String Res_Folder = System.getProperty("user.dir") + "/FBLA Game/res";
+
 	public static void CountResFiles() {
 		
 	}
@@ -24,10 +21,10 @@ public class FileManager {
 	private static void LoadResFiles() {
 		System.out.println(" --- Loading Images and Sounds --- ");
 
-		LoadDirectory(new File(Res_Folder), Images, Sounds);
+		LoadDirectory(new File(Res_Folder), ImageManager.Images, SoundManager.Sounds);
 		
-		System.out.println(" --- " + Sounds.size() + " Sound Files Successfully Loaded ---");
-		System.out.println(" --- " + Images.size() + " Images Successfully Loaded ---");
+		System.out.println(" --- " + SoundManager.Sounds.size() + " Sound Files Successfully Loaded ---");
+		System.out.println(" --- " + ImageManager.Images.size() + " Images Successfully Loaded ---");
 	}
 	private static void LoadDirectory(File dir, HashMap<String, Image> images, HashMap<String, Sound> sounds) {
 		for (final File f : dir.listFiles()) {

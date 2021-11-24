@@ -21,20 +21,20 @@ public class Engine extends StateBasedGame
 	public static final int START_ID = 0;
     public static final int GAME_ID  = 1;
     
-    //public static StartMenu start;
+    public static StartMenu start;
     public static Game game;
 
 	public Engine(String name) 
 	{
 		super(name);
 		
-		//start = new StartMenu(START_ID);
+		start = new StartMenu(START_ID);
 		game = new Game(GAME_ID);
 	}
 
 	public void initStatesList(GameContainer gc) throws SlickException 
 	{
-		//addState(start);
+		addState(start);
 		addState(game);
 	}
 
