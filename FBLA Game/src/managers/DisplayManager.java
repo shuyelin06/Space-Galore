@@ -1,5 +1,6 @@
 package managers;
 
+import entities.projectiles.Projectile;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -64,7 +65,7 @@ public class DisplayManager{
 		// Render entities in game
 		for(ArrayList<Entity> list: game.getEntities().values()) {
 			for(Entity e: list) {
-				e.drawHitbox(); // Render the entity's hitbox
+				// e.drawHitbox(); // Render the entity's hitbox
 
 				// Render the entity
 				float[] renderPos = positionOnScreen(e.getPosition().getX(), e.getPosition().getY());

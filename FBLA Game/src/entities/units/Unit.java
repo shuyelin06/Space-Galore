@@ -30,9 +30,11 @@ public class Unit extends Entity {
         this.defense = 0;
     }
 
-    public void takeContactDamage(Unit u){
-        int damage = u.contactDamage - this.defense;
-        if(damage > 0) this.health -= damage;
+    public UnitType getType() { return unitType; }
+
+    public void takeDamage(int damage){
+        int unblockedDmg = damage - this.defense;
+        if(unblockedDmg > 0) this.health -= damage;
     }
 
     // Overwritten update method
@@ -50,8 +52,8 @@ public class Unit extends Entity {
 
         Unit u = (Unit) e;
         if(this.unitType != u.unitType) {
-            this.takeContactDamage(u);
-            u.takeContactDamage(this);
+            this.takeDamage(u.contactDamage);
+            u.takeDamage(this.contactDamage);
         }
     }
 }

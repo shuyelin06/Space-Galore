@@ -63,6 +63,7 @@ public abstract class Entity{
 	}
 	
 	// Accessor Methods
+	public Rectangle getHitBox() { return hitBox; }
 	public Image getSprite() { return sprite; }
 	public Coordinate getPosition() { return position; }
 	public float getRotation() { return angle; }

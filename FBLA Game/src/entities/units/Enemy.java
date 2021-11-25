@@ -4,7 +4,8 @@ import managers.ImageManager;
 
 public class Enemy extends Unit {
 	public Enemy() {
-		super(Player.Player_X_Spawn, Player.Player_Y_Spawn + 10f);
+		super(Player.Player_X_Spawn + (float) Math.random() * 40f,
+				Player.Player_Y_Spawn + (float) Math.random() * 40f);
 
 		// Set UnitType
 		this.unitType = UnitType.Enemy;
@@ -24,9 +25,16 @@ public class Enemy extends Unit {
 		this.contactDamage = 50;
 	}
 
+	@Override
 	public void update() {
 		super.update();
+		enemyAI();
+	}
 
+	protected void enemyAI() {
 		this.faceEntity(game.getPlayer());
+
+		this.xSpeed = -5f * (float) Math.cos(this.angle);
+		this.ySpeed = -5f * (float) Math.sin(this.angle);
 	}
 }

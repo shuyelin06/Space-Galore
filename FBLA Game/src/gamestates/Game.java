@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Predicate;
 
+import entities.core.Coordinate;
+import entities.projectiles.Projectile;
+import managers.EntityManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -33,6 +36,8 @@ public class Game extends BasicGameState
 	KeyManager keyDown;
 	
 	public DisplayManager displayManager; // Display Manager
+	public EntityManager entityManager;
+
 	// Sound Manager
 	// Animation Manager
 	// Background / Ambiance Manager (?)
@@ -89,9 +94,12 @@ public class Game extends BasicGameState
 		// Initialize Managers
 		keyDown = new KeyManager(gc.getInput(), this);
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
+		entityManager = new EntityManager(this);
 
 		// Add an Enemy (for testing)
-		entities.get(Entity.EntityType.Unit).add(new Enemy());
+		for(int i = 0; i < 5; i++) {
+			entities.get(Entity.EntityType.Unit).add(new Enemy());
+		}
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
 
@@ -123,7 +131,14 @@ public class Game extends BasicGameState
 	public void mousePressed(int button, int x, int y)
 	{
 		// Shoot something..
+		float[] posInGame = displayManager.positionInGame(x, y);
 
+		Projectile test = new Projectile(
+				player.getPosition().getX(),
+				player.getPosition().getY(),
+				new Coordinate(posInGame[0], posInGame[1]));
+
+		entities.get(Entity.EntityType.Projectile).add(test);
 	}
 	
 	
