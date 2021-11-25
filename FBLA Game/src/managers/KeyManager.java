@@ -4,9 +4,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import org.newdawn.slick.Input;
-import org.newdawn.slick.state.BasicGameState;
 
-import entities.Player;
+import entities.units.Player;
 import gamestates.Game;
 
 public class KeyManager implements Predicate<Integer> {

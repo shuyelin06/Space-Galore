@@ -2,6 +2,7 @@ package entities.core;
 
 import java.util.ArrayList;
 
+import gamestates.Game;
 import managers.ImageManager;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -12,8 +13,11 @@ import main.Values;
 
 // Standard code for all entities in the game
 public abstract class Entity{
+	// For general use
+	protected static Game game = Engine.game;
+
 	// Rendering Variables
-	boolean remove; // When remove == true, the entity will be unloaded
+	protected boolean remove; // When remove == true, the entity will be unloaded
 	protected Image sprite; // The entity's sprite
 	
 	// Descriptive Variables
@@ -30,8 +34,16 @@ public abstract class Entity{
 	
 	// Hit box of the entity
 	protected Rectangle hitBox;
-	
+
+	// Entity Type
+	protected EntityType entityType;
+	public enum EntityType { Unit, Projectile, Other }
+
 	public Entity(float x, float y) {
+		// Initializing Rendering Variables
+		this.remove = false;
+		this.sprite = ImageManager.getPlaceholder(); // Default sprite
+
 		// Initializing Descriptive Variables
 		this.width = 1f; // Default width
 		this.height = 1f; // Default height
@@ -44,12 +56,10 @@ public abstract class Entity{
 		// Initializing Angular Movement
 		this.angle = 0f; // Default rotation for now
 
-		// Initializing Rendering Variables
-		this.remove = false;
-		this.sprite = ImageManager.getPlaceholder(); // Default sprite
-
 		// Initializing hitbox
-		hitBox = new Rectangle(this);	
+		this.hitBox = new Rectangle(this);
+
+		this.entityType = EntityType.Other;
 	}
 	
 	// Accessor Methods
@@ -70,30 +80,38 @@ public abstract class Entity{
 	public void accelerateX(float acceleration) { xSpeed += acceleration; }
 	public void accelerateY(float acceleration) { ySpeed += acceleration; }
 	public void markForRemoval(){ this.remove = true; }
-	
-	// Update method: Updates the physics variables for the entity
+
+	// Helper Methods
+	public void faceEntity(Entity e) {
+		// Find angle (from the horizontal) to the other entity
+		double theta = Math.atan2(
+				position.y - e.position.y,
+				position.x - e.position.x);
+
+		// Set the angle of this entity
+		this.angle = (float) theta;
+	}
+
+	// Update Method: Update Physics Variables
 	public void update() {
 		// Update all velocities of the entity - drag will always act on the entity
 		xSpeed -= (xSpeed * Values.Drag_Coefficient) / mass; // Finding the x resistive acceleration
 		ySpeed -= (ySpeed * Values.Drag_Coefficient) / mass; // Finding the y resistive acceleration
 		
-		// aVelocity -= (aVelocity * Values.Drag_Coefficient) / mass; // Angular resistive acceleration
-		
-		// Then, check for collisions with other entities (or we do this in an overarching collision detector)
+		// Check for collisions with other entities
 		collisions();
 		
 		// Finally, update the position of the entity.
 		this.position.updatePosition(xSpeed, ySpeed);
 	};
-	
+
+	// Check collisions with units (not projectiles FOR NOW)
 	protected void collisions(){
-		ArrayList<Entity> entities = Engine.game.getEntities(); // Will later pull from game
+		ArrayList<Entity> entities = game.getEntitiesOf(EntityType.Unit); // Will later pull from game
 		
 		for(Entity e: entities){
 			if(this.equals(e)) continue; // Will not collide with itself
-			if(hitBox.intersects(e.hitBox)){
-				onCollision(e);
-			}
+			if(hitBox.intersects(e.hitBox)){ onCollision(e); } // Call the collision method
 		}
 	}
 	

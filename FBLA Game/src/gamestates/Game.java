@@ -4,9 +4,9 @@ package gamestates;
 
 import java.lang.Math;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.Predicate;
 
-import main.Values;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -14,8 +14,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import entities.Enemy;
-import entities.Player;
+import entities.units.Enemy;
+import entities.units.Player;
 import entities.core.Entity;
 import managers.DisplayManager;
 import managers.KeyManager;
@@ -27,7 +27,7 @@ public class Game extends BasicGameState
 	
 	// Entities in the Game
 	Player player; // Player
-	ArrayList<Entity> entities; // Entities
+	HashMap<Entity.EntityType, ArrayList<Entity>> entities; // All Entities in the Game
 
 	// Managers
 	KeyManager keyDown;
@@ -43,7 +43,8 @@ public class Game extends BasicGameState
 	}
 	
 	public Player getPlayer(){ return player; }
-	public ArrayList<Entity> getEntities(){ return entities; }
+	public HashMap<Entity.EntityType, ArrayList<Entity>> getEntities(){ return entities; }
+	public ArrayList<Entity> getEntitiesOf(Entity.EntityType type) { return entities.get(type); }
 
 	// Initialization of the Game
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
@@ -52,44 +53,45 @@ public class Game extends BasicGameState
 		this.gc = gc;
 	}
 	
-
-	
-	//render, all visuals
+	// Render all visuals
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
 	{
 		displayManager.renderEntities(g);
 	}
 
-	//update, runs consistently
+	// Update, runs consistently
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
 	{
 		// Manage Key and Cursor Input
 		keyInput(); // Manage keys that are down
 		cursorInput(); // Manage the cursor
 
-		// Update all entities
-		for(Entity e: entities) {
-			e.update();
-		}
-		
-		// Remove entities marked for removal
+		// Update all entities, and remove those marked for removal
 		Predicate<Entity> filter = (Entity e) -> (e.isMarked());
-		entities.removeIf(filter);				
+		for(ArrayList<Entity> list: entities.values()){
+			for(Entity e: list){ e.update(); }
+			list.removeIf(filter);
+		}
 	}
 
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		entities = new ArrayList<Entity>();
+		// Initialize Entities HashMap
+		entities = new HashMap<Entity.EntityType, ArrayList<Entity>>(){{
+			put(Entity.EntityType.Unit, new ArrayList<Entity>());
+			put(Entity.EntityType.Projectile, new ArrayList<Entity>());
+			put(Entity.EntityType.Other, new ArrayList<Entity>());
+		}};
 
+		// Initialize Player
 		player = new Player();
-		entities.add(player);
+		entities.get(Entity.EntityType.Unit).add(player);
 
-		entities.add(new Enemy());
-
-		// Initialization of Managers
+		// Initialize Managers
 		keyDown = new KeyManager(gc.getInput(), this);
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
 
-
+		// Add an Enemy (for testing)
+		entities.get(Entity.EntityType.Unit).add(new Enemy());
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
 
@@ -120,7 +122,8 @@ public class Game extends BasicGameState
 	}
 	public void mousePressed(int button, int x, int y)
 	{
-		
+		// Shoot something..
+
 	}
 	
 	
