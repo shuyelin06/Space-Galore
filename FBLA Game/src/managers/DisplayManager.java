@@ -2,16 +2,16 @@ package managers;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.Image;
 
-import entities.Player;
+import entities.units.Player;
 import entities.core.Coordinate;
 import entities.core.Entity;
-import entities.core.Rectangle;
 import gamestates.Game;
 import main.Engine;
 import main.Values;
+
+import java.util.ArrayList;
 
 public class DisplayManager{
 	private Graphics graphics;
@@ -62,20 +62,22 @@ public class DisplayManager{
 	// Main rendering method
 	public void renderEntities(Graphics g) {
 		// Render entities in game
-		for(Entity e: game.getEntities()) {
-			e.drawHitbox(); // Render the entity's hitbox
+		for(ArrayList<Entity> list: game.getEntities().values()) {
+			for(Entity e: list) {
+				e.drawHitbox(); // Render the entity's hitbox
 
-			// Render the entity
-			float[] renderPos = positionOnScreen(e.getPosition().getX(), e.getPosition().getY());
-			Image sprite = e.getSprite()
-					.getScaledCopy( (int) e.getWidth() * Values.Pixels_Per_Unit,  (int) e.getHeight() * Values.Pixels_Per_Unit);
+				// Render the entity
+				float[] renderPos = positionOnScreen(e.getPosition().getX(), e.getPosition().getY());
+				Image sprite = e.getSprite()
+						.getScaledCopy( (int) e.getWidth() * Values.Pixels_Per_Unit,  (int) e.getHeight() * Values.Pixels_Per_Unit);
 
-			// Rotate the sprite
-			sprite.setCenterOfRotation(sprite.getWidth() / 2, sprite.getHeight() / 2);
-			sprite.rotate((float) -(e.getRotation() * 180 / Math.PI)); // Convert to clockwise degrees
+				// Rotate the sprite
+				sprite.setCenterOfRotation(sprite.getWidth() / 2, sprite.getHeight() / 2);
+				sprite.rotate((float) -(e.getRotation() * 180 / Math.PI)); // Convert to clockwise degrees
 
-			// Draw the sprite
-			sprite.drawCentered(renderPos[0], renderPos[1]);
+				// Draw the sprite
+				sprite.drawCentered(renderPos[0], renderPos[1]);
+			}
 		}
 	}
 }

@@ -1,6 +1,5 @@
-package entities;
+package entities.units;
 
-import entities.core.Entity;
 import main.Engine;
 import main.Values;
 import managers.ImageManager;
@@ -12,6 +11,9 @@ public class Player extends Unit {
 	public Player(){
 		super(Player_X_Spawn, Player_Y_Spawn);
 
+		// Set UnitType
+		this.unitType = UnitType.Ally;
+
 		// Adjust Variables
 		this.sprite = ImageManager.getImage("PlaceholderShip");
 		this.width = 2.5f;
@@ -21,5 +23,8 @@ public class Player extends Unit {
 		// Adjust HitBox
 		this.hitBox.setWidth(width / 1.35f);
 		this.hitBox.setHeight(height / 3f);
+
+		// Adjust Unit Variables
+		this.contactDamage = 0;
 	}
 }
