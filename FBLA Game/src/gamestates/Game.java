@@ -2,12 +2,20 @@
 
 package gamestates;
 
+import java.io.IOException;
 import java.lang.Math;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Predicate;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import entities.core.Coordinate;
+import entities.core.Wave;
 import entities.projectiles.Projectile;
 import managers.EntityManager;
 import org.newdawn.slick.GameContainer;
@@ -41,6 +49,10 @@ public class Game extends BasicGameState
 	// Sound Manager
 	// Animation Manager
 	// Background / Ambiance Manager (?)
+
+	// Waves
+	Gson gson = new Gson();
+	ArrayList<Wave> waves;
 	
 	public Game(int id) 
 	{
@@ -52,10 +64,18 @@ public class Game extends BasicGameState
 	public ArrayList<Entity> getEntitiesOf(Entity.EntityType type) { return entities.get(type); }
 
 	// Initialization of the Game
-	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
 	{
 		gc.setShowFPS(true);
 		this.gc = gc;
+		try {
+			// Debug code + testing code
+			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/waves.json")))).getAsJsonObject().get("1");
+			waves.add(gson.fromJson(results, Wave.class));
+		} catch (IOException e) {
+			System.out.println(System.getProperty("user.dir"));
+			e.printStackTrace();
+		}
 	}
 	
 	// Render all visuals

@@ -1,0 +1,34 @@
+{
+  "1": {
+    "ledger": [
+      {
+        "enemy": 5
+      },
+      {
+        "enemy": 6
+      },
+      {
+        "enemy": 9
+      }
+    ],
+    "delay": 10000,
+    "spread": 20,
+    "duration": 2147483647
+  },
+  "2": {
+    "ledger": [
+      {
+        "enemy": 2
+      },
+      {
+        "enemy": 12
+      },
+      {
+        "enemy": 15
+      }
+    ],
+    "delay": 10000,
+    "spread": 20,
+    "duration": 2147483647
+  }
+}
