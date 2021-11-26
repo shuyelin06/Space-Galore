@@ -2,9 +2,11 @@ package entities.core;
 
 import main.Engine;
 
-public class Coordinate{
+import java.util.Objects;
+
+public class Coordinate {
 	float x, y;
-	
+
 	public Coordinate(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -31,4 +33,26 @@ public class Coordinate{
 		
 		return displacement;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Coordinate)) return false;
+		Coordinate that = (Coordinate) o;
+		return Float.compare(that.x, x) == 0 && Float.compare(that.y, y) == 0;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(x, y);
+	}
+
+	@Override
+	public String toString() {
+		return "Coordinate{" +
+				"x=" + x +
+				", y=" + y +
+				'}';
+	}
+
 }
