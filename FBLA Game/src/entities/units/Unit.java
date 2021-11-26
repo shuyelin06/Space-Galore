@@ -1,11 +1,15 @@
 package entities.units;
 
 import entities.core.Entity;
+import main.Engine;
 
 // Units are every ship / object with stats and can die
 public class Unit extends Entity {
     public enum UnitType{ Ally, Enemy, Neutral } // Define allies and enemies
     protected UnitType unitType; // Type of Unit
+
+    //
+    protected int attackCooldown = 2 * Engine.FRAMES_PER_SECOND;
 
     // Stat Variables
     protected int maxHealth; // Health Variables
@@ -30,9 +34,11 @@ public class Unit extends Entity {
         this.defense = 0;
     }
 
-    public void takeContactDamage(Unit u){
-        int damage = u.contactDamage - this.defense;
-        if(damage > 0) this.health -= damage;
+    public UnitType getType() { return unitType; }
+
+    public void takeDamage(int damage){
+        int unblockedDmg = damage - this.defense;
+        if(unblockedDmg > 0) this.health -= damage;
     }
 
     // Overwritten update method
@@ -50,8 +56,8 @@ public class Unit extends Entity {
 
         Unit u = (Unit) e;
         if(this.unitType != u.unitType) {
-            this.takeContactDamage(u);
-            u.takeContactDamage(this);
+            this.takeDamage(u.contactDamage);
+            u.takeDamage(this.contactDamage);
         }
     }
 }

@@ -63,8 +63,13 @@ public abstract class Entity {
 	}
 	
 	// Accessor Methods
+	public Rectangle getHitBox() { return hitBox; }
 	public Image getSprite() { return sprite; }
 	public Coordinate getPosition() { return position; }
+	public EntityType getEntityType() { return entityType; }
+
+	public float getX() { return position.getX(); }
+	public float getY() { return position.getY(); }
 	public float getRotation() { return angle; }
 	public float getWidth() { return width; }
 	public float getHeight() { return height; }
@@ -79,7 +84,6 @@ public abstract class Entity {
 	
 	public void accelerateX(float acceleration) { xSpeed += acceleration; }
 	public void accelerateY(float acceleration) { ySpeed += acceleration; }
-	public void markForRemoval(){ this.remove = true; }
 
 	// Helper Methods
 	public void faceEntity(Entity e) {

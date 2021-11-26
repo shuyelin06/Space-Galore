@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Predicate;
 
+import entities.core.Coordinate;
+import entities.projectiles.Projectile;
+import managers.EntityManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -33,6 +36,8 @@ public class Game extends BasicGameState
 	KeyManager keyDown;
 	
 	public DisplayManager displayManager; // Display Manager
+	public EntityManager entityManager;
+
 	// Sound Manager
 	// Animation Manager
 	// Background / Ambiance Manager (?)
@@ -89,9 +94,12 @@ public class Game extends BasicGameState
 		// Initialize Managers
 		keyDown = new KeyManager(gc.getInput(), this);
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
+		entityManager = new EntityManager(this);
 
 		// Add an Enemy (for testing)
-		entities.get(Entity.EntityType.Unit).add(new Enemy());
+		for(int i = 0; i < 10; i++) {
+			entities.get(Entity.EntityType.Unit).add(new Enemy());
+		}
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
 
@@ -108,14 +116,12 @@ public class Game extends BasicGameState
 
 	// Rotate the player towards the cursor
 	public void cursorInput(){
-		float[] posInGame = displayManager.positionInGame(
-				gc.getInput().getAbsoluteMouseX(),
-				gc.getInput().getAbsoluteMouseY()
-		);
+		float mouseY = displayManager.gameY(gc.getInput().getAbsoluteMouseY());
+		float mouseX = displayManager.gameX(gc.getInput().getAbsoluteMouseX());
 
 		double theta = Math.atan2(
-				player.getPosition().getY() - posInGame[1],
-				player.getPosition().getX() - posInGame[0]
+				player.getY() - mouseY,
+				player.getX() - mouseX
 		);
 
 		player.setRotation((float) theta);
@@ -123,7 +129,14 @@ public class Game extends BasicGameState
 	public void mousePressed(int button, int x, int y)
 	{
 		// Shoot something..
+		float mouseX = displayManager.gameX(x);
+		float mouseY = displayManager.gameY(y);
 
+		Projectile test = new Projectile(
+				player,
+				new Coordinate(mouseX, mouseY));
+
+		entities.get(Entity.EntityType.Projectile).add(test);
 	}
 	
 	

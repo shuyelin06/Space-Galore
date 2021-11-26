@@ -1,5 +1,6 @@
 package managers;
 
+import entities.projectiles.Projectile;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -29,36 +30,23 @@ public class DisplayManager {
 		this.graphics = graphics;
 	}
 
-	// Returns the pixel coordinates on screen for some block coordinate
-	public float[] positionOnScreen(float x, float y) {
-		float[] output = center.displacement(x, y);
-		
-		output[0] = output[0] * Values.Pixels_Per_Unit + Values.Center_X;
-		output[1] = Engine.RESOLUTION_Y - (output[1] * Values.Pixels_Per_Unit + Values.Center_Y);
-		
-		return output;
-	}
-	// Return block coordinates of some position on screen
-	public float[] positionInGame(float x, float y) {
-		float[] output = new float[2];
-		
-		// Find the distance from the pixel center
-		output[0] = center.getX() + (x - Values.Center_X) / Values.Pixels_Per_Unit;
-		output[1] = center.getY() + 1 + (Values.Center_Y - y) / Values.Pixels_Per_Unit;
-		
-		return output;
-	}
+	// Returns pixel coordinates on screen of some game position
+	public float screenX(float x) { return (x - center.getX()) * Values.Pixels_Per_Unit + Values.Center_X; }
+	public float screenY(float y) { return Engine.RESOLUTION_Y - ((y - center.getY()) * Values.Pixels_Per_Unit + Values.Center_Y); }
+
+	// Returns game coordinate of some pixel screen coordinate
+	public float gameX(float x) { return center.getX() + (x - Values.Center_X) / Values.Pixels_Per_Unit; }
+	public float gameY(float y) { return center.getY() + 1 + (Values.Center_Y - y) / Values.Pixels_Per_Unit; }
 	
 	// Render Methods
 	public void setColor(Color color) {
 		graphics.setColor(color);
 	}
 	public void drawLine(float x1, float y1, float x2, float y2) {
-		float[] pos1 = positionOnScreen(x1, y1);
-		float[] pos2 = positionOnScreen(x2, y2);
-		
-		graphics.drawLine(pos1[0], pos1[1], pos2[0], pos2[1]);
+		graphics.drawLine(screenX(x1), screenY(y1),
+				screenX(x2), screenY(y2));
 	}
+
 	// Main rendering method
 	public void renderEntities(Graphics g) {
 		// Render entities in game
@@ -67,7 +55,6 @@ public class DisplayManager {
 				e.drawHitbox(); // Render the entity's hitbox
 
 				// Render the entity
-				float[] renderPos = positionOnScreen(e.getPosition().getX(), e.getPosition().getY());
 				Image sprite = e.getSprite()
 						.getScaledCopy( (int) e.getWidth() * Values.Pixels_Per_Unit,  (int) e.getHeight() * Values.Pixels_Per_Unit);
 
@@ -76,7 +63,7 @@ public class DisplayManager {
 				sprite.rotate((float) -(e.getRotation() * 180 / Math.PI)); // Convert to clockwise degrees
 
 				// Draw the sprite
-				sprite.drawCentered(renderPos[0], renderPos[1]);
+				sprite.drawCentered(screenX(e.getX()), screenY(e.getY()));
 			}
 		}
 	}
