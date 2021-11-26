@@ -1,6 +1,6 @@
 package entities.core;
 
-public class Vector{
+public class Vector {
 	public static Vector Standard_X = new Vector(1,0);
 	public static Vector Standard_Y = new Vector(0,1);
 	

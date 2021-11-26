@@ -1,6 +1,6 @@
 package entities.core;
 
-public class Line{
+public class Line {
 	float xLeft, xRight;
 	
 	public Line(float xLeft, float xRight) {

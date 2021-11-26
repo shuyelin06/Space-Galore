@@ -12,7 +12,7 @@ import main.Utility;
 import main.Values;
 
 // Standard code for all entities in the game
-public abstract class Entity{
+public abstract class Entity {
 	// For general use
 	protected static Game game = Engine.game;
 

@@ -14,7 +14,7 @@ import main.Values;
 
 import java.util.ArrayList;
 
-public class DisplayManager{
+public class DisplayManager {
 	private Graphics graphics;
 	
 	private Coordinate center; // The entity the camera will be rendered around

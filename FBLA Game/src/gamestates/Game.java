@@ -48,7 +48,7 @@ public class Game extends BasicGameState
 	}
 	
 	public Player getPlayer(){ return player; }
-	public HashMap<Entity.EntityType, ArrayList<Entity>> getEntities(){ return entities; }
+	public HashMap<Entity.EntityType, ArrayList<Entity>> getEntities() { return entities; }
 	public ArrayList<Entity> getEntitiesOf(Entity.EntityType type) { return entities.get(type); }
 
 	// Initialization of the Game
