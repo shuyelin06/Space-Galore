@@ -9,22 +9,22 @@ import java.util.ArrayList;
 
 public class Projectile extends Entity {
     // protected float range; Unused Range
-    
+
     protected Unit.UnitType type;
     protected Coordinate target;
 
     protected int damage; // Damage of the projectile
     protected float speed; // Magnitude of speed for the projectile
 
-    public Projectile(float x, float y, Coordinate target) {
-        super(x,y);
+    public Projectile(Unit origin, Coordinate target) {
+        super(origin.getPosition().getX(), origin.getPosition().getY());
 
         this.target = target;
 
         // Projectiles will by default have low mass
-        this.damage = 10;
+        this.damage = 50;
         this.speed = 75f;
-        this.mass = 2f;
+        this.mass = 1f;
 
         // Set angle for this projectile
         faceTarget();
@@ -37,7 +37,7 @@ public class Projectile extends Entity {
         this.height = 1f;
         this.width = 1.5f;
 
-        this.type = Unit.UnitType.Ally;
+        this.type = origin.getType();
         this.sprite = ImageManager.getImage("Laser");
     }
 

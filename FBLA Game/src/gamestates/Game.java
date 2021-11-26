@@ -97,7 +97,7 @@ public class Game extends BasicGameState
 		entityManager = new EntityManager(this);
 
 		// Add an Enemy (for testing)
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < 10; i++) {
 			entities.get(Entity.EntityType.Unit).add(new Enemy());
 		}
 	}
@@ -116,14 +116,12 @@ public class Game extends BasicGameState
 
 	// Rotate the player towards the cursor
 	public void cursorInput(){
-		float[] posInGame = displayManager.positionInGame(
-				gc.getInput().getAbsoluteMouseX(),
-				gc.getInput().getAbsoluteMouseY()
-		);
+		float mouseY = displayManager.gameY(gc.getInput().getAbsoluteMouseY());
+		float mouseX = displayManager.gameX(gc.getInput().getAbsoluteMouseX());
 
 		double theta = Math.atan2(
-				player.getPosition().getY() - posInGame[1],
-				player.getPosition().getX() - posInGame[0]
+				player.getY() - mouseY,
+				player.getX() - mouseX
 		);
 
 		player.setRotation((float) theta);
@@ -131,12 +129,12 @@ public class Game extends BasicGameState
 	public void mousePressed(int button, int x, int y)
 	{
 		// Shoot something..
-		float[] posInGame = displayManager.positionInGame(x, y);
+		float mouseX = displayManager.gameX(x);
+		float mouseY = displayManager.gameY(y);
 
 		Projectile test = new Projectile(
-				player.getPosition().getX(),
-				player.getPosition().getY(),
-				new Coordinate(posInGame[0], posInGame[1]));
+				player,
+				new Coordinate(mouseX, mouseY));
 
 		entities.get(Entity.EntityType.Projectile).add(test);
 	}

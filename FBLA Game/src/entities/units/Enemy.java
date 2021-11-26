@@ -1,5 +1,9 @@
 package entities.units;
 
+import entities.core.Coordinate;
+import entities.core.Entity;
+import entities.projectiles.Projectile;
+import main.Engine;
 import managers.ImageManager;
 
 public class Enemy extends Unit {
@@ -34,7 +38,20 @@ public class Enemy extends Unit {
 	protected void enemyAI() {
 		this.faceEntity(game.getPlayer());
 
+		// Move towards the player
 		this.xSpeed = -5f * (float) Math.cos(this.angle);
 		this.ySpeed = -5f * (float) Math.sin(this.angle);
+
+		attackCooldown -= 1;
+		if(attackCooldown == 0) {
+			// Shoot at the player
+			Projectile test = new Projectile(this,
+					new Coordinate(game.getPlayer().getPosition().getX(),
+							game.getPlayer().getPosition().getY()));
+			game.getEntitiesOf(EntityType.Projectile).add(test);
+
+			attackCooldown = 5 * Engine.FRAMES_PER_SECOND;
+		}
+
 	}
 }

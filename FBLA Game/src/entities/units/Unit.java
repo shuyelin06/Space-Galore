@@ -1,11 +1,15 @@
 package entities.units;
 
 import entities.core.Entity;
+import main.Engine;
 
 // Units are every ship / object with stats and can die
 public class Unit extends Entity {
     public enum UnitType{ Ally, Enemy, Neutral } // Define allies and enemies
     protected UnitType unitType; // Type of Unit
+
+    //
+    protected int attackCooldown = 2 * Engine.FRAMES_PER_SECOND;
 
     // Stat Variables
     protected int maxHealth; // Health Variables
