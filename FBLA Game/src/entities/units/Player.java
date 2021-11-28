@@ -12,7 +12,7 @@ public class Player extends Unit {
 		super(Player_X_Spawn, Player_Y_Spawn);
 
 		// Set UnitType
-		this.unitType = UnitType.Ally;
+		this.team = Team.Ally;
 
 		// Adjust Variables
 		this.sprite = ImageManager.getImage("PlaceholderShip");

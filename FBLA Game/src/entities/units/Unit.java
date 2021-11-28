@@ -3,14 +3,10 @@ package entities.units;
 import entities.core.Entity;
 import main.Engine;
 
+import java.util.ArrayList;
+
 // Units are every ship / object with stats and can die
 public class Unit extends Entity {
-    public enum UnitType{ Ally, Enemy, Neutral } // Define allies and enemies
-    protected UnitType unitType; // Type of Unit
-
-    //
-    protected int attackCooldown = 2 * Engine.FRAMES_PER_SECOND;
-
     // Stat Variables
     protected int maxHealth; // Health Variables
     protected int health;
@@ -34,30 +30,29 @@ public class Unit extends Entity {
         this.defense = 0;
     }
 
-    public UnitType getType() { return unitType; }
-
+    // Mutator Methods
     public void takeDamage(int damage){
         int unblockedDmg = damage - this.defense;
         if(unblockedDmg > 0) this.health -= damage;
     }
 
     // Overwritten update method
+    @Override
     public void update() {
         if(health < 1) { // Checking if dead
             this.remove = true;
             return;
         }
+        unitAI();
         super.update();
     }
 
-    // Contact damage between entities
-    protected void onCollision(Entity e) {
-        super.onCollision(e);
+    // Unique AI to each unit
+    protected void unitAI() {}
 
-        Unit u = (Unit) e;
-        if(this.unitType != u.unitType) {
-            this.takeDamage(u.contactDamage);
-            u.takeDamage(this.contactDamage);
-        }
+    // Default unit collision: both units take contact damage
+    protected void unitCollision(Unit u) {
+        this.takeDamage(u.contactDamage);
+        u.takeDamage(this.contactDamage);
     }
 }
