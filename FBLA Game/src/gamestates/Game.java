@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.function.Predicate;
 
 import entities.core.Coordinate;
+import entities.projectiles.Laser;
 import entities.projectiles.Projectile;
 import managers.EntityManager;
 import org.newdawn.slick.GameContainer;
@@ -84,7 +85,6 @@ public class Game extends BasicGameState
 		entities = new HashMap<Entity.EntityType, ArrayList<Entity>>(){{
 			put(Entity.EntityType.Unit, new ArrayList<Entity>());
 			put(Entity.EntityType.Projectile, new ArrayList<Entity>());
-			put(Entity.EntityType.Other, new ArrayList<Entity>());
 		}};
 
 		// Initialize Player
@@ -132,7 +132,7 @@ public class Game extends BasicGameState
 		float mouseX = displayManager.gameX(x);
 		float mouseY = displayManager.gameY(y);
 
-		Projectile test = new Projectile(
+		Projectile test = new Laser(
 				player,
 				new Coordinate(mouseX, mouseY));
 

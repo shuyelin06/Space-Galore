@@ -9,37 +9,31 @@ import java.util.ArrayList;
 
 public class Projectile extends Entity {
     // protected float range; Unused Range
-
-    protected Unit.UnitType type;
     protected Coordinate target;
 
     protected int damage; // Damage of the projectile
     protected float speed; // Magnitude of speed for the projectile
 
+    // All projectiles need the origin (what unit created it), and some target
     public Projectile(Unit origin, Coordinate target) {
         super(origin.getPosition().getX(), origin.getPosition().getY());
 
+        // Determine team
+        this.team = origin.getTeam();
+
+        // Determine the target of the projectile
         this.target = target;
 
-        // Projectiles will by default have low mass
-        this.damage = 50;
-        this.speed = 75f;
+        // Default projectile settings
+        this.damage = 0;
+        this.speed = 0f;
         this.mass = 1f;
 
-        // Set angle for this projectile
+        // Set initial angle for this projectile
         faceTarget();
-
-        // Set speeds for the projectile
-        xSpeed = speed * (float) Math.cos(angle);
-        ySpeed = speed * (float) Math.sin(angle);
-
-        // Temporary Variables
-        this.height = 1f;
-        this.width = 1.5f;
-
-        this.type = origin.getType();
-        this.sprite = ImageManager.getImage("Laser");
     }
+
+    public int getDamage() { return damage; }
 
     // Adjust this projectiles angle so it faces the target
     protected void faceTarget() {
@@ -50,36 +44,20 @@ public class Projectile extends Entity {
     // Drag will not act on projectiles
     @Override
     public void update() {
-        updateProjectile();
+        projectileAI(); // Run unique projectile AI
+        collisions(); // Check collisions with units
 
-        collisions();
-
-        this.position.updatePosition(xSpeed, ySpeed);
+        this.position.updatePosition(xSpeed, ySpeed); // Update position
     }
 
-    // Will be used in extensions of this class
-    protected void updateProjectile() {
-
+    // Projectile AI to be used in extensions of this class
+    protected void projectileAI() {
+        // Set speeds for the projectile
+        xSpeed = speed * (float) Math.cos(angle);
+        ySpeed = speed * (float) Math.sin(angle);
     }
 
-    @Override
-    protected void collisions() {
-        ArrayList<Entity> entities = game.getEntitiesOf(EntityType.Unit);
-
-        for(Entity e: entities) {
-            Unit u = (Unit) e;
-
-            if(this.type != u.getType() && hitBox.intersects(u.getHitBox())){
-                onCollision(u);
-            }
-        }
-    }
-
-    @Override
-    protected void onCollision(Entity e) {
-        super.onCollision(e);
-        Unit u = (Unit) e;
-
+    protected void unitCollision(Unit u) {
         u.takeDamage(this.damage);
         this.remove = true;
     }
