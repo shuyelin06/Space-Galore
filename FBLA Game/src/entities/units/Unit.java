@@ -30,6 +30,9 @@ public class Unit extends Entity {
         this.defense = 0;
     }
 
+    // Accessor Methods
+    public float getPercentHealth() { return (float) health / maxHealth; }
+
     // Mutator Methods
     public void takeDamage(int damage){
         int unblockedDmg = damage - this.defense;
