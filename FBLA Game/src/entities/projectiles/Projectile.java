@@ -44,6 +44,12 @@ public class Projectile extends Entity {
     // Drag will not act on projectiles
     @Override
     public void update() {
+        // If projectile is off screen, it kills itself
+        if(!this.onScreen()) {
+            this.remove = true;
+            return;
+        }
+
         projectileAI(); // Run unique projectile AI
         collisions(); // Check collisions with units
 

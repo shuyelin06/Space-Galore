@@ -82,6 +82,12 @@ public abstract class Entity {
 	public float getWidth() { return width; }
 	public float getHeight() { return height; }
 	public boolean isMarked() { return remove; }
+	public boolean onScreen() {
+		final float ScreenRight = Engine.RESOLUTION_X / Values.Pixels_Per_Unit;
+		final float ScreenTop = Engine.RESOLUTION_Y / Values.Pixels_Per_Unit;
+
+		return (0 < position.x && position.x < ScreenRight) && (0 < position.y && position.y < ScreenTop);
+	}
 	
 	// Rendering Methods
 	public void drawHitbox() { hitBox.drawHitBox(); }
