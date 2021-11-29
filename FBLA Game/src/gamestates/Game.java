@@ -12,11 +12,13 @@ import java.util.HashMap;
 import java.util.function.Predicate;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import entities.core.Coordinate;
 import entities.core.Wave;
 import entities.projectiles.Projectile;
+import entities.units.Unit;
 import managers.EntityManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -30,6 +32,7 @@ import entities.units.Player;
 import entities.core.Entity;
 import managers.DisplayManager;
 import managers.KeyManager;
+import util.UnitAdapter;
 
 public class Game extends BasicGameState 
 {	
@@ -51,8 +54,8 @@ public class Game extends BasicGameState
 	// Background / Ambiance Manager (?)
 
 	// Waves
-	Gson gson = new Gson();
-	ArrayList<Wave> waves;
+	Gson gson = new GsonBuilder().registerTypeAdapter(Unit.class, new UnitAdapter().nullSafe()).create();
+	ArrayList<Wave> waves = new ArrayList<Wave>();
 	
 	public Game(int id) 
 	{
