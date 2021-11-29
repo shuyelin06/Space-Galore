@@ -10,7 +10,8 @@ import java.util.function.Predicate;
 import entities.core.Coordinate;
 import entities.projectiles.Laser;
 import entities.projectiles.Projectile;
-import managers.EntityManager;
+import entities.units.Unit;
+import entities.units.types.BasicUnit;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -18,7 +19,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import entities.units.Enemy;
 import entities.units.Player;
 import entities.core.Entity;
 import managers.DisplayManager;
@@ -37,7 +37,6 @@ public class Game extends BasicGameState
 	KeyManager keyDown;
 	
 	public DisplayManager displayManager; // Display Manager
-	public EntityManager entityManager;
 
 	// Sound Manager
 	// Animation Manager
@@ -94,11 +93,11 @@ public class Game extends BasicGameState
 		// Initialize Managers
 		keyDown = new KeyManager(gc.getInput(), this);
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
-		entityManager = new EntityManager(this);
 
 		// Add an Enemy (for testing)
 		for(int i = 0; i < 10; i++) {
-			entities.get(Entity.EntityType.Unit).add(new Enemy());
+			Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
+			entities.get(Entity.EntityType.Unit).add(enemy);
 		}
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
@@ -110,6 +109,11 @@ public class Game extends BasicGameState
 		switch(key) {
 			case Input.KEY_ESCAPE: // Exit the game
 				gc.exit();
+				break;
+
+			case Input.KEY_E:
+				Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
+				entities.get(Entity.EntityType.Unit).add(enemy);
 				break;
 		}
 	}

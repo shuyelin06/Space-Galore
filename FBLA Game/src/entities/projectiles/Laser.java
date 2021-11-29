@@ -8,13 +8,15 @@ public class Laser extends Projectile {
     public Laser(Unit origin, Coordinate target) {
         super(origin, target);
 
-        this.damage = 10;
-        this.speed = 100;
-        this.mass = 2f;
+        this.sprite = ImageManager.getImage("Laser");
 
         this.height = 1f;
-        this.width = 1.5f;
+        this.width = 1.45f;
 
-        this.sprite = ImageManager.getImage("Laser");
+        this.speed = 80;
+        this.mass = 2f;
+
+        this.hitBox.setWidth(width);
+        this.hitBox.setHeight(height);
     }
 }
