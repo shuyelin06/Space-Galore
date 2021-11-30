@@ -5,6 +5,7 @@ package gamestates;
 import java.lang.Math;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.function.Predicate;
 
 import entities.core.Coordinate;
@@ -33,6 +34,9 @@ public class Game extends BasicGameState
 	Player player; // Player
 	HashMap<Entity.EntityType, ArrayList<Entity>> entities; // All Entities in the Game
 
+	// We'll add new units to this arraylist
+	ArrayList<Entity> newUnits;
+
 	// Managers
 	KeyManager keyDown;
 	
@@ -49,6 +53,7 @@ public class Game extends BasicGameState
 	
 	public Player getPlayer(){ return player; }
 	public HashMap<Entity.EntityType, ArrayList<Entity>> getEntities() { return entities; }
+	public void addUnit(Unit u) { newUnits.add(u); }
 	public ArrayList<Entity> getEntitiesOf(Entity.EntityType type) { return entities.get(type); }
 
 	// Initialization of the Game
@@ -74,9 +79,15 @@ public class Game extends BasicGameState
 		// Update all entities, and remove those marked for removal
 		Predicate<Entity> filter = (Entity e) -> (e.isMarked());
 		for(ArrayList<Entity> list: entities.values()){
-			for(Entity e: list){ e.update(); }
+			for(Entity e: list) { e.update(); }
 			list.removeIf(filter);
 		}
+
+		// Add new entities
+		for(Entity e: newUnits) {
+			entities.get(Entity.EntityType.Unit).add(e);
+		}
+		newUnits.clear();
 	}
 
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
@@ -85,6 +96,7 @@ public class Game extends BasicGameState
 			put(Entity.EntityType.Unit, new ArrayList<Entity>());
 			put(Entity.EntityType.Projectile, new ArrayList<Entity>());
 		}};
+		this.newUnits = new ArrayList<Entity>();
 
 		// Initialize Player
 		player = new Player();
@@ -95,9 +107,9 @@ public class Game extends BasicGameState
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
 
 		// Add an Enemy (for testing)
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 3; i++) {
 			Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
-			entities.get(Entity.EntityType.Unit).add(enemy);
+			newUnits.add(enemy);
 		}
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}

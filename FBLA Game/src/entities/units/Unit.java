@@ -46,12 +46,6 @@ public class Unit extends Entity {
     // Defense will block a certain percentage (0 - 100) of damage incoming
     public void takeDamage(int damage){ this.health -= (int) (damage - damage * (this.defense / 100f)); }
 
-    // Action Methods
-    public void thrust() { // Thrust in the angle the unit is facing
-        this.xSpeed -= thrust * (float) Math.cos(this.angle);
-        this.ySpeed -= thrust * (float) Math.sin(this.angle);
-    }
-
     // Overwritten update method
     @Override
     public void update() {
