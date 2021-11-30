@@ -9,6 +9,8 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import com.google.gson.Gson;
@@ -32,7 +34,7 @@ import entities.units.Player;
 import entities.core.Entity;
 import managers.DisplayManager;
 import managers.KeyManager;
-import util.UnitAdapter;
+import util.EnemyAdapter;
 
 public class Game extends BasicGameState 
 {	
@@ -54,7 +56,7 @@ public class Game extends BasicGameState
 	// Background / Ambiance Manager (?)
 
 	// Waves
-	Gson gson = new GsonBuilder().registerTypeAdapter(Unit.class, new UnitAdapter().nullSafe()).create();
+	Gson gson = new GsonBuilder().registerTypeAdapter(Enemy.class, new EnemyAdapter().nullSafe()).create();
 	ArrayList<Wave> waves = new ArrayList<Wave>();
 	
 	public Game(int id) 
@@ -71,14 +73,6 @@ public class Game extends BasicGameState
 	{
 		gc.setShowFPS(true);
 		this.gc = gc;
-		try {
-			// Debug code + testing code
-			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/waves.json")))).getAsJsonObject().get("1");
-			waves.add(gson.fromJson(results, Wave.class));
-		} catch (IOException e) {
-			System.out.println(System.getProperty("user.dir"));
-			e.printStackTrace();
-		}
 	}
 	
 	// Render all visuals
@@ -120,8 +114,25 @@ public class Game extends BasicGameState
 		entityManager = new EntityManager(this);
 
 		// Add an Enemy (for testing)
-		for(int i = 0; i < 10; i++) {
-			entities.get(Entity.EntityType.Unit).add(new Enemy());
+		//for(int i = 0; i < 10; i++) {
+		//	entities.get(Entity.EntityType.Unit).add(new Enemy());
+		//}
+
+		// Initialize Waves
+		try {
+			// Debug code + testing code
+			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/waves.json")))).getAsJsonObject().get("1");
+			waves.add(gson.fromJson(results, Wave.class));
+		} catch (IOException e) {
+			System.out.println(System.getProperty("user.dir"));
+			e.printStackTrace();
+		}
+
+		System.out.println(waves.toString());
+		System.out.println(waves.get(0).getLedger().get(0).keySet().toArray()[0]);
+		HashMap<Enemy, Integer> wave = waves.get(0).getLedger().get(0);
+		for (Map.Entry<Enemy, Integer> e : wave.entrySet()) {
+			for (int i = 0; i < e.getValue(); i++) entities.get(Entity.EntityType.Unit).add(e.getKey());
 		}
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}

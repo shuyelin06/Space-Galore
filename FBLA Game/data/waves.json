@@ -2,13 +2,13 @@
   "1": {
     "ledger": [
       {
-        "enemy": 5
+        "entities.units.Enemy": 5
       },
       {
-        "enemy": 6
+        "entities.units.Enemy": 6
       },
       {
-        "enemy": 9
+        "entities.units.Enemy": 9
       }
     ],
     "delay": 10000,
