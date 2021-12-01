@@ -2,62 +2,67 @@ package entities.units;
 
 import entities.core.Entity;
 import main.Engine;
+import main.Values;
+import org.lwjgl.Sys;
+
+import java.util.ArrayList;
 
 // Units are every ship / object with stats and can die
 public class Unit extends Entity {
-    public enum UnitType{ Ally, Enemy, Neutral } // Define allies and enemies
-    protected UnitType unitType; // Type of Unit
-
-    //
-    protected int attackCooldown = 2 * Engine.FRAMES_PER_SECOND;
-
     // Stat Variables
     protected int maxHealth; // Health Variables
     protected int health;
 
-    protected int contactDamage; // Attack
+    protected int contactDamage; // Damage from contact
+    protected int attackDamage; // Damage from attacks
     protected int defense; // Defense
 
-    protected int acceleration; // Max acceleration of the unit (?)
+    protected float thrust; // The unit's thrust
 
-    public Unit(float x, float y){
+    public Unit(float x, float y, Team team){
         super(x, y);
+
+        // Set the Unit's Team
+        this.team = team;
 
         // Set the EntityType
         this.entityType = EntityType.Unit;
 
-        // Default Stats
-        this.maxHealth = 100;
-        this.health = maxHealth;
-
-        this.contactDamage = 0;
-        this.defense = 0;
+        // Default Contact Damage
+        this.contactDamage = 50;
     }
 
-    public UnitType getType() { return unitType; }
+    // Static Methods
+    protected static float GetTime() { return (float) Sys.getTime() / 1000; }
+    public static float RandomSpawnX() { return (float) Math.random() * Engine.RESOLUTION_X / Values.Pixels_Per_Unit; }
+    public static float RandomSpawnY() { return (float) Math.random() * Engine.RESOLUTION_Y / Values.Pixels_Per_Unit; }
 
-    public void takeDamage(int damage){
-        int unblockedDmg = damage - this.defense;
-        if(unblockedDmg > 0) this.health -= damage;
-    }
+    // Accessor Methods
+    public int getContactDamage() { return contactDamage; }
+    public int getAttackDamage()  { return attackDamage; }
+    public float getPercentHealth() { return (float) health / maxHealth; }
+
+    // Mutator Methods
+    // Defense will block a certain percentage (0 - 100) of damage incoming
+    public void takeDamage(int damage){ this.health -= (int) (damage - damage * (this.defense / 100f)); }
 
     // Overwritten update method
+    @Override
     public void update() {
         if(health < 1) { // Checking if dead
             this.remove = true;
             return;
         }
+        unitAI();
         super.update();
     }
 
-    // Contact damage between entities
-    protected void onCollision(Entity e) {
-        super.onCollision(e);
+    // Unique AI to each unit
+    protected void unitAI() {}
 
-        Unit u = (Unit) e;
-        if(this.unitType != u.unitType) {
-            this.takeDamage(u.contactDamage);
-            u.takeDamage(this.contactDamage);
-        }
+    // Default unit collision: both units take contact damage
+    protected void unitCollision(Unit u) {
+        this.takeDamage(u.contactDamage);
+        u.takeDamage(this.contactDamage);
     }
 }

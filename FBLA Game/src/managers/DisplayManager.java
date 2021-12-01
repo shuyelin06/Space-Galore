@@ -1,6 +1,7 @@
 package managers;
 
 import entities.projectiles.Projectile;
+import entities.units.Unit;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -52,19 +53,52 @@ public class DisplayManager {
 		// Render entities in game
 		for(ArrayList<Entity> list: game.getEntities().values()) {
 			for(Entity e: list) {
-				e.drawHitbox(); // Render the entity's hitbox
+				e.drawHitbox(); // Draw Hitbox
 
-				// Render the entity
-				Image sprite = e.getSprite()
-						.getScaledCopy( (int) e.getWidth() * Values.Pixels_Per_Unit,  (int) e.getHeight() * Values.Pixels_Per_Unit);
-
-				// Rotate the sprite
-				sprite.setCenterOfRotation(sprite.getWidth() / 2, sprite.getHeight() / 2);
-				sprite.rotate((float) -(e.getRotation() * 180 / Math.PI)); // Convert to clockwise degrees
-
-				// Draw the sprite
-				sprite.drawCentered(screenX(e.getX()), screenY(e.getY()));
+				drawEntitySprite(e); // Draw Sprite
+				if(e instanceof Unit) drawUnitHealth((Unit) e, g); // Draw Health
 			}
 		}
+	}
+
+	// Draw the scaled and rotated entity sprite
+	private void drawEntitySprite(Entity e) {
+		// Obtain the sprite and scale it appropriately
+		Image sprite = e.getSprite()
+				.getScaledCopy( (int) e.getWidth() * Values.Pixels_Per_Unit,  (int) e.getHeight() * Values.Pixels_Per_Unit);
+
+		// Rotate the sprite
+		sprite.setCenterOfRotation(sprite.getWidth() / 2, sprite.getHeight() / 2);
+		sprite.rotate((float) -(e.getRotation() * 180 / Math.PI)); // Convert to clockwise degrees
+
+		// Draw the sprite
+		sprite.drawCentered(screenX(e.getX()), screenY(e.getY()));
+	}
+
+	// Draw the health bar of a given unit
+	final private Color Health_Color = new Color(0, 230, 38);
+	private void drawUnitHealth(Unit u, Graphics g) {
+		final float Bar_Width = u.getWidth() * Values.Pixels_Per_Unit;
+		final float Bar_Height = 0.6f * Values.Pixels_Per_Unit;
+
+		final float Height_Displacement = u.getHeight() * Values.Pixels_Per_Unit / 2f + 5f;
+
+		// Draw Bar Background
+		g.setColor(Color.gray); // Color of bar outline
+		g.fillRect(
+				screenX(u.getX()) - Bar_Width / 2, // Bar Left
+				screenY(u.getY()) + Height_Displacement, // Bar Top
+				Bar_Width, // Bar Width
+				Bar_Height // Bar Height
+		);
+
+		// Draw Health Bar
+		g.setColor(Health_Color);
+		g.fillRect(
+				screenX(u.getX()) - Bar_Width / 2, // Bar Left
+				screenY(u.getY()) + Height_Displacement, // Bar Top
+				Bar_Width * u.getPercentHealth(), // Bar Width
+				Bar_Height // Bar Height
+		);
 	}
 }

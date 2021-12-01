@@ -2,7 +2,6 @@
 
 package gamestates;
 
-import java.io.IOException;
 import java.lang.Math;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
@@ -10,6 +9,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -19,9 +19,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import entities.core.Coordinate;
+import entities.projectiles.Laser;
 import entities.core.Wave;
 import entities.projectiles.Projectile;
 import entities.units.Unit;
+import entities.units.types.BasicUnit;
 import managers.EntityManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -46,6 +48,9 @@ public class Game extends BasicGameState
 	Player player; // Player
 	HashMap<Entity.EntityType, ArrayList<Entity>> entities; // All Entities in the Game
 
+	// We'll add new units to this arraylist
+	ArrayList<Entity> newUnits;
+
 	// Managers
 	KeyManager keyDown;
 	
@@ -59,7 +64,7 @@ public class Game extends BasicGameState
 	// Waves
 	Gson gson = new GsonBuilder().registerTypeAdapter(Enemy.class, new EnemyAdapter().nullSafe()).create();
 	ArrayList<Wave> waves = new ArrayList<Wave>();
-	
+
 	public Game(int id) 
 	{
 		this.id = id;
@@ -67,6 +72,7 @@ public class Game extends BasicGameState
 	
 	public Player getPlayer(){ return player; }
 	public HashMap<Entity.EntityType, ArrayList<Entity>> getEntities() { return entities; }
+	public void addUnit(Unit u) { newUnits.add(u); }
 	public ArrayList<Entity> getEntitiesOf(Entity.EntityType type) { return entities.get(type); }
 
 	// Initialization of the Game
@@ -95,6 +101,12 @@ public class Game extends BasicGameState
 			for(Entity e: list){ e.update(); }
 			list.removeIf(filter);
 		}
+
+		// Add new entities
+		for(Entity e: newUnits) {
+			entities.get(Entity.EntityType.Unit).add(e);
+		}
+		newUnits.clear();
 	}
 
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
@@ -104,6 +116,7 @@ public class Game extends BasicGameState
 			put(Entity.EntityType.Projectile, new ArrayList<Entity>());
 			put(Entity.EntityType.Other, new ArrayList<Entity>());
 		}};
+		this.newUnits = new ArrayList<Entity>();
 
 		// Initialize Player
 		player = new Player();
@@ -113,6 +126,12 @@ public class Game extends BasicGameState
 		keyDown = new KeyManager(gc.getInput(), this);
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
 		entityManager = new EntityManager(this);
+
+		// Add an Enemy (for testing)
+		for(int i = 0; i < 3; i++) {
+			Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
+			newUnits.add(enemy);
+		}
 
 		// Initialize Waves
 		try {
@@ -151,6 +170,11 @@ public class Game extends BasicGameState
 		switch(key) {
 			case Input.KEY_ESCAPE: // Exit the game
 				gc.exit();
+				break;
+
+			case Input.KEY_E:
+				Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
+				entities.get(Entity.EntityType.Unit).add(enemy);
 				break;
 		}
 	}

@@ -5,40 +5,26 @@ import entities.core.Entity;
 import entities.units.Unit;
 import managers.ImageManager;
 
-import java.util.ArrayList;
-
 public class Projectile extends Entity {
     // protected float range; Unused Range
-
-    protected Unit.UnitType type;
     protected Coordinate target;
 
     protected int damage; // Damage of the projectile
     protected float speed; // Magnitude of speed for the projectile
 
+    // All projectiles need the origin (what unit created it), and some target
     public Projectile(Unit origin, Coordinate target) {
         super(origin.getPosition().getX(), origin.getPosition().getY());
 
+        // Set the target of the projectile
         this.target = target;
 
-        // Projectiles will by default have low mass
-        this.damage = 50;
-        this.speed = 75f;
-        this.mass = 1f;
+        // Determine the projectile's team and damage based on the origin
+        this.team = origin.getTeam();
+        this.damage = origin.getAttackDamage();
 
-        // Set angle for this projectile
+        // Set initial angle for this projectile
         faceTarget();
-
-        // Set speeds for the projectile
-        xSpeed = speed * (float) Math.cos(angle);
-        ySpeed = speed * (float) Math.sin(angle);
-
-        // Temporary Variables
-        this.height = 1f;
-        this.width = 1.5f;
-
-        this.type = origin.getType();
-        this.sprite = ImageManager.getImage("Laser");
     }
 
     // Adjust this projectiles angle so it faces the target
@@ -50,36 +36,26 @@ public class Projectile extends Entity {
     // Drag will not act on projectiles
     @Override
     public void update() {
-        updateProjectile();
-
-        collisions();
-
-        this.position.updatePosition(xSpeed, ySpeed);
-    }
-
-    // Will be used in extensions of this class
-    protected void updateProjectile() {
-
-    }
-
-    @Override
-    protected void collisions() {
-        ArrayList<Entity> entities = game.getEntitiesOf(EntityType.Unit);
-
-        for(Entity e: entities) {
-            Unit u = (Unit) e;
-
-            if(this.type != u.getType() && hitBox.intersects(u.getHitBox())){
-                onCollision(u);
-            }
+        // If projectile is off screen, it kills itself
+        if(!this.onScreen()) {
+            this.remove = true;
+            return;
         }
+
+        projectileAI(); // Run unique projectile AI
+        collisions(); // Check collisions with units
+
+        this.position.updatePosition(xSpeed, ySpeed); // Update position
     }
 
-    @Override
-    protected void onCollision(Entity e) {
-        super.onCollision(e);
-        Unit u = (Unit) e;
+    // Projectile AI to be used in extensions of this class
+    protected void projectileAI() {
+        // Set speeds for the projectile
+        xSpeed = speed * (float) Math.cos(angle);
+        ySpeed = speed * (float) Math.sin(angle);
+    }
 
+    protected void unitCollision(Unit u) {
         u.takeDamage(this.damage);
         this.remove = true;
     }

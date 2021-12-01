@@ -2,6 +2,7 @@ package entities.core;
 
 import java.util.ArrayList;
 
+import entities.units.Unit;
 import gamestates.Game;
 import managers.ImageManager;
 import org.newdawn.slick.Graphics;
@@ -36,8 +37,12 @@ public abstract class Entity {
 	protected Rectangle hitBox;
 
 	// Entity Type
+	public enum EntityType { Unit, Projectile, Interactable, None }
 	protected EntityType entityType;
-	public enum EntityType { Unit, Projectile, Other }
+
+	// Teams
+	public enum Team { Ally, Enemy, Neutral }
+	protected Team team;
 
 	public Entity(float x, float y) {
 		// Initializing Rendering Variables
@@ -59,7 +64,9 @@ public abstract class Entity {
 		// Initializing hitbox
 		this.hitBox = new Rectangle(this);
 
-		this.entityType = EntityType.Other;
+		// Entity Type and Teams
+		this.entityType = EntityType.None;
+		this.team = Team.Neutral;
 	}
 	
 	// Accessor Methods
@@ -67,6 +74,7 @@ public abstract class Entity {
 	public Image getSprite() { return sprite; }
 	public Coordinate getPosition() { return position; }
 	public EntityType getEntityType() { return entityType; }
+	public Team getTeam() { return team; }
 
 	public float getX() { return position.getX(); }
 	public float getY() { return position.getY(); }
@@ -74,11 +82,18 @@ public abstract class Entity {
 	public float getWidth() { return width; }
 	public float getHeight() { return height; }
 	public boolean isMarked() { return remove; }
+	public boolean onScreen() {
+		final float ScreenRight = Engine.RESOLUTION_X / Values.Pixels_Per_Unit;
+		final float ScreenTop = Engine.RESOLUTION_Y / Values.Pixels_Per_Unit;
+
+		return (0 < position.x && position.x < ScreenRight) && (0 < position.y && position.y < ScreenTop);
+	}
 	
 	// Rendering Methods
 	public void drawHitbox() { hitBox.drawHitBox(); }
 	
 	// Mutator Methods
+	public void markForRemoval() { this.remove = true; }
 	public void rotateCounter(float theta) { this.angle += theta; } // Rotations
 	public void setRotation(float theta) { this.angle = theta; } // Rotations
 	
@@ -109,33 +124,43 @@ public abstract class Entity {
 		this.position.updatePosition(xSpeed, ySpeed);
 	};
 
-	// Check collisions with units (not projectiles FOR NOW)
-	protected void collisions(){
-		ArrayList<Entity> entities = game.getEntitiesOf(EntityType.Unit); // Will later pull from game
-		
-		for(Entity e: entities){
-			if(this.equals(e)) continue; // Will not collide with itself
-			if(hitBox.intersects(e.hitBox)){ onCollision(e); } // Call the collision method
+	// Check collisions with other units
+	protected void collisions() {
+		ArrayList<Entity> units = game.getEntitiesOf(EntityType.Unit);
+
+		for (Entity e: units) {
+			if(this.equals(e)) continue;
+			else if(!sameTeam(e) && hitBox.intersects(e.getHitBox())) {
+				collide(e);
+				unitCollision((Unit) e);
+				break; // Not sure if I should break or not, testing
+			}
 		}
 	}
-	
-	// Collision code unique to every entity
-	protected void onCollision(Entity e){
-		// Updating Velocities using Conservation of Momentum
+	// Determines if two entities are on the same team
+	private boolean sameTeam(Entity e) {
+		if(team == Team.Neutral || team != e.team) {
+			return false;
+		} else return true;
+	}
+
+	// Unique collision method that can be overwritten in extensions of this class
+	protected void unitCollision(Unit u) { }
+
+	// Update velocities (using the law of conservation of momentum)
+	protected void collide(Entity e) {
 		// Updating X Velocities
 		final float C1X = mass * xSpeed + e.mass * e.xSpeed;
 		final float C2X = - Values.Restitution_Coefficient * (e.xSpeed - this.xSpeed);
-		
+
 		this.xSpeed = (C1X + mass * C2X) / (mass + e.mass) - C2X;
 		e.xSpeed = (C1X + mass * C2X) / (mass + e.mass);
-		
-		
+
 		// Updating Y Velocities
 		final float C1Y = mass * ySpeed + e.mass * e.ySpeed;
 		final float C2Y = - Values.Restitution_Coefficient * (e.ySpeed - ySpeed);
-		
+
 		this.ySpeed = (C1Y + mass * C2Y) / (mass + e.mass) - C2Y;
 		e.ySpeed = (C1Y + mass * C2Y) / (mass + e.mass);
 	}
-	
 }

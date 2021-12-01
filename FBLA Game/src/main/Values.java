@@ -10,7 +10,7 @@ public class Values{
 	
 	// Physics Coefficients
 	final public static float Drag_Coefficient = 0.4f;
-	final public static float Restitution_Coefficient = 0.5f;
+	final public static float Restitution_Coefficient = 0.75f;
 	
 	// Where the display manager's center is located on screen 
 	final public static float Center_X = Engine.RESOLUTION_X / 2f;
