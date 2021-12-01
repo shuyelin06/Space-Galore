@@ -138,7 +138,7 @@ public class Game extends BasicGameState
 		waves.get(0).getLedger().forEach((HashMap<Enemy, Integer> m) -> {
 			for (Map.Entry<Enemy, Integer> en : m.entrySet()) {
 				for (int i = 0; i < en.getValue(); i++) {
-					try { waves.get(0).cache.add(en.getKey().getClass().getConstructor().newInstance()); }
+					try { entities.get(Entity.EntityType.Unit).add(en.getKey().getClass().getConstructor().newInstance()); }
 					catch (InstantiationException
 							| IllegalAccessException
 							| InvocationTargetException
@@ -146,7 +146,7 @@ public class Game extends BasicGameState
 				}
 			}
 		});
-		waves.get(0).getCache().forEach((Enemy en) -> entities.get(Entity.EntityType.Unit).add(en));
+		//waves.get(0).getCache().forEach((Enemy en) -> entities.get(Entity.EntityType.Unit).add(en));
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
 
