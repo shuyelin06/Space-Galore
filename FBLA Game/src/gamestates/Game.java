@@ -114,11 +114,6 @@ public class Game extends BasicGameState
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
 		entityManager = new EntityManager(this);
 
-		// Add an Enemy (for testing)
-		//for(int i = 0; i < 10; i++) {
-		//	entities.get(Entity.EntityType.Unit).add(new Enemy());
-		//}
-
 		// Initialize Waves
 		try {
 			// Debug code + testing code
@@ -132,9 +127,7 @@ public class Game extends BasicGameState
 		System.out.println(waves.toString());
 		System.out.println(waves.get(0).getLedger().get(0).keySet().toArray()[0]);
 		HashMap<Enemy, Integer> wave = waves.get(0).getLedger().get(0);
-		//for (Map.Entry<Enemy, Integer> en : wave.entrySet()) {
-		//	for (int i = 0; i < en.getValue(); i++) entities.get(Entity.EntityType.Unit).add(en.getKey());
-		//}
+
 		waves.get(0).getLedger().forEach((HashMap<Enemy, Integer> m) -> {
 			for (Map.Entry<Enemy, Integer> en : m.entrySet()) {
 				for (int i = 0; i < en.getValue(); i++) {
@@ -146,6 +139,7 @@ public class Game extends BasicGameState
 				}
 			}
 		});
+
 		//waves.get(0).getCache().forEach((Enemy en) -> entities.get(Entity.EntityType.Unit).add(en));
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
