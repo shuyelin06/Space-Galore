@@ -4,6 +4,7 @@ package gamestates;
 
 import java.io.IOException;
 import java.lang.Math;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
@@ -131,9 +132,21 @@ public class Game extends BasicGameState
 		System.out.println(waves.toString());
 		System.out.println(waves.get(0).getLedger().get(0).keySet().toArray()[0]);
 		HashMap<Enemy, Integer> wave = waves.get(0).getLedger().get(0);
-		for (Map.Entry<Enemy, Integer> e : wave.entrySet()) {
-			for (int i = 0; i < e.getValue(); i++) entities.get(Entity.EntityType.Unit).add(e.getKey());
-		}
+		//for (Map.Entry<Enemy, Integer> en : wave.entrySet()) {
+		//	for (int i = 0; i < en.getValue(); i++) entities.get(Entity.EntityType.Unit).add(en.getKey());
+		//}
+		waves.get(0).getLedger().forEach((HashMap<Enemy, Integer> m) -> {
+			for (Map.Entry<Enemy, Integer> en : m.entrySet()) {
+				for (int i = 0; i < en.getValue(); i++) {
+					try { waves.get(0).cache.add(en.getKey().getClass().getConstructor().newInstance()); }
+					catch (InstantiationException
+							| IllegalAccessException
+							| InvocationTargetException
+							| NoSuchMethodException e) { e.printStackTrace(); }
+				}
+			}
+		});
+		waves.get(0).getCache().forEach((Enemy en) -> entities.get(Entity.EntityType.Unit).add(en));
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
 

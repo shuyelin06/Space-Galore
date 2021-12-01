@@ -1,10 +1,10 @@
 package entities.core;
 
 import entities.units.Enemy;
+import util.WeakSet;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 public class Wave {
 
@@ -12,12 +12,14 @@ public class Wave {
     private int delay;
     private int spread;
     private int duration;
+    public List<Enemy> cache;
 
     public Wave(ArrayList<HashMap<Enemy, Integer>> ledger, int delay, int spread, int duration) {
         this.ledger = ledger;
         this.delay = delay;
         this.spread = spread;
         this.duration = duration;
+        this.cache = new ArrayList<Enemy>();
     }
 
     public ArrayList<HashMap<Enemy, Integer>> getLedger() {
@@ -34,6 +36,14 @@ public class Wave {
 
     public int getDuration() {
         return duration;
+    }
+
+    public List<Enemy> getCache() {
+        return cache;
+    }
+
+    public void setCache(List<Enemy> cache) {
+        this.cache = cache;
     }
 
     @Override
