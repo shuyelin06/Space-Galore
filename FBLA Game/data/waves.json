@@ -2,29 +2,29 @@
   "1": {
     "ledger": [
       {
-        "entities.units.Enemy": 2
+        "entities.units.types.BasicUnit": 2
       },
       {
-        "entities.units.Enemy": 6
+        "entities.units.types.BasicUnit": 6
       },
       {
-        "entities.units.Enemy": 9
+        "entities.units.types.BasicUnit": 9
       }
     ],
     "delay": 10000,
-    "spread": 20,
+    "spread": 5,
     "duration": 2147483647
   },
   "2": {
     "ledger": [
       {
-        "enemy": 2
+        "entities.units.types.BasicUnit": 2
       },
       {
-        "enemy": 12
+        "entities.units.types.BasicUnit": 12
       },
       {
-        "enemy": 15
+        "entities.units.types.BasicUnit": 15
       }
     ],
     "delay": 10000,

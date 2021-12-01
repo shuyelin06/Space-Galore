@@ -1,6 +1,6 @@
 package entities.core;
 
-import entities.units.Enemy;
+import entities.units.Unit;
 import util.WeakSet;
 
 import java.lang.reflect.InvocationTargetException;
@@ -8,21 +8,19 @@ import java.util.*;
 
 public class Wave {
 
-    private ArrayList<HashMap<Enemy, Integer>> ledger;
+    private ArrayList<HashMap<Unit, Integer>> ledger;
     private int delay;
     private int spread;
     private int duration;
-    public List<Enemy> cache;
 
-    public Wave(ArrayList<HashMap<Enemy, Integer>> ledger, int delay, int spread, int duration) {
+    public Wave(ArrayList<HashMap<Unit, Integer>> ledger, int delay, int spread, int duration) {
         this.ledger = ledger;
         this.delay = delay;
         this.spread = spread;
         this.duration = duration;
-        this.cache = new ArrayList<Enemy>();
     }
 
-    public ArrayList<HashMap<Enemy, Integer>> getLedger() {
+    public ArrayList<HashMap<Unit, Integer>> getLedger() {
         return ledger;
     }
 
@@ -36,14 +34,6 @@ public class Wave {
 
     public int getDuration() {
         return duration;
-    }
-
-    public List<Enemy> getCache() {
-        return cache;
-    }
-
-    public void setCache(List<Enemy> cache) {
-        this.cache = cache;
     }
 
     @Override

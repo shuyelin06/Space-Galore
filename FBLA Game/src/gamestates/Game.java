@@ -2,16 +2,13 @@
 
 package gamestates;
 
+import java.io.IOException;
 import java.lang.Math;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 import com.google.gson.Gson;
@@ -24,7 +21,6 @@ import entities.core.Wave;
 import entities.projectiles.Projectile;
 import entities.units.Unit;
 import entities.units.types.BasicUnit;
-import managers.EntityManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -32,12 +28,11 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import entities.units.Enemy;
 import entities.units.Player;
 import entities.core.Entity;
 import managers.DisplayManager;
 import managers.KeyManager;
-import util.EnemyAdapter;
+import util.UnitAdapter;
 
 public class Game extends BasicGameState 
 {	
@@ -46,7 +41,7 @@ public class Game extends BasicGameState
 	
 	// Entities in the Game
 	Player player; // Player
-	HashMap<Entity.EntityType, ArrayList<Entity>> entities; // All Entities in the Game
+	EnumMap<Entity.EntityType, ArrayList<Entity>> entities; // All Entities in the Game
 
 	// We'll add new units to this arraylist
 	ArrayList<Entity> newUnits;
@@ -55,15 +50,14 @@ public class Game extends BasicGameState
 	KeyManager keyDown;
 	
 	public DisplayManager displayManager; // Display Manager
-	public EntityManager entityManager;
 
 	// Sound Manager
 	// Animation Manager
 	// Background / Ambiance Manager (?)
 
 	// Waves
-	Gson gson = new GsonBuilder().registerTypeAdapter(Enemy.class, new EnemyAdapter().nullSafe()).create();
-	ArrayList<Wave> waves = new ArrayList<Wave>();
+	Gson gson = new GsonBuilder().registerTypeAdapter(Unit.class, new UnitAdapter().nullSafe()).create();
+	ArrayList<Wave> waves = new ArrayList<>();
 
 	public Game(int id) 
 	{
@@ -71,7 +65,7 @@ public class Game extends BasicGameState
 	}
 	
 	public Player getPlayer(){ return player; }
-	public HashMap<Entity.EntityType, ArrayList<Entity>> getEntities() { return entities; }
+	public Map<Entity.EntityType, ArrayList<Entity>> getEntities() { return entities; }
 	public void addUnit(Unit u) { newUnits.add(u); }
 	public ArrayList<Entity> getEntitiesOf(Entity.EntityType type) { return entities.get(type); }
 
@@ -96,7 +90,7 @@ public class Game extends BasicGameState
 		cursorInput(); // Manage the cursor
 
 		// Update all entities, and remove those marked for removal
-		Predicate<Entity> filter = (Entity e) -> (e.isMarked());
+		Predicate<Entity> filter = Entity::isMarked;
 		for(ArrayList<Entity> list: entities.values()){
 			for(Entity e: list){ e.update(); }
 			list.removeIf(filter);
@@ -109,14 +103,16 @@ public class Game extends BasicGameState
 		newUnits.clear();
 	}
 
+	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		// Initialize Entities HashMap
-		entities = new HashMap<Entity.EntityType, ArrayList<Entity>>(){{
-			put(Entity.EntityType.Unit, new ArrayList<Entity>());
-			put(Entity.EntityType.Projectile, new ArrayList<Entity>());
-			put(Entity.EntityType.Other, new ArrayList<Entity>());
-		}};
-		this.newUnits = new ArrayList<Entity>();
+		entities = new EnumMap<>(Map.of(
+				Entity.EntityType.Unit, new ArrayList<>(),
+				Entity.EntityType.Projectile, new ArrayList<>(),
+				Entity.EntityType.Interactable, new ArrayList<>()
+		));
+
+		this.newUnits = new ArrayList<>();
 
 		// Initialize Player
 		player = new Player();
@@ -125,17 +121,16 @@ public class Game extends BasicGameState
 		// Initialize Managers
 		keyDown = new KeyManager(gc.getInput(), this);
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
-		entityManager = new EntityManager(this);
 
 		// Add an Enemy (for testing)
-		for(int i = 0; i < 3; i++) {
-			Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
-			newUnits.add(enemy);
-		}
+		//for(int i = 0; i < 3; i++) {
+		//	Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
+		//	newUnits.add(enemy);
+		//}
 
 		// Initialize Waves
+		// VVVVVVVVVVVV Start of Wave Debug code + testing code
 		try {
-			// Debug code + testing code
 			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/waves.json")))).getAsJsonObject().get("1");
 			waves.add(gson.fromJson(results, Wave.class));
 		} catch (IOException e) {
@@ -145,12 +140,14 @@ public class Game extends BasicGameState
 
 		System.out.println(waves.toString());
 		System.out.println(waves.get(0).getLedger().get(0).keySet().toArray()[0]);
-		HashMap<Enemy, Integer> wave = waves.get(0).getLedger().get(0);
+		HashMap<Unit, Integer> wave = waves.get(0).getLedger().get(0);
 
-		waves.get(0).getLedger().forEach((HashMap<Enemy, Integer> m) -> {
-			for (Map.Entry<Enemy, Integer> en : m.entrySet()) {
+		waves.get(0).getLedger().forEach((HashMap<Unit, Integer> m) -> {
+			for (Map.Entry<Unit, Integer> en : m.entrySet()) {
 				for (int i = 0; i < en.getValue(); i++) {
-					try { entities.get(Entity.EntityType.Unit).add(en.getKey().getClass().getConstructor().newInstance()); }
+					try { newUnits.add(en.getKey().getClass()
+							.getConstructor(float.class, float.class, Entity.Team.class)
+							.newInstance(Player.Player_X_Spawn + (i * waves.get(0).getSpread()) - (int) ((double) en.getValue() / 2) * 5 , 48, Entity.Team.Enemy)); }
 					catch (InstantiationException
 							| IllegalAccessException
 							| InvocationTargetException
@@ -160,11 +157,15 @@ public class Game extends BasicGameState
 		});
 
 		//waves.get(0).getCache().forEach((Enemy en) -> entities.get(Entity.EntityType.Unit).add(en));
+
+		// ^^^^^^^^^ End of Wave Testing Code
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
 
 	// Input Methods
 	public void keyInput() { KeyManager.Key_Down_List.stream().filter(keyDown).forEach(keyDown::keyDown); } // Check keys that are down
+
+	@Override
 	public void keyPressed(int key, char c)
 	{
 		switch(key) {
@@ -191,6 +192,8 @@ public class Game extends BasicGameState
 
 		player.setRotation((float) theta);
 	}
+
+	@Override
 	public void mousePressed(int button, int x, int y)
 	{
 		// Shoot something..

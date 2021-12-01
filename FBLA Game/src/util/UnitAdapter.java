@@ -4,31 +4,34 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import entities.units.Enemy;
+import entities.core.Entity;
+import entities.units.Unit;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class EnemyAdapter extends TypeAdapter<Enemy> {
+public class UnitAdapter extends TypeAdapter<Unit> {
 
     @Override
-    public void write(JsonWriter out, Enemy value) throws IOException {
+    public void write(JsonWriter out, Unit value) throws IOException {
 
     }
 
     @Override
-    public synchronized Enemy read(JsonReader in) throws IOException {
+    public synchronized Unit read(JsonReader in) throws IOException {
 
         if (in.peek() == JsonToken.NULL) {
             in.nextNull();
             return null;
         }
 
-        String enemy = in.nextString();
-        CompletableFuture<Enemy> await = CompletableFuture.supplyAsync(() -> {
-            try { return (Enemy) Class.forName(enemy).getConstructor().newInstance(); }
+        String unit = in.nextString();
+        CompletableFuture<Unit> await = CompletableFuture.supplyAsync(() -> {
+            try { return (Unit) Class.forName(unit)
+                    .getConstructor(float.class, float.class, Entity.Team.class)
+                    .newInstance(0, 0, Entity.Team.Enemy); }
             catch (ClassNotFoundException
                     | NoSuchMethodException
                     | IllegalAccessException
