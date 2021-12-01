@@ -22,8 +22,7 @@ public class StartMenu extends BasicGameState
 	{
 		this.id = id;
 	}
-	
-	
+
 	//initializer, first time
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
 	{
@@ -38,6 +37,8 @@ public class StartMenu extends BasicGameState
 	//render, all visuals
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
 	{
+		// When files are done loading, the game ready will appear on screen
+		g.drawString("Game Ready!", Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
 	}
 
 	//update, runs consistently

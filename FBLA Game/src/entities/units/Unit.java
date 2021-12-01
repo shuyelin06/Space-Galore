@@ -4,8 +4,8 @@ import entities.core.Entity;
 import main.Engine;
 import main.Values;
 import org.lwjgl.Sys;
-
-import java.util.ArrayList;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 // Units are every ship / object with stats and can die
 public class Unit extends Entity {
@@ -38,13 +38,44 @@ public class Unit extends Entity {
     public static float RandomSpawnY() { return (float) Math.random() * Engine.RESOLUTION_Y / Values.Pixels_Per_Unit; }
 
     // Accessor Methods
-    public int getContactDamage() { return contactDamage; }
     public int getAttackDamage()  { return attackDamage; }
     public float getPercentHealth() { return (float) health / maxHealth; }
 
     // Mutator Methods
     // Defense will block a certain percentage (0 - 100) of damage incoming
     public void takeDamage(int damage){ this.health -= (int) (damage - damage * (this.defense / 100f)); }
+
+    @Override
+    public void render(Graphics g) {
+        super.render(g); // Call entity render method
+        drawHealthBar(g); // Draw health bar
+    }
+
+    final static private Color Health_Color = new Color(0, 230, 38);
+    protected void drawHealthBar(Graphics g) {
+        final float Bar_Width = width * Values.Pixels_Per_Unit;
+        final float Bar_Height = 0.6f * Values.Pixels_Per_Unit;
+
+        final float Height_Displacement = height * Values.Pixels_Per_Unit / 2f + 5f;
+
+        // Draw Bar Background
+        g.setColor(Color.gray); // Color of bar outline
+        g.fillRect(
+                game.displayManager.screenX(position.getX()) - Bar_Width / 2, // Bar Left
+                game.displayManager.screenY(position.getY()) + Height_Displacement, // Bar Top
+                Bar_Width, // Bar Width
+                Bar_Height // Bar Height
+        );
+
+        // Draw Health Bar
+        g.setColor(Health_Color);
+        g.fillRect(
+                game.displayManager.screenX(position.getX()) - Bar_Width / 2, // Bar Left
+                game.displayManager.screenY(position.getY()) + Height_Displacement, // Bar Top
+                Bar_Width * getPercentHealth(), // Bar Width
+                Bar_Height // Bar Height
+        );
+    }
 
     // Overwritten update method
     @Override
