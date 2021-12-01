@@ -1,0 +1,34 @@
+{
+  "1": {
+    "ledger": [
+      {
+        "entities.units.types.BasicUnit": 2
+      },
+      {
+        "entities.units.types.BasicUnit": 6
+      },
+      {
+        "entities.units.types.BasicUnit": 9
+      }
+    ],
+    "delay": 10000,
+    "spread": 5,
+    "duration": 2147483647
+  },
+  "2": {
+    "ledger": [
+      {
+        "entities.units.types.BasicUnit": 2
+      },
+      {
+        "entities.units.types.BasicUnit": 12
+      },
+      {
+        "entities.units.types.BasicUnit": 15
+      }
+    ],
+    "delay": 10000,
+    "spread": 20,
+    "duration": 2147483647
+  }
+}

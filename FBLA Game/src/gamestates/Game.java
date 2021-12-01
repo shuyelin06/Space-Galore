@@ -2,14 +2,22 @@
 
 package gamestates;
 
+import java.io.IOException;
 import java.lang.Math;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.function.Predicate;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import entities.core.Coordinate;
 import entities.projectiles.Laser;
+import entities.core.Wave;
 import entities.projectiles.Projectile;
 import entities.units.Unit;
 import entities.units.types.BasicUnit;
@@ -25,6 +33,7 @@ import entities.units.Player;
 import entities.core.Entity;
 import managers.DisplayManager;
 import managers.KeyManager;
+import util.UnitAdapter;
 
 public class Game extends BasicGameState 
 {	
@@ -33,7 +42,7 @@ public class Game extends BasicGameState
 	
 	// Entities in the Game
 	Player player; // Player
-	HashMap<Entity.EntityType, ArrayList<Entity>> entities; // All Entities in the Game
+	EnumMap<Entity.EntityType, ArrayList<Entity>> entities; // All Entities in the Game
 
 	// We'll add new units to this arraylist
 	ArrayList<Entity> newUnits;
@@ -46,19 +55,23 @@ public class Game extends BasicGameState
 	// Sound Manager
 	// Animation Manager
 	// Background / Ambiance Manager (?)
-	
+
+	// Waves
+	Gson gson = new GsonBuilder().registerTypeAdapter(Unit.class, new UnitAdapter().nullSafe()).create();
+	ArrayList<Wave> waves = new ArrayList<>();
+
 	public Game(int id) 
 	{
 		this.id = id;
 	}
 	
 	public Player getPlayer(){ return player; }
-	public HashMap<Entity.EntityType, ArrayList<Entity>> getEntities() { return entities; }
+	public Map<Entity.EntityType, ArrayList<Entity>> getEntities() { return entities; }
 	public void addUnit(Unit u) { newUnits.add(u); }
 	public ArrayList<Entity> getEntitiesOf(Entity.EntityType type) { return entities.get(type); }
 
 	// Initialization of the Game
-	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
 	{
 		gc.setShowFPS(true);
 		this.gc = gc;
@@ -78,9 +91,9 @@ public class Game extends BasicGameState
 		cursorInput(); // Manage the cursor
 
 		// Update all entities, and remove those marked for removal
-		Predicate<Entity> filter = (Entity e) -> (e.isMarked());
+		Predicate<Entity> filter = Entity::isMarked;
 		for(ArrayList<Entity> list: entities.values()){
-			for(Entity e: list) { e.update(); }
+			for(Entity e: list){ e.update(); }
 			list.removeIf(filter);
 		}
 
@@ -91,13 +104,16 @@ public class Game extends BasicGameState
 		newUnits.clear();
 	}
 
+	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		// Initialize Entities HashMap
-		entities = new HashMap<Entity.EntityType, ArrayList<Entity>>(){{
-			put(Entity.EntityType.Unit, new ArrayList<Entity>());
-			put(Entity.EntityType.Projectile, new ArrayList<Entity>());
-		}};
-		this.newUnits = new ArrayList<Entity>();
+		entities = new EnumMap<>(Map.of(
+				Entity.EntityType.Unit, new ArrayList<>(),
+				Entity.EntityType.Projectile, new ArrayList<>(),
+				Entity.EntityType.Interactable, new ArrayList<>()
+		));
+
+		this.newUnits = new ArrayList<>();
 
 		// Initialize Player
 		player = new Player();
@@ -108,17 +124,49 @@ public class Game extends BasicGameState
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
 
 		// Add an Enemy (for testing)
-		// SoundManager.playBackgroundMusic("Background Music");
-		for(int i = 0; i < 3; i++) {
-			Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
-			newUnits.add(enemy);
+		//for(int i = 0; i < 3; i++) {
+		//	Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
+		//	newUnits.add(enemy);
+		//}
+
+		// Initialize Waves
+		// VVVVVVVVVVVV Start of Wave Debug code + testing code
+		try {
+			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/waves.json")))).getAsJsonObject().get("1");
+			waves.add(gson.fromJson(results, Wave.class));
+		} catch (IOException e) {
+			System.out.println(System.getProperty("user.dir"));
+			e.printStackTrace();
 		}
 
+		System.out.println(waves.toString());
+		System.out.println(waves.get(0).getLedger().get(0).keySet().toArray()[0]);
+		HashMap<Unit, Integer> wave = waves.get(0).getLedger().get(0);
+
+		waves.get(0).getLedger().forEach((HashMap<Unit, Integer> m) -> {
+			for (Map.Entry<Unit, Integer> en : m.entrySet()) {
+				for (int i = 0; i < en.getValue(); i++) {
+					try { newUnits.add(en.getKey().getClass()
+							.getConstructor(float.class, float.class, Entity.Team.class)
+							.newInstance(Player.Player_X_Spawn + (i * waves.get(0).getSpread()) - (int) ((double) en.getValue() / 2) * 5 , 48, Entity.Team.Enemy)); }
+					catch (InstantiationException
+							| IllegalAccessException
+							| InvocationTargetException
+							| NoSuchMethodException e) { e.printStackTrace(); }
+				}
+			}
+		});
+
+		//waves.get(0).getCache().forEach((Enemy en) -> entities.get(Entity.EntityType.Unit).add(en));
+
+		// ^^^^^^^^^ End of Wave Testing Code
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
 
 	// Input Methods
 	public void keyInput() { KeyManager.Key_Down_List.stream().filter(keyDown).forEach(keyDown::keyDown); } // Check keys that are down
+
+	@Override
 	public void keyPressed(int key, char c)
 	{
 		switch(key) {
@@ -145,13 +193,15 @@ public class Game extends BasicGameState
 
 		player.setRotation((float) theta);
 	}
+
+	@Override
 	public void mousePressed(int button, int x, int y)
 	{
 		// Shoot something..
 		float mouseX = displayManager.gameX(x);
 		float mouseY = displayManager.gameY(y);
 
-		Projectile test = new Laser(
+		Projectile test = new Projectile(
 				player,
 				new Coordinate(mouseX, mouseY));
 
