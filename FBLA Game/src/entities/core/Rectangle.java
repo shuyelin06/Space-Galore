@@ -1,5 +1,6 @@
 package entities.core;
 
+import managers.DisplayManager;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -24,27 +25,23 @@ public class Rectangle {
 	public void setHeight(float height) { this.height = height; }
 
 	// Rendering Methods
-	public void drawHitBox() { // Draw the rectangle
+	public void drawHitBox(Graphics g) { // Draw the rectangle
+		DisplayManager display = Entity.game.displayManager;
+
 		Vector[] corners = getCorners(0f,0f);
 		
 		for(int i = 0; i < corners.length; i++) {
 			int next = i + 1;
 			if(next == corners.length) next = 0;
 			
-			Engine.game.displayManager.setColor(Color.white);
-			Engine.game.displayManager.drawLine(corners[i].x, corners[i].y, corners[next].x, corners[next].y);
+			g.setColor(Color.white);
+			g.drawLine(
+					display.screenX(corners[i].x),
+					display.screenY(corners[i].y),
+					display.screenX(corners[next].x),
+					display.screenY(corners[next].y)
+			);
 		}
-	}
-	public void drawAxes() { // Draw the basis vectors for the rectangle
-		Vector[] axes = getAxes();
-		
-		// Draw the X-Axis
-		Engine.game.displayManager.setColor(Color.red); // X Axis
-		Engine.game.displayManager.drawLine(entity.position.x, entity.position.y, entity.position.x + axes[0].x, entity.position.y + axes[0].y);
-		
-		// Draw the Y-Axis
-		Engine.game.displayManager.setColor(Color.blue); // Y Axis
-		Engine.game.displayManager.drawLine(entity.position.x, entity.position.y, entity.position.x + axes[1].x, entity.position.y + axes[1].y);
 	}
 	
 	// Get the corners of the hitbox

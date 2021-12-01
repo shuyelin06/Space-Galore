@@ -13,6 +13,7 @@ import entities.projectiles.Laser;
 import entities.projectiles.Projectile;
 import entities.units.Unit;
 import entities.units.types.BasicUnit;
+import managers.SoundManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -107,10 +108,12 @@ public class Game extends BasicGameState
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
 
 		// Add an Enemy (for testing)
+		// SoundManager.playBackgroundMusic("Background Music");
 		for(int i = 0; i < 3; i++) {
 			Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
 			newUnits.add(enemy);
 		}
+
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
 

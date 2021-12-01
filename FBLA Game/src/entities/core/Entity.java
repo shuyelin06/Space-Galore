@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import entities.units.Unit;
 import gamestates.Game;
+import managers.DisplayManager;
 import managers.ImageManager;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -90,7 +91,28 @@ public abstract class Entity {
 	}
 	
 	// Rendering Methods
-	public void drawHitbox() { hitBox.drawHitBox(); }
+	public void render(Graphics g) { // Main render method that is called
+		hitBox.drawHitBox(g); // Draw hitbox first
+
+		renderOther(g); // Draw unique entity graphics
+		drawSprite(); // Draw entity sprite
+	}
+
+	protected void renderOther(Graphics g) {} // Rendering method unique to the entity
+	protected void drawSprite() { // Draw the entity sprite
+		// Scale the sprite appropriately
+		Image im = sprite.getScaledCopy((int) (width * Values.Pixels_Per_Unit), (int) (height * Values.Pixels_Per_Unit));
+
+		// Rotate the sprite
+		im.setCenterOfRotation(im.getWidth() / 2, im.getHeight() / 2);
+		im.rotate((float) -(angle * 180 / Math.PI)); // Convert to clockwise degrees
+
+		// Draw the sprite
+		im.drawCentered(
+				game.displayManager.screenX(position.x),
+				game.displayManager.screenY(position.y));
+	}
+
 	
 	// Mutator Methods
 	public void markForRemoval() { this.remove = true; }

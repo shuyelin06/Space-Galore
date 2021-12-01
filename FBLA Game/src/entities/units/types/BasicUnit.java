@@ -1,12 +1,11 @@
 package entities.units.types;
 
 import entities.core.Coordinate;
-import entities.core.Entity;
 import entities.projectiles.Laser;
 import entities.units.Unit;
 import entities.units.other.Missile;
 import managers.ImageManager;
-import org.lwjgl.Sys;
+import managers.SoundManager;
 
 public class BasicUnit extends Unit {
     /*
@@ -58,16 +57,14 @@ public class BasicUnit extends Unit {
 
         if(GetTime() - lastShot > Shot_Cooldown) {
             // Shoot at the player
-//            Laser laser = new Laser(this,
-//                    new Coordinate(game.getPlayer().getPosition().getX(),
-//                            game.getPlayer().getPosition().getY())
-//            );
-//            game.getEntitiesOf(EntityType.Projectile).add(laser);
+            Laser laser = new Laser(this,
+                    new Coordinate(game.getPlayer().getPosition().getX(),
+                            game.getPlayer().getPosition().getY())
+            );
+            game.getEntitiesOf(EntityType.Projectile).add(laser);
 
-//            System.out.println("adding missile");
-//
-            Unit missile = new Missile(this, game.getPlayer());
-            game.addUnit(missile);
+//            Unit missile = new Missile(this, game.getPlayer());
+//            game.addUnit(missile);
 
             lastShot = GetTime();
         }
