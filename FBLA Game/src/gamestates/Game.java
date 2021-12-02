@@ -201,7 +201,7 @@ public class Game extends BasicGameState
 		float mouseX = displayManager.gameX(x);
 		float mouseY = displayManager.gameY(y);
 
-		Projectile test = new Projectile(
+		Laser test = new Laser(
 				player,
 				new Coordinate(mouseX, mouseY));
 
