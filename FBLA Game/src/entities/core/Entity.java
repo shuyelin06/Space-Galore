@@ -83,12 +83,6 @@ public abstract class Entity {
 	public float getWidth() { return width; }
 	public float getHeight() { return height; }
 	public boolean isMarked() { return remove; }
-	public boolean onScreen() {
-		final float ScreenRight = Engine.RESOLUTION_X / Values.Pixels_Per_Unit;
-		final float ScreenTop = Engine.RESOLUTION_Y / Values.Pixels_Per_Unit;
-
-		return (0 < position.x && position.x < ScreenRight) && (0 < position.y && position.y < ScreenTop);
-	}
 	
 	// Rendering Methods
 	public void render(Graphics g) { // Main render method that is called
@@ -139,15 +133,40 @@ public abstract class Entity {
 		xSpeed -= (xSpeed * Values.Drag_Coefficient) / mass; // Finding the x resistive acceleration
 		ySpeed -= (ySpeed * Values.Drag_Coefficient) / mass; // Finding the y resistive acceleration
 		
-		// Check for collisions with other entities
-		collisions();
-		
+		// Collision checking
+		checkCollisions();
+
 		// Finally, update the position of the entity.
 		this.position.updatePosition(xSpeed, ySpeed);
 	};
 
+	protected void checkCollisions() {
+		checkEntityCollisions(); // Entity Collisions
+		checkScreenCollisions(); // Screen Collisions
+	};
+
+	// Check collision with the edge of the screen
+	protected void checkScreenCollisions() {
+		// Check left/right borders
+		if(position.x - width / 2 < 0 || Engine.RESOLUTION_X / Values.Pixels_Per_Unit < position.x + width / 2) {
+			screenCollision();
+			screenCollisionX();
+		}
+		// Check top/bottom borders
+		if(position.y - height / 2< 0 || Engine.RESOLUTION_Y / Values.Pixels_Per_Unit < position.y + height / 2) {
+			screenCollision();
+			screenCollisionY();
+		}
+	}
+
+	// By default, entities will bounce off the screen borders
+	protected void screenCollisionX() { this.xSpeed = -xSpeed; }
+	protected void screenCollisionY() { this.ySpeed = -ySpeed; }
+
+	protected void screenCollision() {}
+
 	// Check collisions with other units
-	protected void collisions() {
+	protected void checkEntityCollisions() {
 		ArrayList<Entity> units = game.getEntitiesOf(EntityType.Unit);
 
 		for (Entity e: units) {

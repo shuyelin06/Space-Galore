@@ -27,6 +27,9 @@ public class Projectile extends Entity {
         faceTarget();
     }
 
+    @Override // By default, projectiles will die when they hit the screen edge
+    protected void screenCollision() { this.remove = true; }
+
     // Adjust this projectiles angle so it faces the target
     protected void faceTarget() {
         this.angle = (float) Math.atan2(target.getY() - position.getY(),
@@ -36,14 +39,8 @@ public class Projectile extends Entity {
     // Drag will not act on projectiles
     @Override
     public void update() {
-        // If projectile is off screen, it kills itself
-        if(!this.onScreen()) {
-            this.remove = true;
-            return;
-        }
-
         projectileAI(); // Run unique projectile AI
-        collisions(); // Check collisions with units
+        super.checkCollisions(); // Check collisions with units
 
         this.position.updatePosition(xSpeed, ySpeed); // Update position
     }
