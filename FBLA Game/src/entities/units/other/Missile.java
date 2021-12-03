@@ -1,21 +1,25 @@
 package entities.units.other;
 
+import entities.core.Coordinate;
 import entities.units.Unit;
 import managers.ImageManager;
 
 public class Missile extends Unit {
-    private static float jerk = 0.07f;
+    private static float UpdateTimer = 0.18f;
+    private static float acceleration = 5f;
 
     private Unit target;
-
-    private float accelerationX;
-    private float accelerationY;
+    private float lastUpdate;
+    private float lastAngle;
 
     public Missile(Unit origin, Unit target) {
         super(origin.getX(), origin.getY(), origin.getTeam());
 
+        this.xSpeed = origin.getSpeedX();
+        this.ySpeed = origin.getSpeedY();
+
         // Adjusting Rendering Variables
-        this.sprite = ImageManager.getPlaceholder();
+        this.sprite = ImageManager.getImage("missile");
         this.width = 1.75f;
         this.height = 1.45f;
 
@@ -40,17 +44,20 @@ public class Missile extends Unit {
         // Unit Specific Variables
         this.target = target;
 
-        this.accelerationX = 0f;
-        this.accelerationY = 0f;
+        this.lastUpdate = GetTime();
+        this.lastAngle = angle;
     }
 
     protected void unitAI() {
         this.faceEntity(target);
 
-        this.accelerationX -= jerk * (float) Math.cos(this.angle);
-        this.accelerationY -= jerk * (float) Math.sin(this.angle);
+        // Only update angle of attack every few seconds
+        if(GetTime() - lastUpdate > UpdateTimer) {
+            this.lastUpdate = GetTime();
+            this.lastAngle = angle;
+        }
 
-        this.xSpeed += accelerationX;
-        this.ySpeed += accelerationY;
+        this.xSpeed -= acceleration * (float) Math.cos(lastAngle);
+        this.ySpeed -= acceleration * (float) Math.sin(lastAngle);
     }
 }

@@ -9,7 +9,7 @@ public class Projectile extends Entity {
     // protected float range; Unused Range
     protected Coordinate target;
 
-    protected int damage; // Damage of the projectile
+    protected float damage; // Damage of the projectile
     protected float speed; // Magnitude of speed for the projectile
 
     // All projectiles need the origin (what unit created it), and some target
@@ -25,6 +25,9 @@ public class Projectile extends Entity {
 
         // Set initial angle for this projectile
         faceTarget();
+
+        // After initializing, automatically add to the projectiles arraylist
+        game.getEntitiesOf(EntityType.Projectile).add(this);
     }
 
     @Override // By default, projectiles will die when they hit the screen edge
