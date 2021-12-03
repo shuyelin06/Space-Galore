@@ -30,7 +30,7 @@ public class Coordinate {
 	public static float distance(Coordinate c1, Coordinate c2) {
 		return (float) Math.sqrt(Math.pow(c1.x - c2.x, 2) + Math.pow(c1.y - c2.y, 2));
 	}
-  
+
 	// Determine displacement from some coordinate
 	public float[] displacement(float x2, float y2) {
 		float[] displacement = new float[2];

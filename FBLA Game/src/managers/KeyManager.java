@@ -9,18 +9,16 @@ import entities.units.Player;
 import gamestates.Game;
 
 public class KeyManager implements Predicate<Integer> {
-	final private static float Player_Acceleration = 1f;
+	final private static float Player_Acceleration = 1.5f;
 	final public static List<Integer> Key_Down_List = List.of(Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D);
-	
-	private Game game;
+
 	private Player player;
 	
 	private Input input;
 	
 	public KeyManager(Input input, Game game) {
 		this.input = input;
-		
-		this.game = game;
+
 		this.player = game.getPlayer();
 	}
 	

@@ -79,6 +79,9 @@ public abstract class Entity {
 
 	public float getX() { return position.getX(); }
 	public float getY() { return position.getY(); }
+	public float getSpeedX() { return xSpeed; }
+	public float getSpeedY() { return ySpeed; }
+
 	public float getRotation() { return angle; }
 	public float getWidth() { return width; }
 	public float getHeight() { return height; }
@@ -109,7 +112,6 @@ public abstract class Entity {
 
 	
 	// Mutator Methods
-	public void markForRemoval() { this.remove = true; }
 	public void rotateCounter(float theta) { this.angle += theta; } // Rotations
 	public void setRotation(float theta) { this.angle = theta; } // Rotations
 	
