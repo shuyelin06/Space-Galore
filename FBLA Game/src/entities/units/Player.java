@@ -28,11 +28,6 @@ public class Player extends Unit {
 	private static float ShieldMax = 100;
 	private float shieldDurability;
 
-
-
-
-
-
 	public Player(){
 		super(Player_X_Spawn, Player_Y_Spawn, Team.Ally);
 

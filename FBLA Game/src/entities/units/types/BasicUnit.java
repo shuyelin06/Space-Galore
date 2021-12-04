@@ -1,6 +1,8 @@
 package entities.units.types;
 
 import entities.core.Coordinate;
+import entities.projectiles.Flak;
+import entities.projectiles.FlakBomb;
 import entities.projectiles.Laser;
 import entities.units.Unit;
 import entities.units.other.Missile;
@@ -58,11 +60,18 @@ public class BasicUnit extends Unit {
         this.ySpeed -= thrust * (float) Math.sin(this.angle);
 
         if(GetTime() - lastShot > shotCooldown) {
-            // Shoot at the player
-            new Laser(this,
-                    new Coordinate(game.getPlayer().getPosition().getX(),
-                            game.getPlayer().getPosition().getY())
+//            // Shoot at the player
+//            new Laser(this,
+//                    new Coordinate(game.getPlayer().getPosition().getX(),
+//                            game.getPlayer().getPosition().getY())
+//            );
+
+
+            new FlakBomb(this,
+                    game.getPlayer().getPosition(),
+                    10
             );
+
 
 //            Missile missile = new Missile(this, game.getPlayer());
 //            game.addUnit(missile);

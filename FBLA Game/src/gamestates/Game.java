@@ -44,12 +44,10 @@ public class Game extends BasicGameState
 	Player player; // Player
 	EnumMap<Entity.EntityType, ArrayList<Entity>> entities; // All Entities in the Game
 
-	// We'll add new units to this arraylist
-	ArrayList<Entity> newUnits;
+	EnumMap<Entity.EntityType, ArrayList<Entity>> newEntities; // Add new entities to the game
 
 	// Managers
-	KeyManager keyDown;
-	
+	private KeyManager keyDown; // Key Manager
 	public DisplayManager displayManager; // Display Manager
 
 	// Sound Manager
@@ -69,9 +67,11 @@ public class Game extends BasicGameState
 	public int getID() { return id; }
 
 	public Player getPlayer(){ return player; }
+
 	public Map<Entity.EntityType, ArrayList<Entity>> getEntities() { return entities; }
-	public void addUnit(Unit u) { newUnits.add(u); }
 	public ArrayList<Entity> getEntitiesOf(Entity.EntityType type) { return entities.get(type); }
+
+	public void addEntity(Entity.EntityType type, Entity e) { newEntities.get(type).add(e); }
 
 	// Initialization of the Game
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
@@ -101,22 +101,28 @@ public class Game extends BasicGameState
 		}
 
 		// Add new entities
-		for(Entity e: newUnits) {
-			entities.get(Entity.EntityType.Unit).add(e);
+		for(Entity.EntityType type: newEntities.keySet()) {
+			for (Entity e : newEntities.get(type)) {
+				entities.get(type).add(e);
+			}
+			newEntities.get(type).clear();
 		}
-		newUnits.clear();
+
 	}
 
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		// Initialize Entities HashMap
+		// Initialize Both Entity Maps
 		entities = new EnumMap<>(Map.of(
 				Entity.EntityType.Unit, new ArrayList<>(),
 				Entity.EntityType.Projectile, new ArrayList<>(),
 				Entity.EntityType.Interactable, new ArrayList<>()
 		));
-
-		this.newUnits = new ArrayList<>();
+		newEntities = new EnumMap<>(Map.of(
+				Entity.EntityType.Unit, new ArrayList<>(),
+				Entity.EntityType.Projectile, new ArrayList<>(),
+				Entity.EntityType.Interactable, new ArrayList<>()
+		));
 
 		// Initialize Player
 		player = new Player();
