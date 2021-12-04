@@ -47,8 +47,7 @@ public class Game extends BasicGameState
 	EnumMap<Entity.EntityType, ArrayList<Entity>> newEntities; // Add new entities to the game
 
 	// Managers
-	KeyManager keyDown;
-	
+	private KeyManager keyDown; // Key Manager
 	public DisplayManager displayManager; // Display Manager
 
 	// Sound Manager
@@ -113,7 +112,7 @@ public class Game extends BasicGameState
 
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		// Initialize Entities HashMap
+		// Initialize Both Entity Maps
 		entities = new EnumMap<>(Map.of(
 				Entity.EntityType.Unit, new ArrayList<>(),
 				Entity.EntityType.Projectile, new ArrayList<>(),
