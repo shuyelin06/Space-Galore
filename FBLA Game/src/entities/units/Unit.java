@@ -32,11 +32,10 @@ public class Unit extends Entity {
         this.contactDamage = 50;
 
         // Automatically add to newUnits arraylist
-        game.addUnit(this);
+        game.addEntity(EntityType.Unit, this);
     }
 
     // Static Methods
-    protected static float GetTime() { return (float) Sys.getTime() / 1000; }
     public static float RandomSpawnX() { return (float) Math.random() * Engine.RESOLUTION_X / Values.Pixels_Per_Unit; }
     public static float RandomSpawnY() { return (float) Math.random() * Engine.RESOLUTION_Y / Values.Pixels_Per_Unit; }
 

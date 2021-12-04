@@ -2,10 +2,10 @@
 
 package gamestates;
 
-import java.awt.Font;
 import managers.FontManager;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
+import java.awt.Font;
 import org.newdawn.slick.state.StateBasedGame;
 
 import main.Engine;
@@ -35,8 +35,10 @@ public class StartMenu extends BasicGameState
 	//render, all visuals
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
 	{
+		g.setFont(new TrueTypeFont(FontManager.getFont("Retroville_NC", 25f), false));
 		// When files are done loading, the game ready will appear on screen
 		g.drawString("Game Ready!", Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
+		g.resetFont();
 	}
 
 	//update, runs consistently
