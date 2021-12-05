@@ -45,7 +45,7 @@ public class StartMenu extends BasicGameState
 	//initializer, first time
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
 	{
-
+		x = v
 		gc.setShowFPS(true);
 		
 		this.gc = gc;	
@@ -76,7 +76,7 @@ public class StartMenu extends BasicGameState
 
 		g.setFont(new TrueTypeFont(FontManager.getFont("Retroville_NC", 25f), false));
 		// When files are done loading, the game ready will appear on screen
-		g.drawString("Space Galore", Engine.RESOLUTION_X / 2-100, Engine.RESOLUTION_Y / 2);
+		g.drawString("Space Galore",  Engine.RESOLUTION_X / 2-100, Engine.RESOLUTION_Y / 2);
 		g.drawString("Start", Engine.RESOLUTION_X/2, Engine.RESOLUTION_Y/2+100);
 		g.resetFont();
 
