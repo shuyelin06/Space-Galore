@@ -1,6 +1,8 @@
 package entities.units.types;
 
 import entities.core.Coordinate;
+import entities.projectiles.Flak;
+import entities.projectiles.FlakBomb;
 import entities.projectiles.Laser;
 import entities.units.Unit;
 import entities.units.other.Missile;
@@ -12,8 +14,9 @@ public class BasicUnit extends Unit {
     The most basic enemy in the game
     Has average stats, and will just periodically shoot lasers at the player
     */
+    final private float AverageShotCooldown = 2.5f;
 
-    final private static float Shot_Cooldown = 2.5f; // Seconds delay between laser shots
+    private float shotCooldown; // Seconds delay between laser shots
     private float lastShot;
 
     public BasicUnit(float x, float y, Team team) {
@@ -42,6 +45,7 @@ public class BasicUnit extends Unit {
         this.hitBox.setHeight(height / 1.80f);
 
         // Unit Specific Variables
+        this.shotCooldown = AverageShotCooldown + (float) Math.random() - 0.5f;
         this.lastShot = GetTime();
     }
 
@@ -55,17 +59,22 @@ public class BasicUnit extends Unit {
         this.xSpeed -= thrust * (float) Math.cos(this.angle);
         this.ySpeed -= thrust * (float) Math.sin(this.angle);
 
-        if(GetTime() - lastShot > Shot_Cooldown) {
-            // Shoot at the player
-            Laser laser = new Laser(this,
-                    new Coordinate(game.getPlayer().getPosition().getX(),
-                            game.getPlayer().getPosition().getY())
+        if(GetTime() - lastShot > shotCooldown) {
+//            // Shoot at the player
+//            new Laser(this,
+//                    new Coordinate(game.getPlayer().getPosition().getX(),
+//                            game.getPlayer().getPosition().getY())
+//            );
+
+
+            new FlakBomb(this,
+                    game.getPlayer().getPosition(),
+                    10
             );
-            game.getEntitiesOf(EntityType.Projectile).add(laser);
 
-//            Unit missile = new Missile(this, game.getPlayer());
+
+//            Missile missile = new Missile(this, game.getPlayer());
 //            game.addUnit(missile);
-
             lastShot = GetTime();
         }
     }

@@ -44,12 +44,10 @@ public class Game extends BasicGameState
 	Player player; // Player
 	EnumMap<Entity.EntityType, ArrayList<Entity>> entities; // All Entities in the Game
 
-	// We'll add new units to this arraylist
-	ArrayList<Entity> newUnits;
+	EnumMap<Entity.EntityType, ArrayList<Entity>> newEntities; // Add new entities to the game
 
 	// Managers
-	KeyManager keyDown;
-	
+	private KeyManager keyDown; // Key Manager
 	public DisplayManager displayManager; // Display Manager
 
 	// Sound Manager
@@ -64,11 +62,16 @@ public class Game extends BasicGameState
 	{
 		this.id = id;
 	}
-	
+
+	// Returns the ID code for this game state
+	public int getID() { return id; }
+
 	public Player getPlayer(){ return player; }
+
 	public Map<Entity.EntityType, ArrayList<Entity>> getEntities() { return entities; }
-	public void addUnit(Unit u) { newUnits.add(u); }
 	public ArrayList<Entity> getEntitiesOf(Entity.EntityType type) { return entities.get(type); }
+
+	public void addEntity(Entity.EntityType type, Entity e) { newEntities.get(type).add(e); }
 
 	// Initialization of the Game
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
@@ -98,22 +101,28 @@ public class Game extends BasicGameState
 		}
 
 		// Add new entities
-		for(Entity e: newUnits) {
-			entities.get(Entity.EntityType.Unit).add(e);
+		for(Entity.EntityType type: newEntities.keySet()) {
+			for (Entity e : newEntities.get(type)) {
+				entities.get(type).add(e);
+			}
+			newEntities.get(type).clear();
 		}
-		newUnits.clear();
+
 	}
 
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		// Initialize Entities HashMap
+		// Initialize Both Entity Maps
 		entities = new EnumMap<>(Map.of(
 				Entity.EntityType.Unit, new ArrayList<>(),
 				Entity.EntityType.Projectile, new ArrayList<>(),
 				Entity.EntityType.Interactable, new ArrayList<>()
 		));
-
-		this.newUnits = new ArrayList<>();
+		newEntities = new EnumMap<>(Map.of(
+				Entity.EntityType.Unit, new ArrayList<>(),
+				Entity.EntityType.Projectile, new ArrayList<>(),
+				Entity.EntityType.Interactable, new ArrayList<>()
+		));
 
 		// Initialize Player
 		player = new Player();
@@ -146,9 +155,9 @@ public class Game extends BasicGameState
 		waves.get(0).getLedger().forEach((HashMap<Unit, Integer> m) -> {
 			for (Map.Entry<Unit, Integer> en : m.entrySet()) {
 				for (int i = 0; i < en.getValue(); i++) {
-					try { newUnits.add(en.getKey().getClass()
+					try { en.getKey().getClass()
 							.getConstructor(float.class, float.class, Entity.Team.class)
-							.newInstance(Player.Player_X_Spawn + (i * waves.get(0).getSpread()) - (int) ((double) en.getValue() / 2) * 5 , 48, Entity.Team.Enemy)); }
+							.newInstance(Player.Player_X_Spawn + (i * waves.get(0).getSpread()) - (int) ((double) en.getValue() / 2) * 5 , 48, Entity.Team.Enemy); }
 					catch (InstantiationException
 							| IllegalAccessException
 							| InvocationTargetException
@@ -181,10 +190,13 @@ public class Game extends BasicGameState
 		}
 	}
 
-	// Rotate the player towards the cursor
+	// Check cusor input
 	public void cursorInput(){
-		float mouseY = displayManager.gameY(gc.getInput().getAbsoluteMouseY());
-		float mouseX = displayManager.gameX(gc.getInput().getAbsoluteMouseX());
+		Input input = gc.getInput();
+
+		// Set Rotation of the player
+		float mouseX = displayManager.gameX(input.getAbsoluteMouseX());
+		float mouseY = displayManager.gameY(input.getAbsoluteMouseY());
 
 		double theta = Math.atan2(
 				player.getY() - mouseY,
@@ -192,28 +204,14 @@ public class Game extends BasicGameState
 		);
 
 		player.setRotation((float) theta);
+
+		// Check key presses
+		if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+			player.shoot(mouseX, mouseY); // Left Click: Shoot
+		}
+
 	}
 
-	@Override
-	public void mousePressed(int button, int x, int y)
-	{
-		// Shoot something..
-		float mouseX = displayManager.gameX(x);
-		float mouseY = displayManager.gameY(y);
-
-		Laser test = new Laser(
-				player,
-				new Coordinate(mouseX, mouseY));
-
-		entities.get(Entity.EntityType.Projectile).add(test);
-	}
-	
-	
-	// Returns the ID code for this game state
-	public int getID() 
-	{
-		return id;
-	}
 
 
 }

@@ -7,10 +7,12 @@ import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 
+
 import managers.FontManager;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
+import java.awt.Font;
 import org.newdawn.slick.state.StateBasedGame;
 
 import main.Engine;
@@ -42,6 +44,7 @@ public class StartMenu extends BasicGameState
 	//render, all visuals
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
 	{
+
 		try {
 			//create the font to use. Specify the size!
 			retrovilleNC = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\Retroville_NC.ttf")).deriveFont(12f);
@@ -56,6 +59,12 @@ public class StartMenu extends BasicGameState
 		// When files are done loading, the game ready will appear on screen
 		g.drawString("Game Ready!", Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
 		g.drawString("Start", Engine.RESOLUTION_X/2, Engine.RESOLUTION_Y/2+100);
+
+		g.setFont(new TrueTypeFont(FontManager.getFont("Retroville_NC", 25f), false));
+		// When files are done loading, the game ready will appear on screen
+		g.drawString("Game Ready!", Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
+		g.resetFont();
+
 	}
 
 	//update, runs consistently

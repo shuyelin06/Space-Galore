@@ -6,6 +6,7 @@ import entities.units.Unit;
 import gamestates.Game;
 import managers.DisplayManager;
 import managers.ImageManager;
+import org.lwjgl.Sys;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
@@ -79,6 +80,11 @@ public abstract class Entity {
 
 	public float getX() { return position.getX(); }
 	public float getY() { return position.getY(); }
+
+	public float getMagSpeed() { return (float) Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed); }
+	public float getSpeedX() { return xSpeed; }
+	public float getSpeedY() { return ySpeed; }
+
 	public float getRotation() { return angle; }
 	public float getWidth() { return width; }
 	public float getHeight() { return height; }
@@ -109,7 +115,6 @@ public abstract class Entity {
 
 	
 	// Mutator Methods
-	public void markForRemoval() { this.remove = true; }
 	public void rotateCounter(float theta) { this.angle += theta; } // Rotations
 	public void setRotation(float theta) { this.angle = theta; } // Rotations
 	
@@ -117,6 +122,7 @@ public abstract class Entity {
 	public void accelerateY(float acceleration) { ySpeed += acceleration; }
 
 	// Helper Methods
+	protected static float GetTime() { return (float) Sys.getTime() / 1000; }
 	public void faceEntity(Entity e) {
 		// Find angle (from the horizontal) to the other entity
 		double theta = Math.atan2(

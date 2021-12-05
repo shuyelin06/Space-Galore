@@ -9,22 +9,28 @@ public class Projectile extends Entity {
     // protected float range; Unused Range
     protected Coordinate target;
 
-    protected int damage; // Damage of the projectile
+    protected float damage; // Damage of the projectile
     protected float speed; // Magnitude of speed for the projectile
 
     // All projectiles need the origin (what unit created it), and some target
-    public Projectile(Unit origin, Coordinate target) {
+    public Projectile(Entity origin, Coordinate target, float baseDamage) {
         super(origin.getPosition().getX(), origin.getPosition().getY());
 
         // Set the target of the projectile
         this.target = target;
 
+        // Default speed
+        this.speed = origin.getMagSpeed();
+
         // Determine the projectile's team and damage based on the origin
         this.team = origin.getTeam();
-        this.damage = origin.getAttackDamage();
+        this.damage = baseDamage;
 
         // Set initial angle for this projectile
         faceTarget();
+
+        // After initializing, automatically add to the projectiles arraylist
+        game.addEntity(EntityType.Projectile, this);
     }
 
     @Override // By default, projectiles will die when they hit the screen edge
