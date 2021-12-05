@@ -25,27 +25,29 @@ public class StartMenu extends BasicGameState
 	private StateBasedGame sbg;
 	private GameContainer gc;
 	private int id;
-	private float x;
-	private float y;
 
 	private ArrayList<Button> buttons;
 
+	private Button gameTitle;
 	private Button playButton;
 	private Button instructionsButton;
 	private Button leaderButton;
 	private Button quitButton;
 
-	Font retrovilleNC;
-	
 	public StartMenu(int id) 
 	{
 		this.id = id;
 	}
 
+	// Returns the ID code for this game state
+	public int getID()
+	{
+		return id;
+	}
+
 	//initializer, first time
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
 	{
-		x = v
 		gc.setShowFPS(true);
 		
 		this.gc = gc;	
@@ -59,27 +61,6 @@ public class StartMenu extends BasicGameState
 	//render, all visuals
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
 	{
-
-//		try {
-//			//create the font to use. Specify the size!
-//			retrovilleNC = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\Retroville_NC.ttf")).deriveFont(12f);
-//			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-//			//register the font
-//			ge.registerFont(retrovilleNC);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch(FontFormatException e) {
-//			e.printStackTrace();
-//		}
-		// When files are done loading, the game ready will appear on screen
-
-
-		g.setFont(new TrueTypeFont(FontManager.getFont("Retroville_NC", 25f), false));
-		// When files are done loading, the game ready will appear on screen
-		g.drawString("Space Galore",  Engine.RESOLUTION_X / 2-100, Engine.RESOLUTION_Y / 2);
-		g.drawString("Start", Engine.RESOLUTION_X/2, Engine.RESOLUTION_Y/2+100);
-		g.resetFont();
-
 		for(Button b: buttons) { b.render(g); } // Render every button
 	}
 
@@ -88,59 +69,52 @@ public class StartMenu extends BasicGameState
 
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		if(!initialized) {
-			final float width = 150f;
-			final float height = 100f;
+			// Initialize Buttons ArrayList and Add Buttons to it
+			this.buttons = new ArrayList<>();
 
-			x = Engine.RESOLUTION_X/2;
-			y =
+			// Initialize Center Buttons
+			final float padding = 35f;
+			final float width = 250f;
+			final float height = 75f;
 
-			playButton = new Button(x,y, width, height,"");
+			final float x = Engine.RESOLUTION_X / 2;
+			final float y = Engine.RESOLUTION_Y / 5;
+
+			gameTitle = new Button(x, y, width * 2.5f, height,"");
+			buttons.add(gameTitle);
+
+			playButton = new Button(x,y + height + padding, width, height,"");
 			buttons.add(playButton);
 
-			instructionsButton = new Button();
+			instructionsButton = new Button(x,y + 2 * height + 2 * padding, width, height,"");
 			buttons.add(instructionsButton);
 
-			leaderButton = new Button();
+			leaderButton = new Button(x,y + 3 * height + 3 * padding, width, height,"");
 			buttons.add(leaderButton);
 
-			quitButton = new Button();
+			quitButton = new Button(x,y + 4 * height + 4 * padding, width, height,"");
 			buttons.add(quitButton);
 		}
 
+	}
 
-	}
-	public void leave(GameContainer gc, StateBasedGame sbg) {}
-	
-	public void keyPressed(int key, char c)
-	{
-		switch(key) {
-		case Input.KEY_Q:
-			sbg.enterState(Engine.GAME_ID);
-			break;
-		}
-	}
+	public void keyPressed(int key, char c) { }
 	
 	public void mousePressed(int button, int x, int y)
 	{
-		if(playButton.onButton(x,y)) {
-		}
-		if(instructionsButton.onButton(x,y)) {
+		System.out.println("Pressed");
 
-		}
-		if(leaderButton.onButton(x,y)) {
+		// Play Button: Enter LevelSelect State
+		if(playButton.onButton(x,y)) { sbg.enterState(Engine.LEVELSELECT_ID); }
 
-		}
+		// Instructions Button: Enter Instructions State
+		if(instructionsButton.onButton(x,y)) { sbg.enterState(Engine.INSTRUCTIONS_ID); }
+
+		// Leaderboard Button: Enter Leaderboard State
+		if(leaderButton.onButton(x,y)) { sbg.enterState(Engine.LEADERBOARD_ID); }
 
 		// Quit Button: Exit Game
 		if(quitButton.onButton(x,y)) { gc.exit(); }
 	}
-	
-	
-	// Returns the ID code for this game state
-	public int getID() 
-	{
-		return id;
-	}
-
 
 }

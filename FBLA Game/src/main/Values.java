@@ -17,5 +17,8 @@ public class Values{
 	final public static float Center_Y = Engine.RESOLUTION_Y / 2f;
 
 	// Level
-	public static int LEVEL = 0;
+	public static int MIN_LEVEL = 1;
+	public static int MAX_LEVEL = 3;
+
+	public static int LEVEL = MIN_LEVEL;
 }

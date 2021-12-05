@@ -17,12 +17,20 @@ public class Button {
         this.width = width;
         this.height = height;
 
-        this.image = ImageManager.getImage(name);
+        // Obtain the image and scale it
+        this.image = ImageManager.getImage(name)
+                .getScaledCopy((int) width, (int) height);
     }
 
-    public void render(Graphics g) { image.draw(x, y, width, height); }
+    // Draw the image centered
+    public void render(Graphics g) { image.drawCentered(x, y); }
 
-    public boolean onButton(float x, float y) {
+    public boolean onButton(float mouseX, float mouseY) {
+        if(x - width / 2 < mouseX && mouseX < x + width / 2) {
+            if(y - height / 2 < mouseY && mouseY < y + height / 2) {
+                return true;
+            }
+        }
         return false;
     }
 
