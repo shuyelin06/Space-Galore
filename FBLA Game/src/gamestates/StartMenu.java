@@ -22,6 +22,9 @@ public class StartMenu extends BasicGameState
 	private StateBasedGame sbg;
 	private GameContainer gc;
 	private int id;
+	private float x;
+	private float y;
+	private buttons[] button;
 	Font retrovilleNC;
 	
 	public StartMenu(int id) 
@@ -37,6 +40,12 @@ public class StartMenu extends BasicGameState
 		
 		this.gc = gc;	
 		this.sbg = sbg;
+
+		button = new buttons[1];
+		for(int i = 0; i<button.length; i++)
+		{
+			button[i] = new buttons();
+		}
 	}
 	
 
@@ -57,19 +66,28 @@ public class StartMenu extends BasicGameState
 			e.printStackTrace();
 		}
 		// When files are done loading, the game ready will appear on screen
-		g.drawString("Game Ready!", Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
-		g.drawString("Start", Engine.RESOLUTION_X/2, Engine.RESOLUTION_Y/2+100);
+
 
 		g.setFont(new TrueTypeFont(FontManager.getFont("Retroville_NC", 25f), false));
 		// When files are done loading, the game ready will appear on screen
-		g.drawString("Game Ready!", Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
+		g.drawString("Space Galore", Engine.RESOLUTION_X / 2-100, Engine.RESOLUTION_Y / 2);
+		g.drawString("Start", Engine.RESOLUTION_X/2, Engine.RESOLUTION_Y/2+100);
 		g.resetFont();
+
+		for(int i = 0; i<button.length; i++)
+		{
+			button[i].render(g);
+		}
 
 	}
 
 	//update, runs consistently
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
-	{					
+	{
+		for(int i = 0; i< button.length; i++)
+		{
+			button[i].update();
+		}
 	}
 
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {}
@@ -87,7 +105,12 @@ public class StartMenu extends BasicGameState
 	
 	public void mousePressed(int button, int x, int y)
 	{
-		
+		x = gc.getInput().getMouseX() ;
+		y = gc.getInput().getMouseY();
+		if ( x >= Engine.RESOLUTION_X/2 && x <= Engine.RESOLUTION_X/2+50 && y >= Engine.RESOLUTION_Y/2+100 && y <= Engine.RESOLUTION_Y/2+200)
+		{
+			sbg.enterState(Engine.GAME_ID);
+		}
 	}
 	
 	
