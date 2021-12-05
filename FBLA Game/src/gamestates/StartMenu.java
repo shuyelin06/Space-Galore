@@ -80,21 +80,11 @@ public class StartMenu extends BasicGameState
 		g.drawString("Start", Engine.RESOLUTION_X/2, Engine.RESOLUTION_Y/2+100);
 		g.resetFont();
 
-		for(int i = 0; i<button.length; i++)
-		{
-			button[i].render(g);
-		}
-
+		for(Button b: buttons) { b.render(g); } // Render every button
 	}
 
 	//update, runs consistently
-	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
-	{
-		for(int i = 0; i< button.length; i++)
-		{
-			button[i].update();
-		}
-	}
+	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException { }
 
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		if(!initialized) {
@@ -132,12 +122,17 @@ public class StartMenu extends BasicGameState
 	
 	public void mousePressed(int button, int x, int y)
 	{
-		x = gc.getInput().getMouseX() ;
-		y = gc.getInput().getMouseY();
-		if ( x >= Engine.RESOLUTION_X/2 && x <= Engine.RESOLUTION_X/2+50 && y >= Engine.RESOLUTION_Y/2+100 && y <= Engine.RESOLUTION_Y/2+200)
-		{
-			sbg.enterState(Engine.GAME_ID);
+		if(playButton.onButton(x,y)) {
 		}
+		if(instructionsButton.onButton(x,y)) {
+
+		}
+		if(leaderButton.onButton(x,y)) {
+
+		}
+
+		// Quit Button: Exit Game
+		if(quitButton.onButton(x,y)) { gc.exit(); }
 	}
 	
 	
