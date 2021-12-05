@@ -36,6 +36,9 @@ public class Unit extends Entity {
     }
 
     // Static Methods
+    public static Unit NearestAlly() { return null; } // Incomplete
+    public static Unit NearestEnemy() { return null; } // Incomplete
+
     public static float RandomSpawnX() { return (float) Math.random() * Engine.RESOLUTION_X / Values.Pixels_Per_Unit; }
     public static float RandomSpawnY() { return (float) Math.random() * Engine.RESOLUTION_Y / Values.Pixels_Per_Unit; }
 

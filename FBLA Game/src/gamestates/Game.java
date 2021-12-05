@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.lang.Math;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Predicate;
@@ -15,12 +14,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import entities.core.Coordinate;
-import entities.projectiles.Laser;
 import entities.core.Wave;
-import entities.projectiles.Projectile;
 import entities.units.Unit;
-import entities.units.types.BasicUnit;
+import entities.units.types.BasicTank;
 import managers.SoundManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -112,6 +108,7 @@ public class Game extends BasicGameState
 
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		System.out.println("Entering game");
 		// Initialize Both Entity Maps
 		entities = new EnumMap<>(Map.of(
 				Entity.EntityType.Unit, new ArrayList<>(),
@@ -140,6 +137,7 @@ public class Game extends BasicGameState
 
 		// Initialize Waves
 		// VVVVVVVVVVVV Start of Wave Debug code + testing code
+		System.out.println("Initializing Waves");
 		try {
 			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/waves.json")))).getAsJsonObject().get("1");
 			waves.add(gson.fromJson(results, Wave.class));
@@ -165,10 +163,13 @@ public class Game extends BasicGameState
 				}
 			}
 		});
-
+		System.out.println("Done waves");
 		//waves.get(0).getCache().forEach((Enemy en) -> entities.get(Entity.EntityType.Unit).add(en));
 
 		// ^^^^^^^^^ End of Wave Testing Code
+
+		// Begin Music
+		SoundManager.playBackgroundMusic("March");
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
 
@@ -183,9 +184,20 @@ public class Game extends BasicGameState
 				gc.exit();
 				break;
 
+				// Spawn Enemy Unit
 			case Input.KEY_E:
-				Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
-				entities.get(Entity.EntityType.Unit).add(enemy);
+				new BasicTank(Unit.RandomSpawnX(),
+						Unit.RandomSpawnY(),
+						Entity.Team.Enemy
+				);
+				break;
+
+				// Spawn Ally Unit
+			case Input.KEY_R:
+				new BasicTank(Unit.RandomSpawnX(),
+						Unit.RandomSpawnY(),
+						Entity.Team.Ally
+				);
 				break;
 		}
 	}

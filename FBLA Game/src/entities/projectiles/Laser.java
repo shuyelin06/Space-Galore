@@ -3,6 +3,7 @@ package entities.projectiles;
 import entities.core.Coordinate;
 import entities.units.Unit;
 import managers.ImageManager;
+import managers.SoundManager;
 
 public class Laser extends Projectile {
     public Laser(Unit origin, Coordinate target) {
@@ -18,5 +19,8 @@ public class Laser extends Projectile {
 
         this.hitBox.setWidth(width);
         this.hitBox.setHeight(height);
+
+        // Sound Effect
+        //SoundManager.playSoundEffect("Laser");
     }
 }

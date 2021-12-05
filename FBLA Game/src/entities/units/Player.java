@@ -2,6 +2,8 @@ package entities.units;
 
 import entities.core.Coordinate;
 import entities.core.Entity;
+import entities.projectiles.Flak;
+import entities.projectiles.FlakBomb;
 import entities.projectiles.Laser;
 import main.Engine;
 import main.Values;
@@ -112,6 +114,9 @@ public class Player extends Unit {
 	// Player Left Click - Shoot a Laser
 	public void shoot(float x, float y) {
 		if(GetTime() - lastShot > ShotCooldown) {
+//			for(int i = 0; i < 100; i++) {
+//				new Flak(this, new Coordinate(x,y), this.attackDamage);
+//			}
 			new Laser(
 					this,
 					new Coordinate(x, y)
