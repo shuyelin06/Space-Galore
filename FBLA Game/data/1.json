@@ -11,7 +11,7 @@
         "entities.units.types.BasicUnit": 9
       }
     ],
-    "delay": 10000,
+    "delay": 1000,
     "spread": 5,
     "duration": 2147483647
   },

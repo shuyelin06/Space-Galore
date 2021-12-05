@@ -12,6 +12,11 @@ import org.newdawn.slick.state.StateBasedGame;
 import gamestates.Game;
 import gamestates.StartMenu;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 public class Engine extends StateBasedGame
 {
 	//desktop: 1920 by 1080
@@ -49,6 +54,10 @@ public class Engine extends StateBasedGame
 		try {
 			AppGameContainer appgc = new AppGameContainer(new Engine("Sample Slick Game"));
 			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+			Properties defaultProps = new Properties();
+			FileInputStream stream = new FileInputStream("FBLA Game/config/logging.properties");
+			defaultProps.load(stream);
+			stream.close();
 
 			//appgc.getScreenHeight()
 			appgc.setDisplayMode(RESOLUTION_X, RESOLUTION_Y, false);
@@ -56,8 +65,7 @@ public class Engine extends StateBasedGame
 			appgc.start();
 			appgc.setVSync(true);
 
-		} catch (SlickException e) 
-		{
+		} catch (SlickException | IOException e) {
 			e.printStackTrace();
 		}
 

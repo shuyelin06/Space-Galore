@@ -15,4 +15,7 @@ public class Values{
 	// Where the display manager's center is located on screen 
 	final public static float Center_X = Engine.RESOLUTION_X / 2f;
 	final public static float Center_Y = Engine.RESOLUTION_Y / 2f;
+
+	// Level
+	public static int LEVEL = 0;
 }

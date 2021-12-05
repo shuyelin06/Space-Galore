@@ -1,12 +1,15 @@
 package managers;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.newdawn.slick.Sound;
 
 public class SoundManager {
-	final public static HashMap<String, Sound> Sounds = new HashMap<>();
+	public static final Map<String, Sound> Sounds = new HashMap<>();
 	private static Sound backgroundMusic;
+
+	private SoundManager() { throw new IllegalStateException("Utility class"); }
 	
 	// Play a sound effect
 	public static void playSoundEffect(String name) {
@@ -18,7 +21,7 @@ public class SoundManager {
 		try {
 			// Later, have it so the existing background music fades out
 			backgroundMusic.stop();
-		} catch(Exception e) {}
+		} catch (Exception ignored) {}
 		finally {
 			backgroundMusic = Sounds.get(name);
 			backgroundMusic.loop();

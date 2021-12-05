@@ -3,6 +3,7 @@
 package gamestates;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
@@ -12,19 +13,28 @@ import managers.FontManager;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
-import java.awt.Font;
 import org.newdawn.slick.state.StateBasedGame;
+import util.Button;
 
 import main.Engine;
 
 public class StartMenu extends BasicGameState 
-{	
+{
+	private boolean initialized;
+
 	private StateBasedGame sbg;
 	private GameContainer gc;
 	private int id;
 	private float x;
 	private float y;
-	private buttons[] button;
+
+	private ArrayList<Button> buttons;
+
+	private Button playButton;
+	private Button instructionsButton;
+	private Button leaderButton;
+	private Button quitButton;
+
 	Font retrovilleNC;
 	
 	public StartMenu(int id) 
@@ -41,11 +51,7 @@ public class StartMenu extends BasicGameState
 		this.gc = gc;	
 		this.sbg = sbg;
 
-		button = new buttons[1];
-		for(int i = 0; i<button.length; i++)
-		{
-			button[i] = new buttons();
-		}
+		this.initialized = false;
 	}
 	
 
@@ -54,17 +60,17 @@ public class StartMenu extends BasicGameState
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
 	{
 
-		try {
-			//create the font to use. Specify the size!
-			retrovilleNC = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\Retroville_NC.ttf")).deriveFont(12f);
-			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			//register the font
-			ge.registerFont(retrovilleNC);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch(FontFormatException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			//create the font to use. Specify the size!
+//			retrovilleNC = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\Retroville_NC.ttf")).deriveFont(12f);
+//			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//			//register the font
+//			ge.registerFont(retrovilleNC);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch(FontFormatException e) {
+//			e.printStackTrace();
+//		}
 		// When files are done loading, the game ready will appear on screen
 
 
@@ -90,9 +96,30 @@ public class StartMenu extends BasicGameState
 		}
 	}
 
-	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {}
-	public void leave(GameContainer gc, StateBasedGame sbg) {}
+	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		if(!initialized) {
+			final float width = 150f;
+			final float height = 100f;
 
+			x = Engine.RESOLUTION_X/2;
+			y =
+
+			playButton = new Button(x,y, width, height,"");
+			buttons.add(playButton);
+
+			instructionsButton = new Button();
+			buttons.add(instructionsButton);
+
+			leaderButton = new Button();
+			buttons.add(leaderButton);
+
+			quitButton = new Button();
+			buttons.add(quitButton);
+		}
+
+
+	}
+	public void leave(GameContainer gc, StateBasedGame sbg) {}
 	
 	public void keyPressed(int key, char c)
 	{
