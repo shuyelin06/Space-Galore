@@ -50,12 +50,12 @@ public class Instructions extends BasicGameState {
 
     public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
         if(!initialized) {
-            final float padding = 25f;
+            final float padding = 35f;
 
-            final float height = 100f;
-            final float width = 150f;
+            final float height = 75f;
+            final float width = 250f;
 
-            this.backButton = new Button(padding, Engine.RESOLUTION_Y - height - padding, width, height, "");
+            this.backButton = new Button(padding+100, Engine.RESOLUTION_Y - height - padding, width, height, "backButton");
         }
     }
 

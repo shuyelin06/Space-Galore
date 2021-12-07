@@ -62,10 +62,10 @@ public class LevelSelect extends BasicGameState {
             this.buttons = new ArrayList<>();
 
             // Back Button
-            final float padding = 25f;
+            final float padding = 35f;
 
-            final float height = 100f;
-            final float width = 100f;
+            final float height = 75f;
+            final float width = 250f;
 
             final float x = Engine.RESOLUTION_X / 2;
             final float y = 3 * Engine.RESOLUTION_Y / 5;
@@ -79,7 +79,7 @@ public class LevelSelect extends BasicGameState {
             nextLevelButton = new Button(x + padding + width,y, width, height,"");
             buttons.add(nextLevelButton);
 
-            backButton = new Button(padding + width / 2, Engine.RESOLUTION_Y - height - padding, width, height, "");
+            backButton = new Button(padding + width / 2, Engine.RESOLUTION_Y - height - padding, width, height, "backButton");
             buttons.add(backButton);
         }
     }
