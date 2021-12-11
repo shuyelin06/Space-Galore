@@ -19,6 +19,9 @@ public class Unit extends Entity {
 
     protected float thrust; // The unit's thrust
 
+    // Other Variables
+    protected int score; // Number of points this unit is worth
+
     public Unit(float x, float y, Team team){
         super(x, y);
 
@@ -85,14 +88,21 @@ public class Unit extends Entity {
     // Overwritten update method
     @Override
     public void update() {
-        if(health < 1) { // Checking if dead
+        if(health <= 0) { // Checking if dead
             this.remove = true;
+
+            onDeath();
+
             return;
         }
         unitAI();
         super.update();
     }
 
+    // Unique Death to each unit
+    protected void onDeath() {
+        if(this.team != Team.Ally) game.getPlayer().addScore(this.score);
+    }
     // Unique AI to each unit
     protected void unitAI() {}
 

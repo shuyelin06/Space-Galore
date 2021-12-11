@@ -80,6 +80,7 @@ public class Game extends BasicGameState
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
 	{
 		displayManager.renderEntities(g);
+		displayManager.renderInterface(g);
 	}
 
 	// Update, runs consistently
@@ -128,12 +129,6 @@ public class Game extends BasicGameState
 		// Initialize Managers
 		keyDown = new KeyManager(gc.getInput(), this);
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
-
-		// Add an Enemy (for testing)
-		//for(int i = 0; i < 3; i++) {
-		//	Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
-		//	newUnits.add(enemy);
-		//}
 
 		// Initialize Waves
 		// VVVVVVVVVVVV Start of Wave Debug code + testing code

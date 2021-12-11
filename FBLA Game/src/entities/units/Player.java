@@ -64,25 +64,22 @@ public class Player extends Unit {
 	}
 
 	protected void renderOther(Graphics g) {
-		// Draw Shield Health - Incomplete
-		g.drawString("[Debug] Player Shield: " + shieldDurability,
-				100, 100);
+//		// Draw Shield Health - Incomplete
+//		g.drawString("[Debug] Player Shield: " + shieldDurability,
+//				100, 100);
 
-		// Shield Rendering
-		if(shieldDurability > 0) {
-			// Draw Shield
-			g.setColor(new Color(0f, 0f, 1f, shieldDurability / ShieldMax));
-			g.setLineWidth(2.5f);
+		// Render Player Shield
+		g.setColor(new Color(0f, 0f, 1f, shieldDurability / ShieldMax));
+		g.setLineWidth(2.5f);
 
-			g.draw(new Circle(
-					game.displayManager.screenX(getX()),
-					game.displayManager.screenY(getY()),
-					this.width * Values.Pixels_Per_Unit
-					)
-			);
+		g.draw(new Circle(
+						game.displayManager.screenX(getX()),
+						game.displayManager.screenY(getY()),
+						this.width * Values.Pixels_Per_Unit
+				)
+		);
+		g.resetLineWidth();
 
-			g.resetLineWidth();
-		}
  	}
 
 	@Override
@@ -111,6 +108,8 @@ public class Player extends Unit {
 		}
 	}
 
+	public void addScore(int score) { this.score += score; }
+	public int getScore() { return score; }
 	// Player Left Click - Shoot a Laser
 	public void shoot(float x, float y) {
 		if(GetTime() - lastShot > ShotCooldown) {

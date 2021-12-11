@@ -45,6 +45,9 @@ public class BasicTank extends Unit {
 
             this.defense = 50;
 
+            // Adjussting Score
+            this.score = 25;
+
             // Adjusting HitBox
             this.hitBox.setWidth(width / 1.15f);
             this.hitBox.setHeight(height / 1.80f);
