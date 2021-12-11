@@ -6,7 +6,6 @@ import entities.units.Unit;
 import managers.ImageManager;
 
 public class Projectile extends Entity {
-    // protected float range; Unused Range
     protected Coordinate target;
 
     protected float damage; // Damage of the projectile

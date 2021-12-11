@@ -17,6 +17,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import entities.core.EntitySpawner;
 import entities.core.Wave;
+import entities.core.Wave;
+import entities.units.Unit;
+import entities.units.types.BasicTank;
+import managers.SoundManager;
 import entities.units.Unit;
 import entities.units.types.BasicUnit;
 import main.Values;
@@ -82,6 +86,7 @@ public class Game extends BasicGameState
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
 	{
 		displayManager.renderEntities(g);
+		displayManager.renderInterface(g);
 	}
 
 	// Update, runs consistently
@@ -110,6 +115,7 @@ public class Game extends BasicGameState
 
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		System.out.println("Entering game");
 		// Initialize Both Entity Maps
 		entities = new EnumMap<>(Map.of(
 				Entity.EntityType.Unit, new ArrayList<>(),
@@ -130,15 +136,9 @@ public class Game extends BasicGameState
 		keyDown = new KeyManager(gc.getInput(), this);
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
 
-		// Add an Enemy (for testing)
-		//for(int i = 0; i < 3; i++) {
-		//	Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
-		//	newUnits.add(enemy);
-		//}
-
 		// Initialize Waves
 		// VVVVVVVVVVVV Start of Wave Debug code + testing code
-		long start = System.currentTimeMillis();
+    long start = System.currentTimeMillis();
 		System.out.println("START");
 		try {
 			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/1.json")))).getAsJsonObject().get(String.valueOf(Values.LEVEL));
@@ -184,6 +184,9 @@ public class Game extends BasicGameState
 		System.out.println("Level took " + (long) (end - start) + "ms to load.");
 
 		// ^^^^^^^^^ End of Wave Testing Code
+
+		// Begin Music
+		SoundManager.playBackgroundMusic("March");
 	}
 	public void leave(GameContainer gc, StateBasedGame sbg) {}
 
@@ -198,9 +201,20 @@ public class Game extends BasicGameState
 				gc.exit();
 				break;
 
+				// Spawn Enemy Unit
 			case Input.KEY_E:
-				Entity enemy = new BasicUnit(Unit.RandomSpawnX(), Unit.RandomSpawnY(), Entity.Team.Enemy);
-				entities.get(Entity.EntityType.Unit).add(enemy);
+				new BasicTank(Unit.RandomSpawnX(),
+						Unit.RandomSpawnY(),
+						Entity.Team.Enemy
+				);
+				break;
+
+				// Spawn Ally Unit
+			case Input.KEY_R:
+				new BasicTank(Unit.RandomSpawnX(),
+						Unit.RandomSpawnY(),
+						Entity.Team.Ally
+				);
 				break;
 		}
 	}

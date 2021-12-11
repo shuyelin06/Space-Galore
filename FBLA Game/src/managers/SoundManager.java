@@ -4,17 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.openal.DeferredSound;
 
 public class SoundManager {
+
 	public static final Map<String, Sound> Sounds = new HashMap<>();
 	private static Sound backgroundMusic;
 
 	private SoundManager() { throw new IllegalStateException("Utility class"); }
 	
 	// Play a sound effect
-	public static void playSoundEffect(String name) {
-		Sounds.get(name).play();
-	}
+	public static void playSoundEffect(String name) { Sounds.get(name).play(); }
 
 	// Stop any existing background music, and play new background music
 	public static void playBackgroundMusic(String name) {
@@ -24,7 +24,10 @@ public class SoundManager {
 		} catch (Exception ignored) {}
 		finally {
 			backgroundMusic = Sounds.get(name);
-			backgroundMusic.loop();
+
+			if(backgroundMusic != null) {
+				backgroundMusic.loop();
+			}
 		}
 		
 	}

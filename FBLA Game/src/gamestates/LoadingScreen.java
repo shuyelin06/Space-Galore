@@ -64,8 +64,6 @@ public class LoadingScreen extends BasicGameState {
         this.tasksDone = 0;
     }
 
-
-
     @Override // Update, runs consistently
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
     {
@@ -82,6 +80,7 @@ public class LoadingScreen extends BasicGameState {
         // When loading is completed, automatically move to start menu
         else {
             sbg.enterState(Engine.START_ID);
+            System.out.println("Leaving Loading");
         }
     }
 

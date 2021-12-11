@@ -40,6 +40,9 @@ public class BasicUnit extends Unit {
 
         this.defense = 0;
 
+        // Adjussting Score
+        this.score = 10;
+
         // Adjusting HitBox
         this.hitBox.setWidth(width / 1.15f);
         this.hitBox.setHeight(height / 1.80f);
