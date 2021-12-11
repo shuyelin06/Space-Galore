@@ -5,7 +5,9 @@ import org.newdawn.slick.Image;
 import java.util.HashMap;
 
 public class ImageManager {
-    final public static HashMap<String, Image> Images = new HashMap<>();
+    public static final HashMap<String, Image> Images = new HashMap<>();
+
+    private ImageManager() { throw new IllegalStateException("Utility class"); }
 
     public static Image getPlaceholder() { return Images.get("placeholder"); }
     public static Image getImage(String name) {

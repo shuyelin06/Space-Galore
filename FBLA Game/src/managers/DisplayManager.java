@@ -2,6 +2,7 @@ package managers;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 import entities.units.Player;
 import entities.core.Coordinate;

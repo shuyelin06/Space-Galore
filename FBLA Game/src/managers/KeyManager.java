@@ -9,8 +9,12 @@ import entities.units.Player;
 import gamestates.Game;
 
 public class KeyManager implements Predicate<Integer> {
-	final private static float Player_Acceleration = 1.5f;
-	final public static List<Integer> Key_Down_List = List.of(Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D);
+	private static final float Player_Acceleration = 1f;
+	public static final List<Integer> Key_Down_List = List.of(Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D);
+
+	private KeyManager() { throw new IllegalStateException("Utility class"); }
+	
+	private Game game;
 
 	private Player player;
 	
@@ -18,7 +22,8 @@ public class KeyManager implements Predicate<Integer> {
 	
 	public KeyManager(Input input, Game game) {
 		this.input = input;
-
+		
+		this.game = game;
 		this.player = game.getPlayer();
 	}
 	
@@ -27,19 +32,11 @@ public class KeyManager implements Predicate<Integer> {
 	}
 	
 	public void keyDown(int key) {
-		switch(key) {
-			case Input.KEY_W:
-				player.accelerateY(Player_Acceleration);
-				break;
-			case Input.KEY_A:
-				player.accelerateX(-Player_Acceleration);
-				break;
-			case Input.KEY_S:
-				player.accelerateY(-Player_Acceleration);
-				break;
-			case Input.KEY_D:
-				player.accelerateX(Player_Acceleration);
-				break;
+		switch (key) {
+			case Input.KEY_W -> player.accelerateY(Player_Acceleration);
+			case Input.KEY_A -> player.accelerateX(-Player_Acceleration);
+			case Input.KEY_S -> player.accelerateY(-Player_Acceleration);
+			case Input.KEY_D -> player.accelerateX(Player_Acceleration);
 		}
 	}
 }

@@ -11,7 +11,7 @@
         "entities.units.types.BasicUnit": 9
       }
     ],
-    "delay": 10000,
+    "delay": 6000,
     "spread": 5,
     "duration": 2147483647
   },
@@ -27,8 +27,8 @@
         "entities.units.types.BasicUnit": 15
       }
     ],
-    "delay": 10000,
-    "spread": 20,
+    "delay": 6000,
+    "spread": 5,
     "duration": 2147483647
   }
 }

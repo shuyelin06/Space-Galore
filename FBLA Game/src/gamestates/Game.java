@@ -8,16 +8,22 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import entities.core.EntitySpawner;
+import entities.core.Wave;
 import entities.core.Wave;
 import entities.units.Unit;
 import entities.units.types.BasicTank;
 import managers.SoundManager;
+import entities.units.Unit;
+import entities.units.types.BasicUnit;
+import main.Values;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -132,9 +138,10 @@ public class Game extends BasicGameState
 
 		// Initialize Waves
 		// VVVVVVVVVVVV Start of Wave Debug code + testing code
-		System.out.println("Initializing Waves");
+    long start = System.currentTimeMillis();
+		System.out.println("START");
 		try {
-			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/waves.json")))).getAsJsonObject().get("1");
+			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/1.json")))).getAsJsonObject().get(String.valueOf(Values.LEVEL));
 			waves.add(gson.fromJson(results, Wave.class));
 		} catch (IOException e) {
 			System.out.println(System.getProperty("user.dir"));
@@ -143,23 +150,38 @@ public class Game extends BasicGameState
 
 		System.out.println(waves.toString());
 		System.out.println(waves.get(0).getLedger().get(0).keySet().toArray()[0]);
-		HashMap<Unit, Integer> wave = waves.get(0).getLedger().get(0);
 
-		waves.get(0).getLedger().forEach((HashMap<Unit, Integer> m) -> {
-			for (Map.Entry<Unit, Integer> en : m.entrySet()) {
-				for (int i = 0; i < en.getValue(); i++) {
-					try { en.getKey().getClass()
-							.getConstructor(float.class, float.class, Entity.Team.class)
-							.newInstance(Player.Player_X_Spawn + (i * waves.get(0).getSpread()) - (int) ((double) en.getValue() / 2) * 5 , 48, Entity.Team.Enemy); }
-					catch (InstantiationException
-							| IllegalAccessException
-							| InvocationTargetException
-							| NoSuchMethodException e) { e.printStackTrace(); }
-				}
-			}
-		});
-		System.out.println("Done waves");
-		//waves.get(0).getCache().forEach((Enemy en) -> entities.get(Entity.EntityType.Unit).add(en));
+		new Thread(new EntitySpawner(waves)).start();
+
+//		HashMap<Unit, Integer> wave = waves.get(0).getLedger().get(0);
+//
+//		AtomicInteger timer = new AtomicInteger();
+//		long timerStart = System.currentTimeMillis();
+//		waves.get(0).getLedger().forEach((HashMap<Unit, Integer> m) -> {
+//			timer.getAndIncrement();
+//			while (true) {
+//				if (timer.get() == 1) break;
+//				System.out.println(m);
+//				System.out.println("Current timer " + timer.get());
+//				System.out.println("Started at " + timerStart);
+//				if (System.currentTimeMillis() - waves.get(0).getDelay() <= timerStart) break;
+//			}
+//			for (Map.Entry<Unit, Integer> en : m.entrySet()) {
+//				for (int i = 0; i < en.getValue(); i++) {
+//					try { en.getKey().getClass()
+//							.getConstructor(float.class, float.class, Entity.Team.class)
+//							.newInstance(Player.Player_X_Spawn + (i * waves.get(0).getSpread()) - (int) ((double) en.getValue() / 2) * 5 , 48, Entity.Team.Enemy);
+//						System.out.println(i + " is being spawned right now");
+//					}
+//					catch (InstantiationException
+//							| IllegalAccessException
+//							| InvocationTargetException
+//							| NoSuchMethodException e) { e.printStackTrace(); }
+//				}
+//			}
+//		});
+		long end = System.currentTimeMillis();
+		System.out.println("Level took " + (long) (end - start) + "ms to load.");
 
 		// ^^^^^^^^^ End of Wave Testing Code
 
