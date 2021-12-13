@@ -136,8 +136,8 @@ public abstract class Entity {
 	// Update Method: Update Physics Variables
 	public void update() {
 		// Update all velocities of the entity - drag will always act on the entity
-		xSpeed -= (xSpeed * Values.Drag_Coefficient) / mass; // Finding the x resistive acceleration
-		ySpeed -= (ySpeed * Values.Drag_Coefficient) / mass; // Finding the y resistive acceleration
+		xSpeed -= xSpeed * Values.Drag; // Finding the x resistive acceleration
+		ySpeed -= ySpeed * Values.Drag; // Finding the y resistive acceleration
 		
 		// Collision checking
 		checkCollisions();

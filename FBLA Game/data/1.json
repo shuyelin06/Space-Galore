@@ -2,7 +2,8 @@
   "1": {
     "ledger": [
       {
-        "entities.units.types.BasicUnit": 2
+        "entities.units.types.BasicUnit": 1,
+        "entities.units.types.BasicSpeedster": 3
       },
       {
         "entities.units.types.BasicUnit": 6
