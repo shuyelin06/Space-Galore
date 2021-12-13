@@ -70,13 +70,13 @@ public class LevelSelect extends BasicGameState {
             final float x = Engine.RESOLUTION_X / 2;
             final float y = 3 * Engine.RESOLUTION_Y / 5;
 
-            previousLevelButton = new Button(x - padding - width, y, width, height,"");
+            previousLevelButton = new Button(x - padding - width, y, width-178, height,"previousButton");
             buttons.add(previousLevelButton);
 
-            enterGameButton = new Button(x,y, width, height,"");
+            enterGameButton = new Button(x,y, width, height,"startGameButton");
             buttons.add(enterGameButton);
 
-            nextLevelButton = new Button(x + padding + width,y, width, height,"");
+            nextLevelButton = new Button(x + padding + width,y, width-178, height,"nextButton");
             buttons.add(nextLevelButton);
 
             backButton = new Button(padding + width / 2, Engine.RESOLUTION_Y - height - padding, width, height, "backButton");
