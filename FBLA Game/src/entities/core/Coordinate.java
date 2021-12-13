@@ -12,6 +12,10 @@ public class Coordinate {
 		this.x = x;
 		this.y = y;
 	}
+	public Coordinate(Coordinate c) {
+		this.x = c.x;
+		this.y = c.y;
+	}
 	
 	public void updatePosition(float xSpeed, float ySpeed) {
 		// Update the X and Y position

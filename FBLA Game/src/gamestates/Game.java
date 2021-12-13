@@ -20,10 +20,12 @@ import entities.core.Wave;
 import entities.core.Wave;
 import entities.units.Unit;
 import entities.units.types.BasicTank;
+import main.Engine;
 import managers.SoundManager;
 import entities.units.Unit;
 import entities.units.types.BasicUnit;
 import main.Values;
+import org.lwjgl.Sys;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -51,6 +53,13 @@ public class Game extends BasicGameState
 	// Managers
 	private KeyManager keyDown; // Key Manager
 	public DisplayManager displayManager; // Display Manager
+
+	// Level Complete
+	private static float SwitchDelay = 2.5f;
+
+	private float completeTime;
+	private boolean levelComplete;
+
 
 	// Sound Manager
 	// Animation Manager
@@ -87,6 +96,13 @@ public class Game extends BasicGameState
 	{
 		displayManager.renderEntities(g);
 		displayManager.renderInterface(g);
+
+		if(levelComplete) {
+			if(player.getPercentHealth() > 0) g.drawString("Level Complete!", 200, 200);
+			else {
+				g.drawString("Level Failed...", 200, 200);
+			}
+		}
 	}
 
 	// Update, runs consistently
@@ -111,6 +127,15 @@ public class Game extends BasicGameState
 			newEntities.get(type).clear();
 		}
 
+		if(levelComplete) {
+			// Save score to leaderboard
+			float score = player.getScore();
+
+			// Delay, then enter level select
+			if(Sys.getTime() - completeTime > SwitchDelay * 1000) {
+				sbg.enterState(Engine.LEVELSELECT_ID);
+			}
+		}
 	}
 
 	@Override
@@ -127,6 +152,10 @@ public class Game extends BasicGameState
 				Entity.EntityType.Projectile, new ArrayList<>(),
 				Entity.EntityType.Interactable, new ArrayList<>()
 		));
+
+		// Set level complete variables
+		this.levelComplete = false;
+		this.completeTime = 0;
 
 		// Initialize Player
 		player = new Player();

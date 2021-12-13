@@ -9,7 +9,7 @@ public class Values{
 	final public static int Pixels_Per_Unit = 15; // Defines the number of pixels per unit in our game
 	
 	// Physics Coefficients
-	final public static float Drag_Coefficient = 0.5f;
+	final public static float Drag = 0.05f;
 	final public static float Restitution_Coefficient = 0.75f;
 	
 	// Where the display manager's center is located on screen 

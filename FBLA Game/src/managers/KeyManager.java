@@ -9,7 +9,7 @@ import entities.units.Player;
 import gamestates.Game;
 
 public class KeyManager implements Predicate<Integer> {
-	private static final float Player_Acceleration = 1f;
+	private static final float Player_Acceleration = 2f;
 	public static final List<Integer> Key_Down_List = List.of(Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D);
 
 	private KeyManager() { throw new IllegalStateException("Utility class"); }
