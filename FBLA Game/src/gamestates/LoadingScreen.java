@@ -2,6 +2,7 @@
 
 package gamestates;
 
+import managers.TextManager;
 import org.newdawn.slick.*;
 import org.newdawn.slick.loading.DeferredResource;
 import org.newdawn.slick.loading.LoadingList;
@@ -79,6 +80,7 @@ public class LoadingScreen extends BasicGameState {
         }
         // When loading is completed, automatically move to start menu
         else {
+            // TextManager.initialize();
             sbg.enterState(Engine.START_ID);
             System.out.println("Leaving Loading");
         }

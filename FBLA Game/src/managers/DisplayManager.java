@@ -1,5 +1,6 @@
 package managers;
 
+import graphics.Background;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -16,7 +17,9 @@ import java.util.ArrayList;
 
 public class DisplayManager {
 	private Graphics graphics;
-	
+
+	private Background background;
+
 	private Coordinate center; // The entity the camera will be rendered around
 	private Game game; // The game (so we can reference it)
 	
@@ -28,6 +31,9 @@ public class DisplayManager {
 		//		game.getPlayer().getPosition();
 
 		this.graphics = graphics;
+
+		// Initialize Background
+		this.background = new Background();
 	}
 
 	// Returns pixel coordinates on screen of some game position
@@ -58,4 +64,6 @@ public class DisplayManager {
 				g.getFont().getHeight(scoreDisplay) + Engine.RESOLUTION_Y * 0.009f * 2f);
 		g.drawString(scoreDisplay, Engine.RESOLUTION_X * 0.026f, Engine.RESOLUTION_Y * 0.046f);
 	}
+	// Render Background
+	public void renderBackground(Graphics g) { background.render(g); }
 }
