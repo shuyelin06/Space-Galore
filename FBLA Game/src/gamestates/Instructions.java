@@ -44,7 +44,12 @@ public class Instructions extends BasicGameState {
         backButton.render(g);
     }
 
-    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException { }
+    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+        float mouseX = gc.getInput().getAbsoluteMouseX();
+        float mouseY = gc.getInput().getAbsoluteMouseY();
+
+        backButton.update(mouseX, mouseY);
+    }
 
     public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
         if(!initialized) {
@@ -59,18 +64,10 @@ public class Instructions extends BasicGameState {
         main = main.getScaledCopy((float) Engine.RESOLUTION_Y / (float) main.getHeight());
     }
 
-    public void leave(GameContainer gc, StateBasedGame sbg) {}
-
-    public void keyPressed(int key, char c)
-    {
-
-    }
-
     public void mousePressed(int button, int x, int y)
     {
         // Back Button: Return to Starting Menu
         if(backButton.onButton(x, y)) { sbg.enterState(Engine.START_ID); }
     }
-
 
 }

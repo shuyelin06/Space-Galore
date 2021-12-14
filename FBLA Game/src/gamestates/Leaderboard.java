@@ -88,6 +88,11 @@ public class Leaderboard extends BasicGameState {
     }
 
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+        float mouseX = gc.getInput().getAbsoluteMouseX();
+        float mouseY = gc.getInput().getAbsoluteMouseY();
+
+        backButton.update(mouseX, mouseY);
+
         try {
             // Prevent performance issues by checking if the file already equals what it was before
             if (allLines.equals(Files.readAllLines(Paths.get("./FBLA Game/data/LEADERBOARD")))) return;

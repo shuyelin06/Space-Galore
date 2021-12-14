@@ -57,7 +57,14 @@ public class LevelSelect extends BasicGameState {
         for(Button b: buttons) b.render(g);
     }
 
-    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException { }
+    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+        float mouseX = gc.getInput().getAbsoluteMouseX();
+        float mouseY = gc.getInput().getAbsoluteMouseY();
+
+        for(Button b: buttons) {
+            b.update(mouseX, mouseY);
+        }
+    }
 
     public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
         if(!initialized) {
