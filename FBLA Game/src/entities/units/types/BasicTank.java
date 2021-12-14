@@ -16,8 +16,8 @@ public class BasicTank extends Unit {
         the tank gets too close.
         */
         final private float AverageShotCooldown = 4.5f;
-        final private float AttackRadius = 42.5f;
-        final private int FlakCount = 25;
+        final private float AttackRadius = 50f;
+        final private int FlakCount = 15;
 
         private float shotCooldown; // Specific delay for this unit
         private float lastShot; // Last time this unit shot
@@ -26,7 +26,7 @@ public class BasicTank extends Unit {
             super(x, y, team);
 
             // Adjusting Rendering Variables
-            this.sprite = ImageManager.getImage("tank ");
+            this.sprite = ImageManager.getImage("tank");
             this.sprite.setImageColor(0f, 1f, 1f);
 
             this.width = 4.5f;
@@ -34,7 +34,7 @@ public class BasicTank extends Unit {
 
             // Adjusting Physics Variables
             this.mass = 500f;
-            this.thrust = 0.035f;
+            this.thrust = 0.5f;
 
             // Adjusting Damage Stats
             this.attackDamage = 50;

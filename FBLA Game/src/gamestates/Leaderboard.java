@@ -2,7 +2,9 @@ package gamestates;
 
 import main.Engine;
 import main.Utility;
+import managers.ImageManager;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -21,6 +23,8 @@ public class Leaderboard extends BasicGameState {
 
     private boolean initialized;
     private Button backButton;
+
+    private Image title;
 
     private TreeMap<String, Integer> scores;
     private SortedSet<Integer> leaderboard;
@@ -45,7 +49,7 @@ public class Leaderboard extends BasicGameState {
     //initializer, first time
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
     {
-        gc.setShowFPS(true);
+        gc.setShowFPS(false);
 
         this.gc = gc;
         this.sbg = sbg;
@@ -68,10 +72,16 @@ public class Leaderboard extends BasicGameState {
     //render, all visuals
     public void render(GameContainer gc, StateBasedGame sbg, org.newdawn.slick.Graphics g) throws SlickException
     {
-        g.drawString("LeaderBoard",  Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
+        title.drawCentered(Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 5);
 
         // Sorts values of scores TreeMap and iterates to display
-        for (Map.Entry<String, Integer> en : (Set<Map.Entry<String, Integer>>) Utility.sort(scores).entrySet()) g.drawString(String.format("%s ------------------------ %d", en.getKey(), en.getValue()), Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
+        int offset = 100;
+        for (Map.Entry<String, Integer> en : (Set<Map.Entry<String, Integer>>) Utility.sort(scores).entrySet()){
+            String line = String.format("%s ------------------------ %d", en.getKey(), en.getValue());
+            g.drawString(line,Engine.RESOLUTION_X / 2 - g.getFont().getWidth(line) / 2, Engine.RESOLUTION_Y / 5 + offset);
+            offset += 45;
+        }
+
 
         // Render BackButton
         backButton.render(g);
@@ -97,6 +107,8 @@ public class Leaderboard extends BasicGameState {
 
             this.backButton = new Button(padding+100, Engine.RESOLUTION_Y - height - padding, width, height, "backButton");
         }
+
+        this.title = ImageManager.getImage("Leaderboard");
     }
 
     public void leave(GameContainer gc, StateBasedGame sbg) {}

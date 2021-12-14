@@ -2,34 +2,64 @@
   "1": {
     "ledger": [
       {
-        "entities.units.types.BasicUnit": 1,
-        "entities.units.types.BasicSpeedster": 3
+        "entities.units.types.BasicUnit": 2
       },
       {
-        "entities.units.types.BasicUnit": 6
+        "entities.units.types.BasicUnit": 4,
+        "entities.units.types.BasicTank": 2
       },
       {
-        "entities.units.types.BasicUnit": 9
+        "entities.units.types.BasicUnit": 6,
+        "entities.units.types.BasicTank": 3,
+        "entities.units.types.BasicSpeedster": 2
       }
     ],
     "delay": 6000,
-    "spread": 5,
+    "spread": 6,
     "duration": 2147483647
   },
   "2": {
     "ledger": [
       {
-        "entities.units.types.BasicUnit": 2
+        "entities.units.types.BasicUnit": 3,
+        "entities.units.types.BasicTank": 2,
+        "entities.units.types.BasicSpeedster": 3
       },
       {
-        "entities.units.types.BasicUnit": 12
+        "entities.units.types.BasicUnit": 4,
+        "entities.units.types.BasicTank": 3,
+        "entities.units.types.BasicSpeedster": 4
       },
       {
-        "entities.units.types.BasicUnit": 15
+        "entities.units.types.BasicUnit": 6,
+        "entities.units.types.BasicTank": 4,
+        "entities.units.types.BasicSpeedster": 5
       }
     ],
     "delay": 6000,
-    "spread": 5,
+    "spread": 8,
+    "duration": 2147483647
+  },
+  "3": {
+    "ledger": [
+      {
+        "entities.units.types.BasicUnit": 7,
+        "entities.units.types.BasicTank": 4,
+        "entities.units.types.BasicSpeedster": 5
+      },
+      {
+        "entities.units.types.BasicUnit": 10,
+        "entities.units.types.BasicTank": 6,
+        "entities.units.types.BasicSpeedster": 4
+      },
+      {
+        "entities.units.types.BasicUnit": 13,
+        "entities.units.types.BasicTank": 7,
+        "entities.units.types.BasicSpeedster": 9
+      }
+    ],
+    "delay": 6000,
+    "spread": 10,
     "duration": 2147483647
   }
 }

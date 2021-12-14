@@ -33,7 +33,7 @@ public class BasicSpeedster extends Unit {
 
         // Adjusting Physics Variables
         this.mass = 0.5f;
-        this.thrust = 5f;
+        this.thrust = 4f;
 
         // Adjusting Damage Stats
         this.attackDamage = 45;
@@ -76,9 +76,7 @@ public class BasicSpeedster extends Unit {
         this.ySpeed -= thrust * (float) Math.sin(thrustAngle);
 
         if(GetTime() - lastShot > shotCooldown) {
-            new Laser(this,
-                    game.getPlayer().getPosition()
-            );
+            new Missile(this, game.getPlayer());
             lastShot = GetTime();
         }
     }

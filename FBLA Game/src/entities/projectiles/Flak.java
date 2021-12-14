@@ -5,13 +5,13 @@ import entities.core.Entity;
 import managers.ImageManager;
 
 public class Flak extends Projectile {
-    private static float AngleOffset = 55;
+    private static float AngleOffset = 45;
 
     // Flak is supposed to be very inaccurate
     public Flak(Entity origin, Coordinate target, float damage) {
         super(origin, target, damage);
 
-        this.sprite = ImageManager.getImage("flak");
+        this.sprite = ImageManager.getImage("Flak");
 
         this.height = 0.75f;
         this.width = 0.75f;

@@ -2,7 +2,9 @@ package gamestates;
 
 import main.Engine;
 import main.Values;
+import managers.ImageManager;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -16,6 +18,8 @@ public class LevelSelect extends BasicGameState {
     private int id;
 
     private boolean initialized;
+
+    private Image title;
 
     private ArrayList<Button> buttons;
 
@@ -33,7 +37,7 @@ public class LevelSelect extends BasicGameState {
     //initializer, first time
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
     {
-        gc.setShowFPS(true);
+        gc.setShowFPS(false);
 
         this.gc = gc;
         this.sbg = sbg;
@@ -44,8 +48,10 @@ public class LevelSelect extends BasicGameState {
     //render, all visuals
     public void render(GameContainer gc, StateBasedGame sbg, org.newdawn.slick.Graphics g) throws SlickException
     {
-        g.drawString("Level Select",  Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
-        g.drawString(((Integer) Values.LEVEL).toString(),  Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2 - 50f);
+        title.drawCentered(Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 5);
+
+        Image number = ImageManager.getImage(((Integer) Values.LEVEL).toString());
+        number.drawCentered(Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2 - 50f);
 
         // Render Buttons
         for(Button b: buttons) b.render(g);
@@ -78,6 +84,7 @@ public class LevelSelect extends BasicGameState {
             backButton = new Button(padding + width / 2, Engine.RESOLUTION_Y - height - padding, width, height, "backButton");
             buttons.add(backButton);
         }
+        this.title = ImageManager.getImage("Level Select");
     }
 
     public void leave(GameContainer gc, StateBasedGame sbg) {}

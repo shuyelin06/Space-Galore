@@ -6,7 +6,7 @@ import managers.ImageManager;
 
 public class Missile extends Unit {
     private static float UpdateTimer = 0.18f;
-    private static float acceleration = 5f;
+    private static float acceleration = 3.5f;
 
     private Unit target;
     private float lastUpdate;
@@ -59,5 +59,10 @@ public class Missile extends Unit {
 
         this.xSpeed -= acceleration * (float) Math.cos(lastAngle);
         this.ySpeed -= acceleration * (float) Math.sin(lastAngle);
+    }
+
+    protected void unitCollision(Unit u) {
+        this.remove = true;
+        u.takeDamage(this.contactDamage);
     }
 }

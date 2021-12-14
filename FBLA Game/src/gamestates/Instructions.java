@@ -1,7 +1,9 @@
 package gamestates;
 
 import main.Engine;
+import managers.ImageManager;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -11,6 +13,8 @@ public class Instructions extends BasicGameState {
     private StateBasedGame sbg;
     private GameContainer gc;
     private int id;
+
+    private Image main;
 
     private boolean initialized;
     private Button backButton;
@@ -23,7 +27,7 @@ public class Instructions extends BasicGameState {
     //initializer, first time
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
     {
-        gc.setShowFPS(true);
+        gc.setShowFPS(false);
 
         this.gc = gc;
         this.sbg = sbg;
@@ -34,7 +38,7 @@ public class Instructions extends BasicGameState {
     //render, all visuals
     public void render(GameContainer gc, StateBasedGame sbg, org.newdawn.slick.Graphics g) throws SlickException
     {
-        g.drawString("Instructions",  Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
+        main.drawCentered(Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
 
         // Render BackButton
         backButton.render(g);
@@ -51,6 +55,8 @@ public class Instructions extends BasicGameState {
 
             this.backButton = new Button(padding+100, Engine.RESOLUTION_Y - height - padding, width, height, "backButton");
         }
+        this.main = ImageManager.getImage("Instructions");
+        main = main.getScaledCopy((float) Engine.RESOLUTION_Y / (float) main.getHeight());
     }
 
     public void leave(GameContainer gc, StateBasedGame sbg) {}

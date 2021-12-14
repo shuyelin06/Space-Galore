@@ -2,6 +2,7 @@ package entities.core;
 
 import entities.units.Player;
 import entities.units.Unit;
+import main.Engine;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -34,12 +35,15 @@ public class EntitySpawner implements Runnable {
                             | NoSuchMethodException e) { e.printStackTrace(); }
                 }
             }
+
             try {
                 Thread.sleep(waves.get(0).getDelay());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
+
+        Engine.game.spawningComplete();
     }
 
 }

@@ -31,4 +31,9 @@ public class SoundManager {
 		}
 		
 	}
+	public static void stopBackgroundMusic() {
+		try{
+			backgroundMusic.stop();
+		} catch(Exception ignored) {}
+	}
 }
