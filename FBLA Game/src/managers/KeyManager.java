@@ -13,17 +13,13 @@ public class KeyManager implements Predicate<Integer> {
 	public static final List<Integer> Key_Down_List = List.of(Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D);
 
 	private KeyManager() { throw new IllegalStateException("Utility class"); }
-	
-	private Game game;
 
 	private Player player;
-	
 	private Input input;
 	
 	public KeyManager(Input input, Game game) {
 		this.input = input;
-		
-		this.game = game;
+
 		this.player = game.getPlayer();
 	}
 	

@@ -2,14 +2,10 @@
 
 package gamestates;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.awt.Font;
-import java.io.File;
-import java.io.IOException;
 
 
-import managers.FontManager;
+import managers.TextManager;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
@@ -61,6 +57,12 @@ public class StartMenu extends BasicGameState
 	//render, all visuals
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
 	{
+//		System.out.println("Rendering image");
+//		TextManager.setColor(Color.white);
+//		Image im = TextManager.getCharacter();
+//		im.setImageColor(0.5f, 0.7f, 0.3f);
+//
+//		im.getScaledCopy(5f).draw(200, 200);
 		for(Button b: buttons) { b.render(g); } // Render every button
 	}
 

@@ -94,6 +94,7 @@ public class Game extends BasicGameState
 	// Render all visuals
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
 	{
+		displayManager.renderBackground(g);
 		displayManager.renderEntities(g);
 		displayManager.renderInterface(g);
 

@@ -1,17 +1,12 @@
 package gamestates;
 
 import main.Engine;
-import managers.FontManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import util.Button;
-
-import java.awt.*;
-import java.util.ArrayList;
 
 public class Leaderboard extends BasicGameState {
     private StateBasedGame sbg;
