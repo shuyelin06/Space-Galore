@@ -27,7 +27,7 @@ public class BasicSpeedster extends Unit {
         super(x, y, team);
 
         // Adjusting Rendering Variables
-        this.sprite = ImageManager.getImage("PlaceholderShip");
+        this.sprite = ImageManager.getImage("basicUnit");
         this.width = 1.5f;
         this.height = 1.5f;
 

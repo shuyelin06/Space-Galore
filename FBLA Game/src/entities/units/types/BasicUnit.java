@@ -25,7 +25,7 @@ public class BasicUnit extends Unit {
         super(x, y, team);
 
         // Adjusting Rendering Variables
-        this.sprite = ImageManager.getImage("PlaceholderShip");
+        this.sprite = ImageManager.getImage("basicUnit");
         this.width = 3f;
         this.height = 3f;
 

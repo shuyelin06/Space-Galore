@@ -26,7 +26,7 @@ public class BasicTank extends Unit {
             super(x, y, team);
 
             // Adjusting Rendering Variables
-            this.sprite = ImageManager.getImage("PlaceholderShip");
+            this.sprite = ImageManager.getImage("tank ");
             this.sprite.setImageColor(0f, 1f, 1f);
 
             this.width = 4.5f;
