@@ -9,75 +9,77 @@ import entities.units.Unit;
 import managers.ImageManager;
 
 public class BasicTank extends Unit {
-        /*
-        The tank is a very beefy unit, with fairly high health and high defense
-        The tank will shotgun flak within a certain radius at a very slow rate,and moves very slowly.
-        However, it is virtually impossible to knock the tank back, forcing the player to reposition if
-        the tank gets too close.
-        */
-        final private float AverageShotCooldown = 4.5f;
-        final private float AttackRadius = 42.5f;
-        final private int FlakCount = 25;
+    /*
+    The tank is a very beefy unit, with fairly high health and high defense
+    The tank will shotgun flak within a certain radius at a very slow rate,and moves very slowly.
+    However, it is virtually impossible to knock the tank back, forcing the player to reposition if
+    the tank gets too close.
+    */
+    final private float AverageShotCooldown = 4.5f;
+    final private float AttackRadius = 42.5f;
+    final private int FlakCount = 25;
 
-        private float shotCooldown; // Specific delay for this unit
-        private float lastShot; // Last time this unit shot
+    private float shotCooldown; // Specific delay for this unit
+    private float lastShot; // Last time this unit shot
 
-        public BasicTank(float x, float y, Entity.Team team) {
-            super(x, y, team);
+    public BasicTank() { super(); }
 
-            // Adjusting Rendering Variables
-            this.sprite = ImageManager.getImage("tank ");
-            this.sprite.setImageColor(0f, 1f, 1f);
+    public BasicTank(float x, float y, Entity.Team team) {
+        super(x, y, team);
 
-            this.width = 4.5f;
-            this.height = 4.5f;
+        // Adjusting Rendering Variables
+        this.sprite = ImageManager.getImage("tank ");
+        this.sprite.setImageColor(0f, 1f, 1f);
 
-            // Adjusting Physics Variables
-            this.mass = 500f;
-            this.thrust = 0.035f;
+        this.width = 4.5f;
+        this.height = 4.5f;
 
-            // Adjusting Damage Stats
-            this.attackDamage = 50;
+        // Adjusting Physics Variables
+        this.mass = 500f;
+        this.thrust = 0.035f;
 
-            // Adjusting Other Stats
-            this.maxHealth = 300;
-            this.health = maxHealth;
+        // Adjusting Damage Stats
+        this.attackDamage = 50;
 
-            this.defense = 50;
+        // Adjusting Other Stats
+        this.maxHealth = 300;
+        this.health = maxHealth;
 
-            // Adjussting Score
-            this.score = 25;
+        this.defense = 50;
 
-            // Adjusting HitBox
-            this.hitBox.setWidth(width / 1.15f);
-            this.hitBox.setHeight(height / 1.80f);
+        // Adjussting Score
+        this.score = 25;
 
-            // Unit Specific Variables
-            this.shotCooldown = AverageShotCooldown + (float) Math.random() - 1.5f;
-            this.lastShot = GetTime();
-        }
+        // Adjusting HitBox
+        this.hitBox.setWidth(width / 1.15f);
+        this.hitBox.setHeight(height / 1.80f);
 
-        // Move towards the player, shoot a laser at the player every 2.5 seconds
-        protected void unitAI() {
-            Player player = game.getPlayer();
+        // Unit Specific Variables
+        this.shotCooldown = AverageShotCooldown + (float) Math.random() - 1.5f;
+        this.lastShot = GetTime();
+    }
 
-            // Move towards the player
-            if(player.isMarked()) return; // Stops enemy actions
+    // Move towards the player, shoot a laser at the player every 2.5 seconds
+    protected void unitAI() {
+        Player player = game.getPlayer();
 
-            // Face and move towards the player
-            this.faceEntity(player);
-            this.xSpeed -= thrust * (float) Math.cos(this.angle);
-            this.ySpeed -= thrust * (float) Math.sin(this.angle);
+        // Move towards the player
+        if (player.isMarked()) return; // Stops enemy actions
 
-            if(GetTime() - lastShot > shotCooldown &&
-                    Coordinate.distance(position, player.getPosition()) < AttackRadius) {
-                for(int i = 0; i < FlakCount; i++) {
-                    new Flak(this,
-                            player.getPosition(),
-                            this.attackDamage
-                    );
-                }
-                lastShot = GetTime();
+        // Face and move towards the player
+        this.faceEntity(player);
+        this.xSpeed -= thrust * (float) Math.cos(this.angle);
+        this.ySpeed -= thrust * (float) Math.sin(this.angle);
+
+        if (GetTime() - lastShot > shotCooldown &&
+                Coordinate.distance(position, player.getPosition()) < AttackRadius) {
+            for (int i = 0; i < FlakCount; i++) {
+                new Flak(this,
+                        player.getPosition(),
+                        this.attackDamage
+                );
             }
+            lastShot = GetTime();
         }
+    }
 }

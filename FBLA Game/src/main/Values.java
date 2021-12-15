@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.newdawn.slick.Input;
 
-public class Values{
+public class Values {
+
+	private Values() { throw new IllegalStateException("Please reference values from a static context."); }
+
 	// Will contain all of our major game variables
 	final public static int Pixels_Per_Unit = 15; // Defines the number of pixels per unit in our game
 	
@@ -21,4 +24,5 @@ public class Values{
 	public static int MAX_LEVEL = 3;
 
 	public static int LEVEL = MIN_LEVEL;
+
 }

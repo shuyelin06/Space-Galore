@@ -22,7 +22,9 @@ public class Unit extends Entity {
     // Other Variables
     protected int score; // Number of points this unit is worth
 
-    public Unit(float x, float y, Team team){
+    public Unit() { this.entityType = EntityType.Unit; }
+
+    public Unit(float x, float y, Team team) {
         super(x, y);
 
         // Set the Unit's Team

@@ -46,6 +46,8 @@ public abstract class Entity {
 	public enum Team { Ally, Enemy, Neutral }
 	protected Team team;
 
+	public Entity() {}
+
 	public Entity(float x, float y) {
 		// Initializing Rendering Variables
 		this.remove = false;
@@ -209,5 +211,23 @@ public abstract class Entity {
 
 		this.ySpeed = (C1Y + mass * C2Y) / (mass + e.mass) - C2Y;
 		e.ySpeed = (C1Y + mass * C2Y) / (mass + e.mass);
+	}
+
+	@Override
+	public String toString() {
+		return "Entity{" +
+				"remove=" + remove +
+				", sprite=" + sprite +
+				", mass=" + mass +
+				", width=" + width +
+				", height=" + height +
+				", position=" + position +
+				", xSpeed=" + xSpeed +
+				", ySpeed=" + ySpeed +
+				", angle=" + angle +
+				", hitBox=" + hitBox +
+				", entityType=" + entityType +
+				", team=" + team +
+				'}';
 	}
 }

@@ -21,6 +21,8 @@ public class BasicUnit extends Unit {
     private float shotCooldown; // Seconds delay between laser shots
     private float lastShot;
 
+    public BasicUnit() { super(); }
+
     public BasicUnit(float x, float y, Team team) {
         super(x, y, team);
 

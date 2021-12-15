@@ -116,13 +116,15 @@ public class Game extends BasicGameState
 		// Update all entities, and remove those marked for removal
 		Predicate<Entity> filter = Entity::isMarked;
 		for(ArrayList<Entity> list: entities.values()){
-			for(Entity e: list){ e.update(); }
+			for(Entity e: list) e.update();
 			list.removeIf(filter);
 		}
 
 		// Add new entities
-		for(Entity.EntityType type: newEntities.keySet()) {
+		for (Entity.EntityType type : newEntities.keySet()) {
 			for (Entity e : newEntities.get(type)) {
+				System.out.println("------- SPAWNING ENTITY -------");
+				System.out.println(e.toString());
 				entities.get(type).add(e);
 			}
 			newEntities.get(type).clear();
@@ -167,8 +169,7 @@ public class Game extends BasicGameState
 		displayManager = new DisplayManager(this, player.getPosition(), gc.getGraphics());
 
 		// Initialize Waves
-		// VVVVVVVVVVVV Start of Wave Debug code + testing code
-    long start = System.currentTimeMillis();
+    	long start = System.currentTimeMillis();
 		System.out.println("START");
 		try {
 			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/1.json")))).getAsJsonObject().get(String.valueOf(Values.LEVEL));
@@ -178,42 +179,10 @@ public class Game extends BasicGameState
 			e.printStackTrace();
 		}
 
-		System.out.println(waves.toString());
-		System.out.println(waves.get(0).getLedger().get(0).keySet().toArray()[0]);
-
 		new Thread(new EntitySpawner(waves)).start();
 
-//		HashMap<Unit, Integer> wave = waves.get(0).getLedger().get(0);
-//
-//		AtomicInteger timer = new AtomicInteger();
-//		long timerStart = System.currentTimeMillis();
-//		waves.get(0).getLedger().forEach((HashMap<Unit, Integer> m) -> {
-//			timer.getAndIncrement();
-//			while (true) {
-//				if (timer.get() == 1) break;
-//				System.out.println(m);
-//				System.out.println("Current timer " + timer.get());
-//				System.out.println("Started at " + timerStart);
-//				if (System.currentTimeMillis() - waves.get(0).getDelay() <= timerStart) break;
-//			}
-//			for (Map.Entry<Unit, Integer> en : m.entrySet()) {
-//				for (int i = 0; i < en.getValue(); i++) {
-//					try { en.getKey().getClass()
-//							.getConstructor(float.class, float.class, Entity.Team.class)
-//							.newInstance(Player.Player_X_Spawn + (i * waves.get(0).getSpread()) - (int) ((double) en.getValue() / 2) * 5 , 48, Entity.Team.Enemy);
-//						System.out.println(i + " is being spawned right now");
-//					}
-//					catch (InstantiationException
-//							| IllegalAccessException
-//							| InvocationTargetException
-//							| NoSuchMethodException e) { e.printStackTrace(); }
-//				}
-//			}
-//		});
 		long end = System.currentTimeMillis();
 		System.out.println("Level took " + (long) (end - start) + "ms to load.");
-
-		// ^^^^^^^^^ End of Wave Testing Code
 
 		// Begin Music
 		SoundManager.playBackgroundMusic("March");

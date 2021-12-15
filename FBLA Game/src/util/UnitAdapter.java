@@ -29,9 +29,7 @@ public class UnitAdapter extends TypeAdapter<Unit> {
 
         String unit = in.nextString();
         CompletableFuture<Unit> await = CompletableFuture.supplyAsync(() -> {
-            try { return (Unit) Class.forName(unit)
-                    .getConstructor(float.class, float.class, Entity.Team.class)
-                    .newInstance(0, 0, Entity.Team.Enemy); }
+            try { return (Unit) Class.forName(unit).getConstructor().newInstance(); }
             catch (ClassNotFoundException
                     | NoSuchMethodException
                     | IllegalAccessException

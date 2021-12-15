@@ -23,6 +23,8 @@ public class BasicSpeedster extends Unit {
     private float thrustAngle;
     private float lastShot;
 
+    public BasicSpeedster() { super(); }
+
     public BasicSpeedster(float x, float y, Team team) {
         super(x, y, team);
 
