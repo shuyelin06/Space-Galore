@@ -79,19 +79,19 @@ public class StartMenu extends BasicGameState
 			final float x = Engine.RESOLUTION_X / 2;
 			final float y = Engine.RESOLUTION_Y / 5;
 
-			gameTitle = new Button(x, y, width * 2.5f, height+100,"title");
+			gameTitle = new Button(x, y+100, width * 3.5f, height+250,"title");
 			buttons.add(gameTitle);
 
-			playButton = new Button(x-5,y + height + padding, width+200, height,"startButton");
+			playButton = new Button(x-5,y + height + padding +250, width+200, height,"startButton");
 			buttons.add(playButton);
 
-			instructionsButton = new Button(x,y + 2 * height + 2 * padding, width+200, height,"instructionsButton");
+			instructionsButton = new Button(x,y + 4 * height + 4 * padding, width+200, height,"instructionsButton");
 			buttons.add(instructionsButton);
 
-			leaderButton = new Button(x,y + 3 * height + 3 * padding, width+200, height,"leaderBoardButton");
+			leaderButton = new Button(x,y + 5 * height + 5 * padding, width+200, height,"leaderBoardButton");
 			buttons.add(leaderButton);
 
-			quitButton = new Button(x-3,y + 4 * height + 4 * padding, width+200, height,"quitButton");
+			quitButton = new Button(x,y + 6 * height + 6 * padding, width+200, height,"quitButton");
 			buttons.add(quitButton);
 		}
 
