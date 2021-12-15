@@ -195,6 +195,7 @@ public class Game extends BasicGameState
 		// Initialize Waves
     	long start = System.currentTimeMillis();
 
+		System.out.println("-----");
 		System.out.println("START");
 		try {
 			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/1.json")))).getAsJsonObject().get(String.valueOf(Values.LEVEL));
@@ -203,10 +204,10 @@ public class Game extends BasicGameState
 			System.out.println(System.getProperty("user.dir"));
 			e.printStackTrace();
 		}
-
+		System.out.println("-----");
 		System.out.println(waves.toString());
 		System.out.println(waves.get(0).getLedger().get(0).keySet().toArray()[0]);
-
+		System.out.println("-----");
 		spawning = new Thread(new EntitySpawner(waves));
 		spawning.start();
 

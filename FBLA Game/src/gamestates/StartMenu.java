@@ -5,6 +5,7 @@ package gamestates;
 import java.util.ArrayList;
 
 
+import managers.ImageManager;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
@@ -21,9 +22,10 @@ public class StartMenu extends BasicGameState
 	private GameContainer gc;
 	private int id;
 
+	private Image gameTitle;
+
 	private ArrayList<Button> buttons;
 
-	private Button gameTitle;
 	private Button playButton;
 	private Button instructionsButton;
 	private Button leaderButton;
@@ -54,7 +56,10 @@ public class StartMenu extends BasicGameState
 
 	
 	//render, all visuals
-	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException { for(Button b: buttons) { b.render(g); } }
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		gameTitle.drawCentered(Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 5);
+		for(Button b: buttons) { b.render(g); }
+	}
 
 	//update, runs consistently
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
@@ -77,23 +82,21 @@ public class StartMenu extends BasicGameState
 			final float height = 75f;
 
 			final float x = Engine.RESOLUTION_X / 2;
-			final float y = Engine.RESOLUTION_Y / 5;
+			final float y = Engine.RESOLUTION_Y / 5 + 80f;
 
-			gameTitle = new Button(x, y+100, width * 3.5f, height+250,"title");
-			buttons.add(gameTitle);
-
-			playButton = new Button(x-5,y + height + padding +250, width+200, height,"startButton");
+			playButton = new Button(x - 5,y + height + padding, width+200, height,"startButton");
 			buttons.add(playButton);
 
-			instructionsButton = new Button(x,y + 4 * height + 4 * padding, width+200, height,"instructionsButton");
+			instructionsButton = new Button(x,y + 2 * height + 2 * padding, width+200, height,"instructionsButton");
 			buttons.add(instructionsButton);
 
-			leaderButton = new Button(x,y + 5 * height + 5 * padding, width+200, height,"leaderBoardButton");
+			leaderButton = new Button(x,y + 3 * height + 3 * padding, width+200, height,"leaderBoardButton");
 			buttons.add(leaderButton);
 
-			quitButton = new Button(x,y + 6 * height + 6 * padding, width+200, height,"quitButton");
+			quitButton = new Button(x,y + 4 * height + 4 * padding, width+200, height,"quitButton");
 			buttons.add(quitButton);
 		}
+		gameTitle = ImageManager.getImage("title");
 
 	}
 

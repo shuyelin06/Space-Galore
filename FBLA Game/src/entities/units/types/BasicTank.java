@@ -25,6 +25,7 @@ public class BasicTank extends Unit {
         public BasicTank(float x, float y, Entity.Team team) {
             super(x, y, team);
 
+            System.out.println("tank spawning");
             // Adjusting Rendering Variables
             this.sprite = ImageManager.getImage("tank");
             this.sprite.setImageColor(0f, 1f, 1f);
