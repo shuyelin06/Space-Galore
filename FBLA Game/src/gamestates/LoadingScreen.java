@@ -2,7 +2,6 @@
 
 package gamestates;
 
-import managers.TextManager;
 import org.newdawn.slick.*;
 import org.newdawn.slick.loading.DeferredResource;
 import org.newdawn.slick.loading.LoadingList;
@@ -48,7 +47,7 @@ public class LoadingScreen extends BasicGameState {
     // Initializer, first time
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
     {
-        gc.setShowFPS(true);
+        gc.setShowFPS(false);
 
         this.loadingList = LoadingList.get();
     }

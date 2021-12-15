@@ -2,6 +2,7 @@ package entities.core;
 
 import entities.units.Player;
 import entities.units.Unit;
+import main.Engine;
 import main.Values;
 
 import java.lang.reflect.InvocationTargetException;
@@ -30,12 +31,15 @@ public record EntitySpawner(ArrayList<Wave> waves) implements Runnable {
                     }
                 }
             }
+
             try {
                 Thread.sleep(waves.get(0).getDelay());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
+
+        Engine.game.spawningComplete();
     }
 
 }

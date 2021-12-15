@@ -9,15 +9,15 @@ import entities.units.Unit;
 import managers.ImageManager;
 
 public class BasicTank extends Unit {
-    /*
-    The tank is a very beefy unit, with fairly high health and high defense
-    The tank will shotgun flak within a certain radius at a very slow rate,and moves very slowly.
-    However, it is virtually impossible to knock the tank back, forcing the player to reposition if
-    the tank gets too close.
-    */
-    final private float AverageShotCooldown = 4.5f;
-    final private float AttackRadius = 42.5f;
-    final private int FlakCount = 25;
+        /*
+        The tank is a very beefy unit, with fairly high health and high defense
+        The tank will shotgun flak within a certain radius at a very slow rate,and moves very slowly.
+        However, it is virtually impossible to knock the tank back, forcing the player to reposition if
+        the tank gets too close.
+        */
+        final private float AverageShotCooldown = 4.5f;
+        final private float AttackRadius = 50f;
+        final private int FlakCount = 15;
 
     private float shotCooldown; // Specific delay for this unit
     private float lastShot; // Last time this unit shot
@@ -27,8 +27,9 @@ public class BasicTank extends Unit {
     public BasicTank(float x, float y, Entity.Team team) {
         super(x, y, team);
 
+        System.out.println("tank spawning");
         // Adjusting Rendering Variables
-        this.sprite = ImageManager.getImage("tank ");
+        this.sprite = ImageManager.getImage("tank");
         this.sprite.setImageColor(0f, 1f, 1f);
 
         this.width = 4.5f;
@@ -36,7 +37,7 @@ public class BasicTank extends Unit {
 
         // Adjusting Physics Variables
         this.mass = 500f;
-        this.thrust = 0.035f;
+        this.thrust = 0.5f;
 
         // Adjusting Damage Stats
         this.attackDamage = 50;

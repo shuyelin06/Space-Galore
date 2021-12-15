@@ -33,7 +33,7 @@ public class BasicUnit extends Unit {
 
         // Adjusting Physics Variables
         this.mass = 10f;
-        this.thrust = 0.5f;
+        this.thrust = 0.75f;
 
         // Adjusting Damage Stats
         this.attackDamage = 20;

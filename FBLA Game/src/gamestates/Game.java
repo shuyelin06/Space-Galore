@@ -21,6 +21,7 @@ import entities.core.Wave;
 import entities.units.Unit;
 import entities.units.types.BasicTank;
 import main.Engine;
+import managers.ImageManager;
 import managers.SoundManager;
 import entities.units.Unit;
 import entities.units.types.BasicUnit;
@@ -55,17 +56,20 @@ public class Game extends BasicGameState
 	public DisplayManager displayManager; // Display Manager
 
 	// Level Complete
-	private static float SwitchDelay = 2.5f;
+	private static float SwitchDelay = 5f;
 
 	private float completeTime;
-	private boolean levelComplete;
 
+	private boolean spawningComplete;
+	private boolean levelComplete;
 
 	// Sound Manager
 	// Animation Manager
 	// Background / Ambiance Manager (?)
 
 	// Waves
+	Thread spawning;
+
 	Gson gson = new GsonBuilder().registerTypeAdapter(Unit.class, new UnitAdapter().nullSafe()).create();
 	ArrayList<Wave> waves = new ArrayList<>();
 
@@ -83,11 +87,11 @@ public class Game extends BasicGameState
 	public ArrayList<Entity> getEntitiesOf(Entity.EntityType type) { return entities.get(type); }
 
 	public void addEntity(Entity.EntityType type, Entity e) { newEntities.get(type).add(e); }
-
+	public void spawningComplete() { spawningComplete = true; }
 	// Initialization of the Game
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
 	{
-		gc.setShowFPS(true);
+		gc.setShowFPS(false);
 		this.gc = gc;
 	}
 	
@@ -99,9 +103,11 @@ public class Game extends BasicGameState
 		displayManager.renderInterface(g);
 
 		if(levelComplete) {
-			if(player.getPercentHealth() > 0) g.drawString("Level Complete!", 200, 200);
+			if(player.getPercentHealth() > 0) {
+				ImageManager.getImage("Level Complete").drawCentered(Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
+			}
 			else {
-				g.drawString("Level Failed...", 200, 200);
+				ImageManager.getImage("Level Failed").drawCentered(Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
 			}
 		}
 	}
@@ -109,6 +115,34 @@ public class Game extends BasicGameState
 	// Update, runs consistently
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
 	{
+		if(levelComplete) {
+			// Save score to leaderboard
+			float score = player.getScore();
+
+
+			// Delay, then enter level select
+			if(Sys.getTime() - completeTime > SwitchDelay * 1000) {
+				sbg.enterState(Engine.LEVELSELECT_ID);
+			}
+			return;
+		}
+
+		// Check if Level is Complete - Player is dead, or all enemies are
+		if(player.getPercentHealth() <= 0) {
+			levelComplete = true;
+			completeTime = Sys.getTime();
+		} else if (spawningComplete) {
+			boolean enemiesDead = true;
+
+			for(Entity e: entities.get(Entity.EntityType.Unit)) {
+				if(e.getTeam() == Entity.Team.Enemy) enemiesDead = false;
+			}
+			if(enemiesDead) {
+				levelComplete = true;
+				completeTime = Sys.getTime();
+			}
+		}
+
 		// Manage Key and Cursor Input
 		keyInput(); // Manage keys that are down
 		cursorInput(); // Manage the cursor
@@ -130,15 +164,6 @@ public class Game extends BasicGameState
 			newEntities.get(type).clear();
 		}
 
-		if(levelComplete) {
-			// Save score to leaderboard
-			float score = player.getScore();
-
-			// Delay, then enter level select
-			if(Sys.getTime() - completeTime > SwitchDelay * 1000) {
-				sbg.enterState(Engine.LEVELSELECT_ID);
-			}
-		}
 	}
 
 	@Override
@@ -157,12 +182,12 @@ public class Game extends BasicGameState
 		));
 
 		// Set level complete variables
+		this.spawningComplete = false;
 		this.levelComplete = false;
 		this.completeTime = 0;
 
 		// Initialize Player
 		player = new Player();
-		entities.get(Entity.EntityType.Unit).add(player);
 
 		// Initialize Managers
 		keyDown = new KeyManager(gc.getInput(), this);
@@ -170,6 +195,8 @@ public class Game extends BasicGameState
 
 		// Initialize Waves
     	long start = System.currentTimeMillis();
+
+		System.out.println("-----");
 		System.out.println("START");
 		try {
 			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/1.json")))).getAsJsonObject().get(String.valueOf(Values.LEVEL));
@@ -178,8 +205,8 @@ public class Game extends BasicGameState
 			System.out.println(System.getProperty("user.dir"));
 			e.printStackTrace();
 		}
-
-		new Thread(new EntitySpawner(waves)).start();
+		spawning = new Thread(new EntitySpawner(waves));
+		spawning.start();
 
 		long end = System.currentTimeMillis();
 		System.out.println("Level took " + (long) (end - start) + "ms to load.");
@@ -187,7 +214,7 @@ public class Game extends BasicGameState
 		// Begin Music
 		SoundManager.playBackgroundMusic("March");
 	}
-	public void leave(GameContainer gc, StateBasedGame sbg) {}
+	public void leave(GameContainer gc, StateBasedGame sbg) { SoundManager.stopBackgroundMusic(); }
 
 	// Input Methods
 	public void keyInput() { KeyManager.Key_Down_List.stream().filter(keyDown).forEach(keyDown::keyDown); } // Check keys that are down
@@ -198,22 +225,6 @@ public class Game extends BasicGameState
 		switch(key) {
 			case Input.KEY_ESCAPE: // Exit the game
 				gc.exit();
-				break;
-
-				// Spawn Enemy Unit
-			case Input.KEY_E:
-				new BasicTank(Unit.RandomSpawnX(),
-						Unit.RandomSpawnY(),
-						Entity.Team.Enemy
-				);
-				break;
-
-				// Spawn Ally Unit
-			case Input.KEY_R:
-				new BasicTank(Unit.RandomSpawnX(),
-						Unit.RandomSpawnY(),
-						Entity.Team.Ally
-				);
 				break;
 		}
 	}

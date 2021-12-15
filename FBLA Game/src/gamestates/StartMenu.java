@@ -5,7 +5,7 @@ package gamestates;
 import java.util.ArrayList;
 
 
-import managers.TextManager;
+import managers.ImageManager;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
@@ -22,9 +22,10 @@ public class StartMenu extends BasicGameState
 	private GameContainer gc;
 	private int id;
 
+	private Image gameTitle;
+
 	private ArrayList<Button> buttons;
 
-	private Button gameTitle;
 	private Button playButton;
 	private Button instructionsButton;
 	private Button leaderButton;
@@ -44,7 +45,7 @@ public class StartMenu extends BasicGameState
 	//initializer, first time
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
 	{
-		gc.setShowFPS(true);
+		gc.setShowFPS(false);
 		
 		this.gc = gc;	
 		this.sbg = sbg;
@@ -55,19 +56,20 @@ public class StartMenu extends BasicGameState
 
 	
 	//render, all visuals
-	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
-	{
-//		System.out.println("Rendering image");
-//		TextManager.setColor(Color.white);
-//		Image im = TextManager.getCharacter();
-//		im.setImageColor(0.5f, 0.7f, 0.3f);
-//
-//		im.getScaledCopy(5f).draw(200, 200);
-		for(Button b: buttons) { b.render(g); } // Render every button
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		gameTitle.drawCentered(Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 5);
+		for(Button b: buttons) { b.render(g); }
 	}
 
 	//update, runs consistently
-	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException { }
+	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+		float mouseX = gc.getInput().getAbsoluteMouseX();
+		float mouseY = gc.getInput().getAbsoluteMouseY();
+
+		for(Button b: buttons) {
+			b.update(mouseX, mouseY);
+		}
+	}
 
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		if(!initialized) {
@@ -75,28 +77,26 @@ public class StartMenu extends BasicGameState
 			this.buttons = new ArrayList<>();
 
 			// Initialize Center Buttons
-			final float padding = 35f;
+			final float padding = 50f;
 			final float width = 250f;
 			final float height = 75f;
 
 			final float x = Engine.RESOLUTION_X / 2;
-			final float y = Engine.RESOLUTION_Y / 5;
+			final float y = Engine.RESOLUTION_Y / 5 + 80f;
 
-			gameTitle = new Button(x, y, width * 2.5f, height,"res/Entities/startButton.png");
-			buttons.add(gameTitle);
-
-			playButton = new Button(x-5,y + height + padding+330, width+200, height,"startButton");
+			playButton = new Button(x - 5,y + height + padding, width+200, height,"startButton");
 			buttons.add(playButton);
 
-			instructionsButton = new Button(x,y + 2 * height + 2 * padding+300, width+200, height,"instructionsButton");
+			instructionsButton = new Button(x,y + 2 * height + 2 * padding, width+200, height,"instructionsButton");
 			buttons.add(instructionsButton);
 
-			leaderButton = new Button(x,y + 3 * height + 3 * padding+280, width+200, height,"leaderBoardButton");
+			leaderButton = new Button(x,y + 3 * height + 3 * padding, width+200, height,"leaderBoardButton");
 			buttons.add(leaderButton);
 
-			quitButton = new Button(x-3,y + 4 * height + 4 * padding +250, width+200, height,"quitButton");
+			quitButton = new Button(x,y + 4 * height + 4 * padding, width+200, height,"quitButton");
 			buttons.add(quitButton);
 		}
+		gameTitle = ImageManager.getImage("title");
 
 	}
 
