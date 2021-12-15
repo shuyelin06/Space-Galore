@@ -11,6 +11,9 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import util.Button;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -41,6 +44,16 @@ public class Leaderboard extends BasicGameState {
         leaderboard = new TreeSet<>(scores.values());
     }
 
+    public static void writeScore(String name, int score) throws IOException {
+        assert name != null;
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("./FBLA Game/data/LEADERBOARD", true))) {
+            bw.newLine();
+            bw.write(name + "§" + score);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Leaderboard(int id) { this.id = id; }
 
     // Returns the ID code for this game state
@@ -58,6 +71,12 @@ public class Leaderboard extends BasicGameState {
 
         // Initialize scores HashMap
         this.scores = new TreeMap<>();
+
+        try {
+            Leaderboard.writeScore("TEJUJEIFEF", 2833);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Update scores, needs to throw IOException
         try {
