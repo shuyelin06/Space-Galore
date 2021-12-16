@@ -14,7 +14,7 @@
         "entities.units.types.BasicSpeedster": 2
       }
     ],
-    "delay": 6000,
+    "delay": 8000,
     "spread": 6,
     "duration": 2147483647
   },

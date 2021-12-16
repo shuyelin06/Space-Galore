@@ -72,12 +72,6 @@ public class Leaderboard extends BasicGameState {
         // Initialize scores HashMap
         this.scores = new TreeMap<>();
 
-        try {
-            Leaderboard.writeScore("TEJUJEIFEF", 2833);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         // Update scores, needs to throw IOException
         try {
             updateScores();

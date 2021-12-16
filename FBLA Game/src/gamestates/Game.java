@@ -40,7 +40,7 @@ import managers.DisplayManager;
 import managers.KeyManager;
 import util.UnitAdapter;
 
-public class Game extends BasicGameState 
+public class Game extends BasicGameState
 {	
 	private GameContainer gc;
 	private int id;
@@ -59,9 +59,11 @@ public class Game extends BasicGameState
 	private static float SwitchDelay = 5f;
 
 	private float completeTime;
+	private long remainingWaveTime;
 
 	private boolean spawningComplete;
 	private boolean levelComplete;
+	private boolean scoreWritten;
 
 	// Sound Manager
 	// Animation Manager
@@ -102,8 +104,8 @@ public class Game extends BasicGameState
 		displayManager.renderEntities(g);
 		displayManager.renderInterface(g);
 
-		if(levelComplete) {
-			if(player.getPercentHealth() > 0) {
+		if (levelComplete) {
+			if (player.getPercentHealth() > 0) {
 				ImageManager.getImage("Level Complete").drawCentered(Engine.RESOLUTION_X / 2, Engine.RESOLUTION_Y / 2);
 			}
 			else {
@@ -115,9 +117,17 @@ public class Game extends BasicGameState
 	// Update, runs consistently
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
 	{
-		if(levelComplete) {
+		if (levelComplete) {
 			// Save score to leaderboard
 			float score = player.getScore();
+			if (!scoreWritten) {
+				try {
+					Leaderboard.writeScore("Level " + Values.LEVEL, (int) score);
+					scoreWritten = true;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 
 
 			// Delay, then enter level select
@@ -128,16 +138,16 @@ public class Game extends BasicGameState
 		}
 
 		// Check if Level is Complete - Player is dead, or all enemies are
-		if(player.getPercentHealth() <= 0) {
+		if (player.getPercentHealth() <= 0) {
 			levelComplete = true;
 			completeTime = Sys.getTime();
 		} else if (spawningComplete) {
 			boolean enemiesDead = true;
 
-			for(Entity e: entities.get(Entity.EntityType.Unit)) {
-				if(e.getTeam() == Entity.Team.Enemy) enemiesDead = false;
+			for (Entity e : entities.get(Entity.EntityType.Unit)) {
+				if (e.getTeam() == Entity.Team.Enemy) enemiesDead = false;
 			}
-			if(enemiesDead) {
+			if (enemiesDead) {
 				levelComplete = true;
 				completeTime = Sys.getTime();
 			}
@@ -157,8 +167,6 @@ public class Game extends BasicGameState
 		// Add new entities
 		for (Entity.EntityType type : newEntities.keySet()) {
 			for (Entity e : newEntities.get(type)) {
-				System.out.println("------- SPAWNING ENTITY -------");
-				System.out.println(e.toString());
 				entities.get(type).add(e);
 			}
 			newEntities.get(type).clear();
@@ -199,12 +207,13 @@ public class Game extends BasicGameState
 		System.out.println("-----");
 		System.out.println("START");
 		try {
-			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/1.json")))).getAsJsonObject().get(String.valueOf(Values.LEVEL));
+			JsonElement results = new JsonParser().parse(new String(Files.readAllBytes(Paths.get("FBLA Game/data/levels.json")))).getAsJsonObject().get(String.valueOf(Values.LEVEL));
 			waves.add(gson.fromJson(results, Wave.class));
 		} catch (IOException e) {
 			System.out.println(System.getProperty("user.dir"));
 			e.printStackTrace();
 		}
+
 		spawning = new Thread(new EntitySpawner(waves));
 		spawning.start();
 
